@@ -12,7 +12,7 @@
 extern "C" {
 #endif
 
-#define BLNK_PROD_ID  0x06
+#define BLNK_PROD_ID  0x07
 
 #define BLNK_MAJ_VER  0x00
 #define BLNK_MIN_VER  0x00

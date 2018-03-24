@@ -35,9 +35,6 @@
 #include "blnk.h"
 #include "blnk_version.h"
 
-#include "blnk_i2c.h"
-#include "blnk_pwm.h"
-#include "blnk_hbridge.h"
 
 
 
@@ -50,8 +47,8 @@ void blnk_InitLED( uint8_t portMask )
 
 void blnk_Delay(void)
 {
-    // long i = 524280;
-    long i = 5556;
+    long i = 524280;
+    // long i = 5556;
     while(i--);
 }
 
@@ -75,27 +72,9 @@ void blnk_InitPIC( void )
 int main(int argc, char** argv) {
 
     blnk_InitPIC();
-    blnk_InitI2CSlave( BLNK_I2C_ADDR );
-    blnk_ResetI2CSlave( BLNK_PROD_ID, BLNK_MAJ_VER, BLNK_MIN_VER, BLNK_BUILD );
     blnk_InitLED( BLNK_LED_MASK );
-
-    /* Init PWM0 */
-    blnk_pwmInit( 0 );
-    blnk_WriteI2CData( BLNK_I2C_PWM0_FLG_INDEX,0x00 );
-    blnk_WriteI2CData( BLNK_I2C_PWM0_LSB_INDEX,0x00 );
-    blnk_WriteI2CData( BLNK_I2C_PWM0_MSB_INDEX,0x00 );
-    blnk_pwmSet( 0, 0x0000 );
-
-    /* Init H-Bridge */
-    blnk_hBridgeInit( 0 );
-    blnk_hBridgeSetEnable( 0, BLNK_TRUE );
-    blnk_hBridgeSetPWM0( BLNK_TRUE );
-    blnk_hBridgeSetPWM0( BLNK_FALSE );
-    blnk_hBridgeSetReverse( 0, BLNK_TRUE );
-    blnk_hBridgeSetPWM0( BLNK_TRUE );
-    blnk_hBridgeSetPWM0( BLNK_FALSE );
     
-    GIE = 1; /* GO! */
+    // GIE = 1; /* GO! */
 
     while( 1 )
     {
