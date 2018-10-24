@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   main.c
  * Author: BasementPC
  *
@@ -10,6 +10,9 @@
 #include <stdint.h>
 
 #include <xc.h>
+
+#include "beerChipConfig.h"
+#include "beerChipBlinker.h"
 
 // #pragma config statements should precede project file includes.
 // Use project enums instead of #define for ON and OFF.
@@ -32,9 +35,6 @@
 #pragma config LPBOR = OFF      // Low-Power Brown Out Reset (Low-Power BOR is disabled)
 #pragma config LVP = OFF        // Low-Voltage Programming Enable (High-voltage on MCLR/VPP must be used for programming)
 
-#include "blnk.h"
-#include "blnk_version.h"
-
 void blnk_Delay(void)
 {
     long i = 524280;
@@ -44,7 +44,7 @@ void blnk_Delay(void)
 
 void blnk_InitPIC( void )
 {
-    OSCCON = BLNK_CLK;
+    OSCCON = BEERCHIP_CLK;
 
     OPTION_REG = (1 << _OPTION_REG_nWPUEN_POSN) | /* Weak pullup disabled */
                  (1 << _OPTION_REG_INTEDG_POSN) | /* Edge triggered ints */
@@ -61,9 +61,14 @@ void blnk_InitPIC( void )
 */
 int main(int argc, char** argv) {
 
+    /* Initialize the LED blinker */
     blnk_InitPIC();
     blnk_InitLED( BLNK_LED_MASK, blnk_mode_allowForce );
-    
+
+    /* Initialize I2C */
+    // hbrdg_InitI2CSlave( BEERCHIP_I2C_BASE_ADDR + hbrdg_ReadI2CSelect() );
+    // hbrdg_ResetI2CSlave( );
+
     // GIE = 1; /* GO! */
 
     while( 1 )
@@ -74,4 +79,5 @@ int main(int argc, char** argv) {
     }
     return (EXIT_SUCCESS);
 }
+
 
