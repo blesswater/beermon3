@@ -1,1 +1,0 @@
- build/default/production/_ext/2076838892/beerChipI2C.d  build/default/production/_ext/2076838892/beerChipI2C.p1:  ../Blinky/beerChipI2C.c ../Blinky/beerChipI2C.h ../Blinky/beerChipI2CIndex.h

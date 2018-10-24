@@ -2,27 +2,23 @@
  * File:   beerChipI2CIndex.h
  * Author: BasementPC
  *
- * Created on January 19, 2014, 9:58 PM
+ * Created on October 6, 2018, 10:57 PM
  */
 
-#ifndef HBRIDGE_I2CINDEX_H
-#define	HBRIDGE_I2CINDEX_H
+#ifndef BEERCHIPI2CINDEX_H
+#define	BEERCHIPI2CINDEX_H
 
 #ifdef	__cplusplus
 extern "C" {
 #endif
 
 /*
-** I2C Address
-*/
-#define BEERCHIP_I2C_BASE_ADDR  0x23
-/*
 ** Indexes that hold version information
 */
-#define BEERCHIP_I2C_PROD_INDEX          0x00
-#define BEERCHIP_I2C_MAJ_VER_INDEX       0x01
-#define BEERCHIP_I2C_MIN_VER_INDEX       0x02
-#define BEERCHIP_I2C_PROD_BUILD_INDEX    0x03
+#define HBRDG_I2C_PROD_INDEX          0x00
+#define HBRDG_I2C_MAJ_VER_INDEX       0x01
+#define HBRDG_I2C_MIN_VER_INDEX       0x02
+#define HBRDG_I2C_PROD_BUILD_INDEX    0x03
 
 /*
 ** PWM
@@ -62,9 +58,10 @@ extern "C" {
 #define HBRDG_I2C_ENCOD_RDFLG_REV_CNT  0x01
 #define HBRDG_I2C_ENCOD_RDFLG_RESET    0x02
 
+
 #ifdef	__cplusplus
 }
 #endif
 
-#endif	/* HBRIDGE_I2CINDEX_H */
+#endif	/* BEERCHIPI2CINDEX_H */
 

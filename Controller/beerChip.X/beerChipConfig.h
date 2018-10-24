@@ -2,7 +2,7 @@
  * File:   beerChipConfig.h
  * Author: BasementPC
  *
- * Created on October 6, 2018, 9:25 PM
+ * Created on October 6, 2018, 10:09 PM
  */
 
 #ifndef BEERCHIPCONFIG_H
@@ -28,12 +28,16 @@ extern "C" {
 /* Clock select use in OSCCON */
 #define BEERCHIP_CLK (BEERCHIP_CLK_16MHz | BEERCHIP_CLK_SEL)
 
-/* I2C Configuration */
-#define HBRDG_I2C_SELECT_PORT  PORTC
-#define HBRDG_I2C_SELECT_TRIS  TRISC
-#define HBRDG_I2C_SELECT_ANSEL ANSELC
-#define HBRDG_I2C_SELECT_PIN   0x04  /* RC2 */
-#define HBRDG_I2C_BASE_ADDR    0x30
+#define BEERCHIP_INLINE
+/*
+** LED PIN Configuration
+*/
+#define BEERCHIP_LED_MASK   0x01 /* Port RA0 */
+
+/*
+** I2C Config
+*/
+#define BEERCHIP_I2C_ADDRESS   0x23
 
 
 #ifdef	__cplusplus

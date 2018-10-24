@@ -4,10 +4,6 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
-      <itemPath>beerChipBlinker.h</itemPath>
-      <itemPath>../Blinky/beerChipI2C.h</itemPath>
-      <itemPath>../Blinky/beerChipI2CIndex.h</itemPath>
-      <itemPath>beerChipConfig.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -18,7 +14,8 @@
                    projectFiles="true">
       <itemPath>beerChipMain.c</itemPath>
       <itemPath>beerChipBlinker.c</itemPath>
-      <itemPath>../Blinky/beerChipI2C.c</itemPath>
+      <itemPath>beerChipI2C.c</itemPath>
+      <itemPath>beerChipLed.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -28,6 +25,7 @@
   </logicalFolder>
   <sourceRootList>
     <Elem>../Blinky</Elem>
+    <Elem>.</Elem>
   </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
   <confs>

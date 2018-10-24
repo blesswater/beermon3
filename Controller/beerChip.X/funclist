@@ -1,8 +1,11 @@
-_memset: CODE, 1947 0 29
-_main: CODE, 1911 0 16
-__initialization: CODE, 2038 0 7
-_blnk_InitLED: CODE, 1976 0 29
-_blnk_InitPIC: CODE, 1904 0 7
-_blnk_Delay: CODE, 2005 0 33
-_blnk_ForceBlink: CODE, 1927 0 20
-Total: 141
+_beerChip_ForceBlink: CODE, 1860 0 20
+_memset: CODE, 1932 0 29
+_beerchip_InitPIC: CODE, 1853 0 7
+_main: CODE, 1906 0 26
+_i2c_InitI2CSlave: CODE, 1994 0 39
+__initialization: CODE, 2033 0 12
+_i2c_ReadI2CSelect: CODE, 1847 0 2
+_blnk_Delay: CODE, 1961 0 33
+_beerChip_InitLED: CODE, 1880 0 26
+_i2c_ResetI2CSlave: CODE, 1849 0 4
+Total: 198

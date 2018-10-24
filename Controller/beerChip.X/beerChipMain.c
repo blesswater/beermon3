@@ -1,5 +1,5 @@
-/*
- * File:   beerChipMain.c
+/* 
+ * File:   main.c
  * Author: BasementPC
  *
  * Created on January 8, 2014, 12:21 AM
@@ -10,9 +10,6 @@
 #include <stdint.h>
 
 #include <xc.h>
-
-#include "beerChipConfig.h"
-#include "beerChipBlinker.h"
 
 // #pragma config statements should precede project file includes.
 // Use project enums instead of #define for ON and OFF.
@@ -35,6 +32,12 @@
 #pragma config LPBOR = OFF      // Low-Power Brown Out Reset (Low-Power BOR is disabled)
 #pragma config LVP = OFF        // Low-Voltage Programming Enable (High-voltage on MCLR/VPP must be used for programming)
 
+#include "beerChipConfig.h"
+#include "beerChipLed.h"
+#include "beerChipI2C.h"
+
+
+
 void blnk_Delay(void)
 {
     long i = 524280;
@@ -42,7 +45,7 @@ void blnk_Delay(void)
     while(i--);
 }
 
-void blnk_InitPIC( void )
+void beerchip_InitPIC( void )
 {
     OSCCON = BEERCHIP_CLK;
 
@@ -56,28 +59,58 @@ void blnk_InitPIC( void )
     WDTCON |= ( 0 << _WDTCON_SWDTEN_POSN); /* Turn WDT Off */
 
 }
+
+uint8_t i2c_ReadI2CSelect()
+{
+#ifdef BEERCHIP_I2C_SELECT_ENABLE
+    uint8_t selValue = 0x00;
+    uint8_t cnt = 0;
+    long i;
+    /* Set I2C Select pin to Input */
+    BEERCHIP_I2C_SELECT_PORT |= BEERCHIP_I2C_SELECT_PINS;
+    BEERCHIP_I2C_SELECT_ANSEL &= !BEERCHIP_I2C_SELECT_PINS; /* Turn OFF analog select */
+
+    /* Read SELECT_I2C pin. Make sure get 0x20 readings all the same */
+    while( cnt < 0x20 )
+    {
+        /* hbrdg_Delay() */
+        i = 5556;
+        while(i--);
+
+        cnt++;
+        // LATA ^= BEERCHIP_LED_MASK;
+        if( (BEERCHIP_I2C_SELECT_PORT & BEERCHIP_I2C_SELECT_PINS) != selValue )
+        {
+            cnt = 0;
+        }
+        selValue =  (BEERCHIP_I2C_SELECT_PORT & BEERCHIP_I2C_SELECT_PINS);
+    }
+
+    return( (selValue == 0x00) ? 0x00 : 0x0F );
+#else
+    return( (uint8_t)0x00 );
+#endif
+
+}
 /*
 ** main
 */
 int main(int argc, char** argv) {
 
-    /* Initialize the LED blinker */
-    blnk_InitPIC();
-    blnk_InitLED( BLNK_LED_MASK, blnk_mode_allowForce );
+    beerchip_InitPIC();
 
-    /* Initialize I2C */
-    // hbrdg_InitI2CSlave( BEERCHIP_I2C_BASE_ADDR + hbrdg_ReadI2CSelect() );
-    // hbrdg_ResetI2CSlave( );
+    beerChip_InitLED( BEERCHIP_LED_MASK, ledMode_AllowForce );
 
+    /* Init I2C */
+    i2c_InitI2CSlave( BEERCHIP_I2C_ADDRESS + (uint8_t)i2c_ReadI2CSelect() );
+    i2c_ResetI2CSlave( );
     // GIE = 1; /* GO! */
 
     while( 1 )
     {
-        // PORTA = PORTA ^ BLNK_LED_MASK;
-        blnk_ForceBlink();
+        beerChip_ForceBlink();
         blnk_Delay();
     }
     return (EXIT_SUCCESS);
 }
-
 
