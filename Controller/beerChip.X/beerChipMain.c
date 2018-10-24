@@ -1,5 +1,5 @@
 /*
- * File:   main.c
+ * File:   beerChipMain.c
  * Author: BasementPC
  *
  * Created on January 8, 2014, 12:21 AM
