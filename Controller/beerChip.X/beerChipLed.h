@@ -14,25 +14,32 @@ extern "C" {
 
 #include <stdint.h>
 
+#include <xc.h>
+
+#define BEERCHIP_LED_PORT PORTA
+#define BEERCHIP_LED_ANSEL ANSELA
+#define BEERCHIP_LED_PIN  0x01   /* Port RA0 */
+#define BEERCHIP_LED_TRIS TRISA
+#define BEERCHIP_LED_LAT  LATA
+
 /*
 ** Structure for LED Status
 */
 
 /* LED Modes */
-#define ledMode_AllowForce 0x01
-#define ledMode_Timer      0x02
-#define ledMode_stuckOn    0x04
-#define ledMode_stuckOff   0x08
+#define ledMode_Off        0x00
+#define ledMode_On         0x01
+#define ledMode_Blink      0x02
 
 typedef struct {
     uint8_t mode;
-    uint16_t cnt;
-    uint16_t cngCnt;
+    uint8_t cnt;
+    uint8_t cngCnt;
 } beerChip_LEDState_t ;
 
-void beerChip_InitLED( uint8_t portMask, uint8_t mode);
-void beerChip_ForceBlink( void );
-
+void beerChip_InitLED();
+void beerChip_SetLEDMode( uint8_t mode, uint8_t cnt );
+void beerChip_KickLED( void );
 
 #ifdef	__cplusplus
 }

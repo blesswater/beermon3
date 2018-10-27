@@ -37,11 +37,8 @@ extern "C" {
 #define BEERCHIP_CLK (BEERCHIP_CLK_16MHz | BEERCHIP_CLK_SEL)
 
 #define BEERCHIP_INLINE
-/*
-** LED PIN Configuration
-*/
-#define BEERCHIP_LED_MASK   0x01 /* Port RA0 */
 
+#define BEERCHIP_BLINK_RATE  0 /* In 1/10 sec */
 /*
 ** I2C Config
 */

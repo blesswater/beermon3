@@ -56,6 +56,21 @@ void beerchip_InitPIC( void )
                  (0 << _OPTION_REG_PSA_POSN)    | /* Assign pre-sclar to TMR0 */
                  (0x7 << _OPTION_REG_PS_POSN); /* Presclar 1:256 */
 
+    /* Timer 1 Config */
+    T1CON = (0x0 << _T1CON_TMR1CS_POSN) | /* Use Fosc/4 */
+            (1 << _T1CON_TMR1ON_POSN)   | /* Timer 1 Enabled */
+            (0x3 << _T1CON_T1CKPS_POSN) | /* Timer 1 Prescale 1:8 */
+            (1 << _T1CON_nT1SYNC_POSN);   /* Not syncronazed */ 
+
+    T1GCON = (0 << _T1GCON_TMR1GE_POSN);    /* Turn off Gate Enable */
+    /* Enable Timer 1 interrupt */
+    PIE1 = (1 << _PIE1_TMR1IE_POSN);      /* Enable interrupt */
+    INTCON = (1 << _INTCON_PEIE_POSN);    /* Timer interrupt Enable */
+    /* Set 16 Bit counter to roll over in 0.1sec */
+    TMR1H = 0x3C;
+    TMR1L = 0xAF;
+
+
     WDTCON |= ( 0 << _WDTCON_SWDTEN_POSN); /* Turn WDT Off */
 
 }
@@ -99,16 +114,18 @@ int main(int argc, char** argv) {
 
     beerchip_InitPIC();
 
-    beerChip_InitLED( BEERCHIP_LED_MASK, ledMode_AllowForce );
+    beerChip_InitLED();
+    beerChip_SetLEDMode( ledMode_Blink, BEERCHIP_BLINK_RATE );
 
     /* Init I2C */
     i2c_InitI2CSlave( BEERCHIP_I2C_ADDRESS + (uint8_t)i2c_ReadI2CSelect() );
     i2c_ResetI2CSlave( );
-    // GIE = 1; /* GO! */
+
+
+    GIE = 1; /* GO! */
 
     while( 1 )
     {
-        beerChip_ForceBlink();
         blnk_Delay();
     }
     return (EXIT_SUCCESS);

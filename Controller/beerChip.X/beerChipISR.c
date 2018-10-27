@@ -5,6 +5,7 @@
 #include "beerChipConfig.h"
 #include "beerChipI2C.h"
 #include "beerChipI2CIndex.h"
+#include "beerChipLed.h"
 
 #define HBRDG_PROC_LSB  0x01
 #define HBRDG_PROC_MSB  0x02
@@ -30,7 +31,12 @@ void interrupt ISR( void )
 
     if( TMR1IF )
     {
+        beerChip_KickLED();
 
+        /* Set 16 Bit counter to roll over in 0.1sec */
+        TMR1H = 0x3C;
+        TMR1L = 0xAF;
+        
         TMR1IF = 0x00;
     }
 
