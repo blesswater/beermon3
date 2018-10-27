@@ -69,8 +69,8 @@ void i2c_ResetI2CSlave( )
 }
 
 
-/* The I2C master is performing a Read - Send it data */
-BEERCHIP_INLINE void hbrdg_MasterReadI2CData( uint8_t value )
+/* The I2C master is performing a Read - Send it the data */
+BEERCHIP_INLINE void i2c_MasterReadI2CData( uint8_t value )
 {
     do {
         SSPCON1 &= ~_SSPCON1_WCOL_MASK;
@@ -81,11 +81,11 @@ BEERCHIP_INLINE void hbrdg_MasterReadI2CData( uint8_t value )
 }
 
 
-BEERCHIP_INLINE hbrdg_i2cStatus hbrdg_IsrI2CSlave( uint8_t *index, uint8_t *value )
+BEERCHIP_INLINE i2c_i2cStatus i2c_IsrI2CSlave( uint8_t *index, uint8_t *value )
 {
     uint8_t junk;
     uint8_t stat;
-    hbrdg_i2cStatus result;
+    i2c_i2cStatus result;
 
     // BEERCHIP_I2C_ACTIVITY_ON();
 
@@ -154,11 +154,11 @@ BEERCHIP_INLINE hbrdg_i2cStatus hbrdg_IsrI2CSlave( uint8_t *index, uint8_t *valu
         break;
 
     }
-    // BEERCHIP_I2C_ACTIVITY_OFF();
+    
     return result;
 }
 
-BEERCHIP_INLINE void hbrdg_BusColI2CSlave( void )
+BEERCHIP_INLINE void i2c_BusColI2CSlave( void )
 {
     uint8_t junk;
 

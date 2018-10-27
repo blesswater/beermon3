@@ -13,6 +13,14 @@ extern "C" {
 #endif
 
 /*
+** Version
+*/
+#define BEERCHIP_PRODUCT_ID    0xB0
+#define BEERCHIP_MAJOR_VERSION 0
+#define BEERCHIP_MINOR_VERSION 0
+#define BEERCHIP_BUILD         0
+
+/*
 ** Different clock values for OSCCON
 **/
 #define BEERCHIP_CLK_16MHz  (0xF << _OSCCON_IRCF_POSN)

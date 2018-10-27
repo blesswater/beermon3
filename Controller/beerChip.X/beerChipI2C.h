@@ -67,7 +67,7 @@ typedef union {
     };
     uint8_t value;
 
-} hbrdg_i2cStatus;
+} i2c_i2cStatus;
 
 #define BLKN_I2C_STATE_MASK = (_SSP1STAT_R_nW_MASK | _SSP1STAT_D_nA_MASK)
 
@@ -75,10 +75,10 @@ void i2c_InitI2CSlave( uint8_t addr );
 
 void i2c_ResetI2CSlave( void );
 
-BEERCHIP_INLINE hbrdg_i2cStatus hbrdg_IsrI2CSlave( uint8_t *index, uint8_t *value );
-BEERCHIP_INLINE void hbrdg_BusColI2CSlave( void );
+BEERCHIP_INLINE i2c_i2cStatus i2c_IsrI2CSlave( uint8_t *index, uint8_t *value );
+BEERCHIP_INLINE void i2c_BusColI2CSlave( void );
 
-BEERCHIP_INLINE void hbrdg_MasterReadI2CData( uint8_t value );
+BEERCHIP_INLINE void i2c_MasterReadI2CData( uint8_t value );
 
 BEERCHIP_INLINE void hbrdg_activityOnI2CSlave( void );
 BEERCHIP_INLINE void hbrdg_activityToggleI2CSlave( void );

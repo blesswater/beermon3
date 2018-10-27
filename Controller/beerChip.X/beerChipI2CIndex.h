@@ -15,10 +15,10 @@ extern "C" {
 /*
 ** Indexes that hold version information
 */
-#define HBRDG_I2C_PROD_INDEX          0x00
-#define HBRDG_I2C_MAJ_VER_INDEX       0x01
-#define HBRDG_I2C_MIN_VER_INDEX       0x02
-#define HBRDG_I2C_PROD_BUILD_INDEX    0x03
+#define BEERCHIP_I2C_PROD_INDEX          0x00
+#define BEERCHIP_I2C_MAJ_VER_INDEX       0x01
+#define BEERCHIP_I2C_MIN_VER_INDEX       0x02
+#define BEERCHIP_I2C_PROD_BUILD_INDEX    0x03
 
 /*
 ** PWM
