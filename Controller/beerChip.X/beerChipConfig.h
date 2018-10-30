@@ -42,7 +42,12 @@ extern "C" {
 /*
 ** I2C Config
 */
-#define BEERCHIP_I2C_ADDRESS   0x23
+#define BEERCHIP_I2C_ADDRESS   0x2E
+
+/*
+**
+*/
+#define BEERCHIP_TICKS_PER_SECOND  10
 
 
 #ifdef	__cplusplus

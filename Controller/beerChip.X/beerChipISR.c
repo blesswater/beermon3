@@ -20,7 +20,8 @@ static uint16_t encodVel;
 static uint16_t encodErr;
 #endif
 
-static uint8_t cnts[3];
+static uint32_t uptime = 0x0000;
+static uint8_t  secTickCnt = 0x00;
 
 void interrupt ISR( void )
 {
@@ -28,10 +29,20 @@ void interrupt ISR( void )
     uint8_t i2cValue;
     i2c_i2cStatus i2cStatus;
 
+    static uint32_t uptimeSnapshot;
+
 
     if( TMR1IF )
     {
         beerChip_KickLED();
+
+        /* Do time tick */
+        if( secTickCnt++ == BEERCHIP_TICKS_PER_SECOND )
+        {
+            /* This should happen once per second */
+            uptime++;
+            secTickCnt = 0x00;
+        }
 
         /* Set 16 Bit counter to roll over in 0.1sec */
         TMR1H = 0x3C;
@@ -79,6 +90,15 @@ void interrupt ISR( void )
 
                     case BEERCHIP_I2C_PROD_BUILD_INDEX:
                         i2c_MasterReadI2CData( BEERCHIP_BUILD );
+                    break;
+
+                    /* Up Time */
+                    case BEERCHIP_I2C_UPTIME_BYTE3:
+                        uptimeSnapshot = uptime;
+                    case BEERCHIP_I2C_UPTIME_BYTE2:
+                    case BEERCHIP_I2C_UPTIME_BYTE1:
+                    case BEERCHIP_I2C_UPTIME_BYTE0:
+                        i2c_MasterReadI2CData( (uptimeSnapshot >> (8 * (i2cIndex - BEERCHIP_I2C_UPTIME_BYTE3)) & 0xFF) );
                     break;
 
                     default:

@@ -1,0 +1,28 @@
+192.168.166.185 - pi/S...
+
+# To turn On I2C:
+    sudo raspi-config 5,P5
+#I2C Tools	
+    sudo apt-get install -y i2c-tools
+    i2cdetect -y 1
+    i2cdump -y 1 0x25
+
+# Raspberry Pi Image
+    https://www.raspberrypi.org/downloads/raspbian/
+    Raspbian Stretch w/ Desktop
+    Ver: Oct 2018
+    Rel: 10/9/2018
+    Ker: 4.14
+    SHA-265: 6e3aa76e21473ef316c0bfc9efa5c27a27fe46bd698f71de3e06e66b64a55500
+
+# To get i2c working
+https://www.studentcompanion.co.za/pic-microcontroller-communication-with-i2c-bus-mikroc/
+https://www.raspberrypi.org/forums/viewtopic.php?t=71639
+
+In /boot/config.txt
+    CHANGE: dtparam=i2c_arm=on
+    TO: dtparam=i2c_arm=on,i2c_arm_baudrate=32000
+
+To check:
+    xxd /sys/class/i2c-adapter/i2c-1/of_node/clock-frequency
+    Should show 7d00
