@@ -1,16 +1,17 @@
-_ISR: CODE, 4 0 142
-_i2c_MasterReadI2CData: CODE, 504 0 12
-_memset: CODE, 342 0 30
-_beerchip_InitPIC: CODE, 448 0 22
-_main: CODE, 372 0 27
-_i2c_InitI2CSlave: CODE, 264 0 44
-_beerChip_SetLEDMode: CODE, 425 0 23
-__initialization: CODE, 148 0 9
-_i2c_ReadI2CSelect: CODE, 532 0 2
-_blnk_Delay: CODE, 308 0 34
-_beerChip_KickLED: CODE, 470 0 18
-_beerChip_InitLED: CODE, 399 0 26
-_i2c_IsrI2CSlave: CODE, 160 0 104
-_i2c_BusColI2CSlave: CODE, 516 0 7
-_i2c_ResetI2CSlave: CODE, 529 0 3
-Total: 503
+_ISR: CODE, 4 0 192
+_i2c_MasterReadI2CData: CODE, 610 0 12
+i1_beerChip_SetLEDMode: CODE, 358 0 38
+_memset: CODE, 465 0 30
+_beerchip_InitPIC: CODE, 548 0 22
+_main: CODE, 495 0 27
+_i2c_InitI2CSlave: CODE, 314 0 44
+_beerChip_SetLEDMode: CODE, 396 0 35
+__initialization: CODE, 198 0 9
+_i2c_ReadI2CSelect: CODE, 638 0 2
+_blnk_Delay: CODE, 431 0 34
+_beerChip_KickLED: CODE, 592 0 18
+_beerChip_InitLED: CODE, 522 0 26
+_i2c_IsrI2CSlave: CODE, 210 0 104
+_i2c_BusColI2CSlave: CODE, 622 0 7
+_i2c_ResetI2CSlave: CODE, 635 0 3
+Total: 603

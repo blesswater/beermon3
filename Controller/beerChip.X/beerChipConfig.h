@@ -15,10 +15,10 @@ extern "C" {
 /*
 ** Version
 */
-#define BEERCHIP_PRODUCT_ID    0xB0
+#define BEERCHIP_PRODUCT_ID    0x0B
 #define BEERCHIP_MAJOR_VERSION 0
 #define BEERCHIP_MINOR_VERSION 0
-#define BEERCHIP_BUILD         0
+#define BEERCHIP_BUILD         1
 
 /*
 ** Different clock values for OSCCON

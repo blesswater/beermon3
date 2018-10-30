@@ -8,7 +8,7 @@
 /*
 ** Global instance of the LED State
 */
-static beerChip_LEDState_t ledState;
+beerChip_LEDState_t ledState;
 
 
 void beerChip_InitLED()
@@ -38,7 +38,26 @@ void beerChip_KickLED( void )
 
 void beerChip_SetLEDMode( uint8_t mode, uint8_t cnt )
 {
-    memset( &ledState, 0x00, sizeof(beerChip_LEDState_t) );
-    ledState.mode = mode;
+    switch( mode )
+    {
+        case ledMode_Off:
+            ledState.mode = ledMode_Off;
+            BEERCHIP_LED_PORT = BEERCHIP_LED_PORT & ~BEERCHIP_LED_PIN;
+        break;
+
+        case ledMode_On:
+            ledState.mode = ledMode_On;
+            BEERCHIP_LED_PORT = BEERCHIP_LED_PORT | BEERCHIP_LED_PIN;
+        break;
+
+        case ledMode_Blink:
+            ledState.mode = ledMode_Blink;
+        break;
+
+        default:
+            /* Do nothing */
+        break;
+    }
+    ledState.cnt = 0x00;
     ledState.cngCnt = cnt;
 }

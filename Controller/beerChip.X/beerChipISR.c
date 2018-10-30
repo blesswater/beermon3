@@ -63,6 +63,14 @@ void interrupt ISR( void )
             {
                 switch( i2cIndex )
                 {
+                    case BEERCHIP_I2C_LED_MODE:
+                        beerChip_SetLEDMode( i2cValue, ledState.cngCnt );
+                    break;
+
+                    case BEERCHIP_I2C_LED_CNT_LIMIT:
+                        beerChip_SetLEDMode( ledState.mode, i2cValue );
+                    break;
+
                     default:
                         /* Do Nothing */
                     break;
@@ -101,6 +109,17 @@ void interrupt ISR( void )
                         i2c_MasterReadI2CData( (uptimeSnapshot >> (8 * (i2cIndex - BEERCHIP_I2C_UPTIME_BYTE3)) & 0xFF) );
                     break;
 
+                    /* LED Control */
+                    case BEERCHIP_I2C_LED_MODE:
+                        i2c_MasterReadI2CData( ledState.mode );
+                    break;
+                    case BEERCHIP_I2C_LED_CNT:
+                        i2c_MasterReadI2CData( ledState.cnt );
+                    break;
+                    case BEERCHIP_I2C_LED_CNT_LIMIT:
+                        i2c_MasterReadI2CData( ledState.cngCnt );
+                    break;
+                     
                     default:
                         i2c_MasterReadI2CData( BEERCHIP_I2C_CLEAR_CHAR );
                     break;

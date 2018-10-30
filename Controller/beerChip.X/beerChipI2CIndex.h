@@ -28,6 +28,13 @@ extern "C" {
 #define BEERCHIP_I2C_UPTIME_BYTE2        0x05
 #define BEERCHIP_I2C_UPTIME_BYTE3        0x04 /* LSB */
 
+/*
+** LED Controll
+*/
+#define BEERCHIP_I2C_LED_MODE               0x08
+#define BEERCHIP_I2C_LED_CNT                0x09
+#define BEERCHIP_I2C_LED_CNT_LIMIT          0x0A
+
 
 
 #ifdef	__cplusplus

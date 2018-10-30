@@ -37,6 +37,8 @@ typedef struct {
     uint8_t cngCnt;
 } beerChip_LEDState_t ;
 
+extern beerChip_LEDState_t ledState;
+
 void beerChip_InitLED();
 void beerChip_SetLEDMode( uint8_t mode, uint8_t cnt );
 void beerChip_KickLED( void );
