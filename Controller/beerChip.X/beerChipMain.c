@@ -35,7 +35,7 @@
 #include "beerChipConfig.h"
 #include "beerChipLed.h"
 #include "beerChipI2C.h"
-
+#include "beerLock.h"
 
 
 void blnk_Delay(void)
@@ -112,6 +112,8 @@ uint8_t i2c_ReadI2CSelect()
 */
 int main(int argc, char** argv) {
 
+    lock_t lock;
+
     beerchip_InitPIC();
 
     beerChip_InitLED();
@@ -121,6 +123,12 @@ int main(int argc, char** argv) {
     i2c_InitI2CSlave( BEERCHIP_I2C_ADDRESS + (uint8_t)i2c_ReadI2CSelect() );
     i2c_ResetI2CSlave( );
 
+    lock = 0x12;
+    lock_Init( &lock );
+    if( lock_Take( &lock ) )
+    {
+        lock_Release( &lock );
+    }
 
     GIE = 1; /* GO! */
 

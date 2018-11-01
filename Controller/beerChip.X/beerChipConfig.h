@@ -18,7 +18,7 @@ extern "C" {
 #define BEERCHIP_PRODUCT_ID    0x0B
 #define BEERCHIP_MAJOR_VERSION 0
 #define BEERCHIP_MINOR_VERSION 0
-#define BEERCHIP_BUILD         1
+#define BEERCHIP_BUILD         2
 
 /*
 ** Different clock values for OSCCON
@@ -48,6 +48,11 @@ extern "C" {
 **
 */
 #define BEERCHIP_TICKS_PER_SECOND  10
+
+/*
+** Typedefs
+*/
+typedef unsigned char bool;
 
 
 #ifdef	__cplusplus

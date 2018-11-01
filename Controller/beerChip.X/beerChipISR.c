@@ -7,19 +7,6 @@
 #include "beerChipI2CIndex.h"
 #include "beerChipLed.h"
 
-#define HBRDG_PROC_LSB  0x01
-#define HBRDG_PROC_MSB  0x02
-
-static uint8_t pwmRdCnt;
-static uint16_t pwmRdValue;
-
-static uint8_t encodRdCnt;
-static uint32_t encodPos;
-static uint16_t encodVel;
-#ifdef HBRDG_ENCOD_TRACK_ERRORS
-static uint16_t encodErr;
-#endif
-
 static uint32_t uptime = 0x0000;
 static uint8_t  secTickCnt = 0x00;
 
