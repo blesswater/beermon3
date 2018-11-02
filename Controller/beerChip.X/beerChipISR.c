@@ -10,7 +10,7 @@
 static uint32_t uptime = 0x0000;
 static uint8_t  secTickCnt = 0x00;
 
-void interrupt ISR( void )
+void __interrupt () ISR( void )
 {
     uint8_t i2cIndex;
     uint8_t i2cValue;

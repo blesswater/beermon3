@@ -127,6 +127,10 @@ int main(int argc, char** argv) {
     lock_Init( &lock );
     if( lock_Take( &lock ) )
     {
+        if( lock_Take( &lock ) )
+        {
+            lock_Take( &lock );
+        }
         lock_Release( &lock );
     }
 
