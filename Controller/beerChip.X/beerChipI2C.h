@@ -12,7 +12,7 @@
 extern "C" {
 #endif
 
-#include "BeerChipConfig.h"
+#include "beerChipConfig.h"
 
 #define BEERCHIP_I2C_ACTIVITY_ENABLE_NOT  /* Enables an I2C Activity LED */
 #define BEERCHIP_I2C_TEST_PATTERN_NOT /* Writes an initial test pattern to I2C
@@ -69,7 +69,7 @@ typedef union {
 
 } i2c_i2cStatus;
 
-#define BLKN_I2C_STATE_MASK = (_SSP1STAT_R_nW_MASK | _SSP1STAT_D_nA_MASK)
+#define BLKN_I2C_STATE_MASK  (_SSP1STAT_R_nW_MASK | _SSP1STAT_D_nA_MASK)
 
 void i2c_InitI2CSlave( uint8_t addr );
 
