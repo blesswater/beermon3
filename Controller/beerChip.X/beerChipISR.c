@@ -15,7 +15,8 @@ static uint8_t  secTickCnt = 0x00;
 extern a2d_Reading_t a2dChan0;
 extern a2d_Reading_t a2dChan1;
 
-void __interrupt () ISR( void )
+// void __interrupt () ISR( void )
+void interrupt ISR( void )
 {
     uint8_t i2cIndex;
     uint8_t i2cValue;
@@ -27,6 +28,9 @@ void __interrupt () ISR( void )
         uint16_t reading;
         uint16_t count;
     } a2dChan0Snapshot, a2dChan1Snapshot;
+    
+    // a2dChan0Snapshot.count = 0x89ab;
+    // a2dChan0Snapshot.reading = 0xcdef;
 
     if( TMR1IF )
     {
@@ -131,21 +135,29 @@ void __interrupt () ISR( void )
                     
                     /* A2D */
                     case BEERCHIP_A2D_CHAN0_READING_BYTE0:
-                        if( lock_Take( &(a2dChan0.lock) ) )
+                        if( lock_Check( &(a2dChan0.lock) ) )
                         {
                             a2dChan0Snapshot.count = a2dChan0.count;
                             a2dChan0Snapshot.reading = a2dChan0.reading;
                         }
+                        else
+                        {
+                            a2dChan0Snapshot.count = 0xFFFF;
+                        }
                         i2c_MasterReadI2CData( *(uint8_t *)&(a2dChan0Snapshot.reading) );
+                        // i2c_MasterReadI2CData( 0x12 );
                     break;
                     case BEERCHIP_A2D_CHAN0_READING_BYTE1:
-                        i2c_MasterReadI2CData( *(uint8_t *)(&(a2dChan0Snapshot.reading) + 1) );
+                        i2c_MasterReadI2CData( *((uint8_t *)(&(a2dChan0Snapshot.reading)) + 1) );
+                        // i2c_MasterReadI2CData( 0x34 );
                     break;
                     case BEERCHIP_A2D_CHAN0_COUNT_BYTE0:
                         i2c_MasterReadI2CData( *(uint8_t *)(&(a2dChan0Snapshot.count)) );
+                        // i2c_MasterReadI2CData( 0x56 );
                     break;
                     case BEERCHIP_A2D_CHAN0_COUNT_BYTE1:
-                        i2c_MasterReadI2CData( *(uint8_t *)(&(a2dChan0Snapshot.count) + 1) );
+                        i2c_MasterReadI2CData( *((uint8_t *)(&(a2dChan0Snapshot.count)) + 1) );
+                        // i2c_MasterReadI2CData( 0x78 );
                     break;
                     
                         

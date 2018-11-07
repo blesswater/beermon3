@@ -16,9 +16,7 @@ bool lock_Take( lock_t *lock )
 {
     /* Assumes W holds &lock */
     do {
-        // asm( "MOVLB 0x00" );
-        // asm( "MOVF lock_Take@lock, W" );
-        // asm( "MOVF __pcstackCOMMON, W" );
+        asm( "MOVF lock_Take@lock, W" );
         asm( "MOVWF FSR1L");
         asm( "CLRF FSR1H" );
         asm( "BSF INDF1, 4" );
@@ -26,6 +24,11 @@ bool lock_Take( lock_t *lock )
     } while( *lock == 0x00 );
 
     return( (*lock & 0x10) ? 0 : 1 );
+}
+
+bool lock_Check( lock_t *lock )
+{
+    return( (*lock & 0x01) ? 0 : 1 );
 }
 
 void lock_Release( lock_t *lock )
