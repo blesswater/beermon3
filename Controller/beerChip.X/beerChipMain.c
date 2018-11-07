@@ -36,6 +36,14 @@
 #include "beerChipLed.h"
 #include "beerChipI2C.h"
 #include "beerLock.h"
+#include "beerChipA2D.h"
+
+/*
+** Globals
+*/
+
+a2d_Reading_t a2dChan0;
+a2d_Reading_t a2dChan1;
 
 
 void blnk_Delay(void)
@@ -110,10 +118,11 @@ uint8_t i2c_ReadI2CSelect()
 /*
 ** main
 */
-int main(int argc, char** argv) {
+int main(int argc, char** argv) 
+{
 
-    lock_t lock;
-
+    a2d_Reading_t *thisChan; 
+    
     beerchip_InitPIC();
 
     beerChip_InitLED();
@@ -121,24 +130,29 @@ int main(int argc, char** argv) {
 
     /* Init I2C */
     i2c_InitI2CSlave( BEERCHIP_I2C_ADDRESS + (uint8_t)i2c_ReadI2CSelect() );
-    i2c_ResetI2CSlave( );
-
-    lock = 0x12;
-    lock_Init( &lock );
-    if( lock_Take( &lock ) )
-    {
-        if( lock_Take( &lock ) )
-        {
-            lock_Take( &lock );
-        }
-        lock_Release( &lock );
-    }
+    i2c_ResetI2CSlave();
+    
+    /* Init A2D */
+    a2d_Init();
+    a2d_InitReading( &a2dChan0, BEERCHIP_A2D_CHAN0 );
+    a2d_InitReading( &a2dChan1, BEERCHIP_A2D_CHAN1 );
+    /* Get a few readings before enabling interrupts */
+    thisChan = &a2dChan0;
+    a2d_StartReading( thisChan );
+    while( !a2d_PollReading( thisChan ) );
+    thisChan = &a2dChan1;
+    a2d_StartReading( thisChan );
+    while( !a2d_PollReading( thisChan ) );
+    
 
     GIE = 1; /* GO! */
 
+    /* Dispatch Loop */
     while( 1 )
     {
-        blnk_Delay();
+        thisChan = (thisChan == &a2dChan0) ? &a2dChan1 : &a2dChan0;
+        a2d_StartReading( thisChan );
+        while( !a2d_PollReading( thisChan ) );
     }
     return (EXIT_SUCCESS);
 }

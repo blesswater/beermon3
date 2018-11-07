@@ -9,6 +9,7 @@
       <itemPath>beerChipI2CIndex.h</itemPath>
       <itemPath>beerChipLed.h</itemPath>
       <itemPath>beerLock.h</itemPath>
+      <itemPath>beerChipA2D.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -22,6 +23,7 @@
       <itemPath>beerChipLed.c</itemPath>
       <itemPath>beerChipISR.c</itemPath>
       <itemPath>beerLock.c</itemPath>
+      <itemPath>beerChipA2D.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -37,7 +39,7 @@
     <conf name="default" type="2">
       <toolsSet>
         <developmentServer>localhost</developmentServer>
-        <targetDevice>PIC16F1508</targetDevice>
+        <targetDevice>PIC16F1509</targetDevice>
         <targetHeader></targetHeader>
         <targetPluginBoard></targetPluginBoard>
         <platformTool>PICkit3PlatformTool</platformTool>

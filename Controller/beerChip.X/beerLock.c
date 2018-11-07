@@ -16,7 +16,9 @@ bool lock_Take( lock_t *lock )
 {
     /* Assumes W holds &lock */
     do {
-        asm( "MOVF lock_Take@lock, W" );
+        // asm( "MOVLB 0x00" );
+        // asm( "MOVF lock_Take@lock, W" );
+        // asm( "MOVF __pcstackCOMMON, W" );
         asm( "MOVWF FSR1L");
         asm( "CLRF FSR1H" );
         asm( "BSF INDF1, 4" );

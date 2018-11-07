@@ -6,9 +6,14 @@
 #include "beerChipI2C.h"
 #include "beerChipI2CIndex.h"
 #include "beerChipLed.h"
+#include "beerLock.h"
+#include "beerChipA2D.h"
 
-static uint32_t uptime = 0x0000;
+static uint32_t uptime = 0x00000000;
 static uint8_t  secTickCnt = 0x00;
+
+extern a2d_Reading_t a2dChan0;
+extern a2d_Reading_t a2dChan1;
 
 void __interrupt () ISR( void )
 {
@@ -17,7 +22,11 @@ void __interrupt () ISR( void )
     i2c_i2cStatus i2cStatus;
 
     static uint32_t uptimeSnapshot;
-
+    
+    static struct {
+        uint16_t reading;
+        uint16_t count;
+    } a2dChan0Snapshot, a2dChan1Snapshot;
 
     if( TMR1IF )
     {
@@ -90,10 +99,23 @@ void __interrupt () ISR( void )
                     /* Up Time */
                     case BEERCHIP_I2C_UPTIME_BYTE3:
                         uptimeSnapshot = uptime;
+                        i2c_MasterReadI2CData( (uint8_t)(uptimeSnapshot & 0xFF) );
+                    break;
                     case BEERCHIP_I2C_UPTIME_BYTE2:
+                        // i2c_MasterReadI2CData( (uint8_t)((uptimeSnapshot >> 8) & 0xFF) );
+                        // i2c_MasterReadI2CData( 0x56 );
+                        // temp = 0x56;
+                        // temp = (uint8_t)((uptimeSnapshot & 0x0000FF00) >> 8);
+                        // temp = *(((uint8_t *)&uptimeSnapshot) + 1);
+                        i2c_MasterReadI2CData( *(((uint8_t *)&uptimeSnapshot) + 1) );
+                    break;
+                        
                     case BEERCHIP_I2C_UPTIME_BYTE1:
+                        i2c_MasterReadI2CData( *(((uint8_t *)&uptimeSnapshot) + 2) );
+                    break;
                     case BEERCHIP_I2C_UPTIME_BYTE0:
-                        i2c_MasterReadI2CData( (uptimeSnapshot >> (8 * (i2cIndex - BEERCHIP_I2C_UPTIME_BYTE3)) & 0xFF) );
+                        // i2c_MasterReadI2CData( (uptimeSnapshot >> (8 * (i2cIndex - BEERCHIP_I2C_UPTIME_BYTE3)) & 0xFF) );
+                        i2c_MasterReadI2CData( *(((uint8_t *)&uptimeSnapshot) + 3) );
                     break;
 
                     /* LED Control */
@@ -106,6 +128,27 @@ void __interrupt () ISR( void )
                     case BEERCHIP_I2C_LED_CNT_LIMIT:
                         i2c_MasterReadI2CData( ledState.cngCnt );
                     break;
+                    
+                    /* A2D */
+                    case BEERCHIP_A2D_CHAN0_READING_BYTE0:
+                        if( lock_Take( &(a2dChan0.lock) ) )
+                        {
+                            a2dChan0Snapshot.count = a2dChan0.count;
+                            a2dChan0Snapshot.reading = a2dChan0.reading;
+                        }
+                        i2c_MasterReadI2CData( *(uint8_t *)&(a2dChan0Snapshot.reading) );
+                    break;
+                    case BEERCHIP_A2D_CHAN0_READING_BYTE1:
+                        i2c_MasterReadI2CData( *(uint8_t *)(&(a2dChan0Snapshot.reading) + 1) );
+                    break;
+                    case BEERCHIP_A2D_CHAN0_COUNT_BYTE0:
+                        i2c_MasterReadI2CData( *(uint8_t *)(&(a2dChan0Snapshot.count)) );
+                    break;
+                    case BEERCHIP_A2D_CHAN0_COUNT_BYTE1:
+                        i2c_MasterReadI2CData( *(uint8_t *)(&(a2dChan0Snapshot.count) + 1) );
+                    break;
+                    
+                        
                      
                     default:
                         i2c_MasterReadI2CData( BEERCHIP_I2C_CLEAR_CHAR );

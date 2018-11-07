@@ -11,6 +11,8 @@
 #ifdef	__cplusplus
 extern "C" {
 #endif
+    
+#include <stdint.h>
 
 typedef volatile uint8_t lock_t;
 
