@@ -133,16 +133,15 @@ void interrupt ISR( void )
                         i2c_MasterReadI2CData( ledState.cngCnt );
                     break;
                     
-                    /* A2D */
+                    /* 
+                    ** A2D 
+                    ** Chan 0
+                    */
                     case BEERCHIP_A2D_CHAN0_READING_BYTE0:
                         if( lock_Check( &(a2dChan0.lock) ) )
                         {
                             a2dChan0Snapshot.count = a2dChan0.count;
                             a2dChan0Snapshot.reading = a2dChan0.reading;
-                        }
-                        else
-                        {
-                            a2dChan0Snapshot.count = 0xFFFF;
                         }
                         i2c_MasterReadI2CData( *(uint8_t *)&(a2dChan0Snapshot.reading) );
                         // i2c_MasterReadI2CData( 0x12 );
@@ -160,8 +159,28 @@ void interrupt ISR( void )
                         // i2c_MasterReadI2CData( 0x78 );
                     break;
                     
-                        
-                     
+                    /* Chan 1 */    
+                    case BEERCHIP_A2D_CHAN1_READING_BYTE0:
+                        if( lock_Check( &(a2dChan1.lock) ) )
+                        {
+                            a2dChan1Snapshot.count = a2dChan1.count;
+                            a2dChan1Snapshot.reading = a2dChan1.reading;
+                        }
+                        i2c_MasterReadI2CData( *(uint8_t *)&(a2dChan1Snapshot.reading) );
+                        // i2c_MasterReadI2CData( 0x12 );
+                    break;
+                    case BEERCHIP_A2D_CHAN1_READING_BYTE1:
+                        i2c_MasterReadI2CData( *((uint8_t *)(&(a2dChan1Snapshot.reading)) + 1) );
+                        // i2c_MasterReadI2CData( 0x34 );
+                    break;
+                    case BEERCHIP_A2D_CHAN1_COUNT_BYTE0:
+                        i2c_MasterReadI2CData( *(uint8_t *)(&(a2dChan1Snapshot.count)) );
+                        // i2c_MasterReadI2CData( 0x56 );
+                    break;
+                    case BEERCHIP_A2D_CHAN1_COUNT_BYTE1:
+                        i2c_MasterReadI2CData( *((uint8_t *)(&(a2dChan1Snapshot.count)) + 1) );
+                        // i2c_MasterReadI2CData( 0x78 );
+                    break;
                     default:
                         i2c_MasterReadI2CData( BEERCHIP_I2C_CLEAR_CHAR );
                     break;
