@@ -16,11 +16,11 @@ extern "C" {
 
 #include <xc.h>
 
-#define BEERCHIP_LED_PORT PORTA
-#define BEERCHIP_LED_ANSEL ANSELA
-#define BEERCHIP_LED_PIN  0x01   /* Port RA0 */
-#define BEERCHIP_LED_TRIS TRISA
-#define BEERCHIP_LED_LAT  LATA
+#define BEERCHIP_LED_PORT  PORTC
+#define BEERCHIP_LED_ANSEL ANSELC
+#define BEERCHIP_LED_PIN   0x80   /* Port RC7 */
+#define BEERCHIP_LED_TRIS  TRISC
+#define BEERCHIP_LED_LAT   LATC
 
 /*
 ** Structure for LED Status
