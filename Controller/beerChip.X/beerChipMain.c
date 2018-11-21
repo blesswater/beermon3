@@ -37,6 +37,7 @@
 #include "beerChipI2C.h"
 #include "beerLock.h"
 #include "beerChipA2D.h"
+#include "beerChipTempLookup.h"
 
 /*
 ** Globals
@@ -123,6 +124,9 @@ int main(int argc, char** argv)
 
     a2d_Reading_t *thisChan; 
     
+    volatile uint16_t temp;
+    volatile uint16_t rsltTemp;
+    
     beerchip_InitPIC();
 
     beerChip_InitLED();
@@ -153,6 +157,15 @@ int main(int argc, char** argv)
         thisChan = (thisChan == &a2dChan0) ? &a2dChan1 : &a2dChan0;
         a2d_StartReading( thisChan );
         while( !a2d_PollReading( thisChan ) );
+        
+        temp = 0x0001;
+        rsltTemp = tempLookup( temp );
+        temp = 0x0203;
+        rsltTemp = tempLookup( temp );
+        temp = 256;
+        rsltTemp = tempLookup( temp );
+        temp = 0x03FE;
+        rsltTemp = tempLookup( temp );
     }
     return (EXIT_SUCCESS);
 }
