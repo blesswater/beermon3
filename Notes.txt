@@ -29,3 +29,7 @@ To check:
 
 # Assembly
 https://en.wikipedia.org/wiki/PIC_instruction_listings
+
+# To build beerChipTempLookup.c
+cd ./Controller/beerChip.X
+python ./makeBeerChipTempLookup.py > beerChipTempLookup.c

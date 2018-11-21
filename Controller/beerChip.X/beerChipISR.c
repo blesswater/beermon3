@@ -8,12 +8,15 @@
 #include "beerChipLed.h"
 #include "beerLock.h"
 #include "beerChipA2D.h"
+#include "beerChipTempLookup.h"
 
 static uint32_t uptime = 0x00000000;
 static uint8_t  secTickCnt = 0x00;
 
 extern a2d_Reading_t a2dChan0;
+static int16_t tempChan0; 
 extern a2d_Reading_t a2dChan1;
+static int16_t tempChan1;
 
 // void __interrupt () ISR( void )
 void interrupt ISR( void )
@@ -137,12 +140,20 @@ void interrupt ISR( void )
                     ** A2D 
                     ** Chan 0
                     */
-                    case BEERCHIP_A2D_CHAN0_READING_BYTE0:
+                    case BEERCHIP_A2D_CHAN0_TEMP_BYTE0:
                         if( lock_Check( &(a2dChan0.lock) ) )
                         {
                             a2dChan0Snapshot.count = a2dChan0.count;
                             a2dChan0Snapshot.reading = a2dChan0.reading;
+                            tempChan0 = tempLookup( a2dChan0Snapshot.reading );
                         }
+                        
+                        i2c_MasterReadI2CData( *(uint8_t *)&(tempChan0) );
+                    break;
+                    case BEERCHIP_A2D_CHAN0_TEMP_BYTE1:
+                        i2c_MasterReadI2CData( *((uint8_t *)&(tempChan0) + 1) );
+                    break;
+                    case BEERCHIP_A2D_CHAN0_READING_BYTE0:
                         i2c_MasterReadI2CData( *(uint8_t *)&(a2dChan0Snapshot.reading) );
                         // i2c_MasterReadI2CData( 0x12 );
                     break;
@@ -159,13 +170,21 @@ void interrupt ISR( void )
                         // i2c_MasterReadI2CData( 0x78 );
                     break;
                     
-                    /* Chan 1 */    
-                    case BEERCHIP_A2D_CHAN1_READING_BYTE0:
+                    /* Chan 1 */  
+                    case BEERCHIP_A2D_CHAN1_TEMP_BYTE0:
                         if( lock_Check( &(a2dChan1.lock) ) )
                         {
                             a2dChan1Snapshot.count = a2dChan1.count;
                             a2dChan1Snapshot.reading = a2dChan1.reading;
+                            tempChan1 = tempLookup( a2dChan1Snapshot.reading );
                         }
+                        
+                        i2c_MasterReadI2CData( *(uint8_t *)&(tempChan1) );
+                    break;
+                    case BEERCHIP_A2D_CHAN1_TEMP_BYTE1:
+                        i2c_MasterReadI2CData( *((uint8_t *)&(tempChan1) + 1) );
+                    break;
+                    case BEERCHIP_A2D_CHAN1_READING_BYTE0:
                         i2c_MasterReadI2CData( *(uint8_t *)&(a2dChan1Snapshot.reading) );
                         // i2c_MasterReadI2CData( 0x12 );
                     break;

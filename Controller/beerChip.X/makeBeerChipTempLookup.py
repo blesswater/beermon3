@@ -1,10 +1,10 @@
 
-Vcc = 5.0
-R = 24.917
+Vcc = 5.33
+R = 24.9
 
 Rf = 10.0
-R1 = 47.0
-R2 = 48.6
+R1 = 47.5
+R2 = 48.7
 
 tempTable = [
     {'F' : -40, 'Rt' : 277.2},
@@ -167,7 +167,7 @@ tempLookup_ptr_t tempLookupLsb[] = {tempLookupLsb0,
                                     tempLookupLsb1};
 
 
-uint16_t tempLookup( uint16_t index )
+int16_t tempLookup( uint16_t index )
 {
     uint8_t msb, lsb;
     uint16_t result = 0x0000;
@@ -184,7 +184,7 @@ uint16_t tempLookup( uint16_t index )
         result = (uint16_t)msb << 8 | (uint16_t)(lsb & 0xF0);
     }
 
-    return result;
+    return *(int16_t *)&result;
 }
 """
 

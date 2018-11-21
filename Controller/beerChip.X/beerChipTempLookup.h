@@ -12,7 +12,7 @@
 extern "C" {
 #endif
 
-uint16_t tempLookup( uint16_t index );
+int16_t tempLookup( uint16_t index );
 
 
 #ifdef	__cplusplus

@@ -158,6 +158,7 @@ int main(int argc, char** argv)
         a2d_StartReading( thisChan );
         while( !a2d_PollReading( thisChan ) );
         
+        /*
         temp = 0x0001;
         rsltTemp = tempLookup( temp );
         temp = 0x0203;
@@ -166,6 +167,7 @@ int main(int argc, char** argv)
         rsltTemp = tempLookup( temp );
         temp = 0x03FE;
         rsltTemp = tempLookup( temp );
+        */
     }
     return (EXIT_SUCCESS);
 }
