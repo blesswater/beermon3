@@ -17,6 +17,7 @@ extern a2d_Reading_t a2dChan0;
 static int16_t tempChan0; 
 extern a2d_Reading_t a2dChan1;
 static int16_t tempChan1;
+static uint8_t tempReadingCnt;
 
 // void __interrupt () ISR( void )
 void interrupt ISR( void )
@@ -73,7 +74,24 @@ void interrupt ISR( void )
                     case BEERCHIP_I2C_LED_CNT_LIMIT:
                         beerChip_SetLEDMode( ledState.mode, i2cValue );
                     break;
-
+                    
+                    case BEERCHIP_A2D_TRIGGER_READING:
+                        if( lock_Check( &(a2dChan0.lock) ) )
+                        {
+                            a2dChan0Snapshot.count = a2dChan0.count;
+                            a2dChan0Snapshot.reading = a2dChan0.reading;
+                            tempChan0 = tempLookup( a2dChan0.reading );
+                            // tempChan0 = 0x1234;
+                        }
+                        if( lock_Check( &(a2dChan1.lock) ) )
+                        {
+                            a2dChan1Snapshot.count = a2dChan1.count;
+                            a2dChan1Snapshot.reading = a2dChan1.reading;
+                            tempChan1 = tempLookup( a2dChan1.reading );
+                            // tempChan1 = 0x5678;
+                        }
+                        tempReadingCnt++;
+                    break;
                     default:
                         /* Do Nothing */
                     break;
@@ -140,14 +158,11 @@ void interrupt ISR( void )
                     ** A2D 
                     ** Chan 0
                     */
+                    
+                    case BEERCHIP_A2D_TRIGGER_READING:
+                        i2c_MasterReadI2CData( tempReadingCnt );
+                    break;
                     case BEERCHIP_A2D_CHAN0_TEMP_BYTE0:
-                        if( lock_Check( &(a2dChan0.lock) ) )
-                        {
-                            a2dChan0Snapshot.count = a2dChan0.count;
-                            a2dChan0Snapshot.reading = a2dChan0.reading;
-                            tempChan0 = tempLookup( a2dChan0Snapshot.reading );
-                        }
-                        
                         i2c_MasterReadI2CData( *(uint8_t *)&(tempChan0) );
                     break;
                     case BEERCHIP_A2D_CHAN0_TEMP_BYTE1:
@@ -172,13 +187,6 @@ void interrupt ISR( void )
                     
                     /* Chan 1 */  
                     case BEERCHIP_A2D_CHAN1_TEMP_BYTE0:
-                        if( lock_Check( &(a2dChan1.lock) ) )
-                        {
-                            a2dChan1Snapshot.count = a2dChan1.count;
-                            a2dChan1Snapshot.reading = a2dChan1.reading;
-                            tempChan1 = tempLookup( a2dChan1Snapshot.reading );
-                        }
-                        
                         i2c_MasterReadI2CData( *(uint8_t *)&(tempChan1) );
                     break;
                     case BEERCHIP_A2D_CHAN1_TEMP_BYTE1:

@@ -177,7 +177,7 @@ int16_t tempLookup( uint16_t index )
     lsb = tempLookupLsb[(index & 0x0200) >> 9]((uint8_t)((index & 0x01FF) >> 1));
     if( !(index & 0x0001) )
     {
-        result = (uint16_t)msb << 8 | (uint16_t)(lsb << 4);
+        result = (uint16_t)msb << 8 | (uint16_t)((lsb & 0x0F) << 4);
     }
     else
     {
