@@ -38,6 +38,7 @@
 #include "beerLock.h"
 #include "beerChipA2D.h"
 #include "beerChipTempLookup.h"
+#include "beerChipUserTimer.h"
 
 /*
 ** Globals
@@ -73,7 +74,9 @@ void beerchip_InitPIC( void )
 
     T1GCON = (0 << _T1GCON_TMR1GE_POSN);    /* Turn off Gate Enable */
     /* Enable Timer 1 interrupt */
-    PIE1 = (1 << _PIE1_TMR1IE_POSN);      /* Enable interrupt */
+    PIE1 = (1 << _PIE1_TMR1IE_POSN);        /* Enable TMR1 interrupt */
+           /* (1 << _PIE1_TXIE_POSN);       Enable to use as a SWI */
+            
     INTCON = (1 << _INTCON_PEIE_POSN);    /* Timer interrupt Enable */
     /* Set 16 Bit counter to roll over in 0.1sec */
     TMR1H = 0x3C;
@@ -126,6 +129,7 @@ int main(int argc, char** argv)
     
     volatile uint16_t temp;
     volatile uint16_t rsltTemp;
+    userTmr_t testTmr;
     
     beerchip_InitPIC();
 
@@ -148,9 +152,11 @@ int main(int argc, char** argv)
     a2d_StartReading( thisChan );
     while( !a2d_PollReading( thisChan ) );
     
-
+    usrTmr_Init( &testTmr );
+    beerChip_SetLEDMode( ledMode_On, BEERCHIP_BLINK_RATE );
     GIE = 1; /* GO! */
 
+    usrTmr_Start( &testTmr, 5 );
     /* Dispatch Loop */
     while( 1 )
     {
@@ -158,16 +164,13 @@ int main(int argc, char** argv)
         a2d_StartReading( thisChan );
         while( !a2d_PollReading( thisChan ) );
         
-        /*
-        temp = 0x0001;
-        rsltTemp = tempLookup( temp );
-        temp = 0x0203;
-        rsltTemp = tempLookup( temp );
-        temp = 256;
-        rsltTemp = tempLookup( temp );
-        temp = 0x03FE;
-        rsltTemp = tempLookup( temp );
-        */
+        if( usrTmr_Check( &testTmr ) )
+        {
+            beerChip_ToggleLED();
+            usrTmr_Start( &testTmr, 10 );
+        }
+        
+        
     }
     return (EXIT_SUCCESS);
 }
