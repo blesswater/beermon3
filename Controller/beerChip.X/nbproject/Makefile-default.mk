@@ -57,17 +57,17 @@ OBJECTDIR=build/${CND_CONF}/${IMAGE_TYPE}
 DISTDIR=dist/${CND_CONF}/${IMAGE_TYPE}
 
 # Source Files Quoted if spaced
-SOURCEFILES_QUOTED_IF_SPACED=beerChipMain.c beerChipI2C.c beerChipLed.c beerChipISR.c beerLock.c beerChipA2D.c beerChipTempLookup.c beerChipUserTimer.c
+SOURCEFILES_QUOTED_IF_SPACED=beerChipMain.c beerChipI2C.c beerChipLed.c beerChipISR.c beerLock.c beerChipA2D.c beerChipTempLookup.c beerChipUserTimer.c beerchipRelay.c
 
 # Object Files Quoted if spaced
-OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/beerChipMain.p1 ${OBJECTDIR}/beerChipI2C.p1 ${OBJECTDIR}/beerChipLed.p1 ${OBJECTDIR}/beerChipISR.p1 ${OBJECTDIR}/beerLock.p1 ${OBJECTDIR}/beerChipA2D.p1 ${OBJECTDIR}/beerChipTempLookup.p1 ${OBJECTDIR}/beerChipUserTimer.p1
-POSSIBLE_DEPFILES=${OBJECTDIR}/beerChipMain.p1.d ${OBJECTDIR}/beerChipI2C.p1.d ${OBJECTDIR}/beerChipLed.p1.d ${OBJECTDIR}/beerChipISR.p1.d ${OBJECTDIR}/beerLock.p1.d ${OBJECTDIR}/beerChipA2D.p1.d ${OBJECTDIR}/beerChipTempLookup.p1.d ${OBJECTDIR}/beerChipUserTimer.p1.d
+OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/beerChipMain.p1 ${OBJECTDIR}/beerChipI2C.p1 ${OBJECTDIR}/beerChipLed.p1 ${OBJECTDIR}/beerChipISR.p1 ${OBJECTDIR}/beerLock.p1 ${OBJECTDIR}/beerChipA2D.p1 ${OBJECTDIR}/beerChipTempLookup.p1 ${OBJECTDIR}/beerChipUserTimer.p1 ${OBJECTDIR}/beerchipRelay.p1
+POSSIBLE_DEPFILES=${OBJECTDIR}/beerChipMain.p1.d ${OBJECTDIR}/beerChipI2C.p1.d ${OBJECTDIR}/beerChipLed.p1.d ${OBJECTDIR}/beerChipISR.p1.d ${OBJECTDIR}/beerLock.p1.d ${OBJECTDIR}/beerChipA2D.p1.d ${OBJECTDIR}/beerChipTempLookup.p1.d ${OBJECTDIR}/beerChipUserTimer.p1.d ${OBJECTDIR}/beerchipRelay.p1.d
 
 # Object Files
-OBJECTFILES=${OBJECTDIR}/beerChipMain.p1 ${OBJECTDIR}/beerChipI2C.p1 ${OBJECTDIR}/beerChipLed.p1 ${OBJECTDIR}/beerChipISR.p1 ${OBJECTDIR}/beerLock.p1 ${OBJECTDIR}/beerChipA2D.p1 ${OBJECTDIR}/beerChipTempLookup.p1 ${OBJECTDIR}/beerChipUserTimer.p1
+OBJECTFILES=${OBJECTDIR}/beerChipMain.p1 ${OBJECTDIR}/beerChipI2C.p1 ${OBJECTDIR}/beerChipLed.p1 ${OBJECTDIR}/beerChipISR.p1 ${OBJECTDIR}/beerLock.p1 ${OBJECTDIR}/beerChipA2D.p1 ${OBJECTDIR}/beerChipTempLookup.p1 ${OBJECTDIR}/beerChipUserTimer.p1 ${OBJECTDIR}/beerchipRelay.p1
 
 # Source Files
-SOURCEFILES=beerChipMain.c beerChipI2C.c beerChipLed.c beerChipISR.c beerLock.c beerChipA2D.c beerChipTempLookup.c beerChipUserTimer.c
+SOURCEFILES=beerChipMain.c beerChipI2C.c beerChipLed.c beerChipISR.c beerLock.c beerChipA2D.c beerChipTempLookup.c beerChipUserTimer.c beerchipRelay.c
 
 
 CFLAGS=
@@ -157,6 +157,14 @@ ${OBJECTDIR}/beerChipUserTimer.p1: beerChipUserTimer.c  nbproject/Makefile-${CND
 	@-${MV} ${OBJECTDIR}/beerChipUserTimer.d ${OBJECTDIR}/beerChipUserTimer.p1.d 
 	@${FIXDEPS} ${OBJECTDIR}/beerChipUserTimer.p1.d $(SILENT) -rsi ${MP_CC_DIR}../  
 	
+${OBJECTDIR}/beerchipRelay.p1: beerchipRelay.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/beerchipRelay.p1.d 
+	@${RM} ${OBJECTDIR}/beerchipRelay.p1 
+	${MP_CC} --pass1 $(MP_EXTRA_CC_PRE) --chip=$(MP_PROCESSOR_OPTION) -Q -G  -D__DEBUG=1  --debugger=pickit3  --double=32 --float=32 --opt=+asm,+asmfile,-speed,+space,-debug --addrqual=ignore --mode=free -P -N255 --warn=0 --asmlist -DXPRJ_default=$(CND_CONF)  --summary=default,-psect,-class,+mem,-hex,-file --output=default,-inhx032 --runtime=default,+clear,+init,-keep,-no_startup,+osccal,-resetbits,-download,-stackcall,+clib $(COMPARISON_BUILD)  --output=-mcof,+elf "--errformat=%f:%l: error: (%n) %s" "--warnformat=%f:%l: warning: (%n) %s" "--msgformat=%f:%l: advisory: (%n) %s"     -o${OBJECTDIR}/beerchipRelay.p1 beerchipRelay.c 
+	@-${MV} ${OBJECTDIR}/beerchipRelay.d ${OBJECTDIR}/beerchipRelay.p1.d 
+	@${FIXDEPS} ${OBJECTDIR}/beerchipRelay.p1.d $(SILENT) -rsi ${MP_CC_DIR}../  
+	
 else
 ${OBJECTDIR}/beerChipMain.p1: beerChipMain.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} "${OBJECTDIR}" 
@@ -221,6 +229,14 @@ ${OBJECTDIR}/beerChipUserTimer.p1: beerChipUserTimer.c  nbproject/Makefile-${CND
 	${MP_CC} --pass1 $(MP_EXTRA_CC_PRE) --chip=$(MP_PROCESSOR_OPTION) -Q -G  --double=32 --float=32 --opt=+asm,+asmfile,-speed,+space,-debug --addrqual=ignore --mode=free -P -N255 --warn=0 --asmlist -DXPRJ_default=$(CND_CONF)  --summary=default,-psect,-class,+mem,-hex,-file --output=default,-inhx032 --runtime=default,+clear,+init,-keep,-no_startup,+osccal,-resetbits,-download,-stackcall,+clib $(COMPARISON_BUILD)  --output=-mcof,+elf "--errformat=%f:%l: error: (%n) %s" "--warnformat=%f:%l: warning: (%n) %s" "--msgformat=%f:%l: advisory: (%n) %s"     -o${OBJECTDIR}/beerChipUserTimer.p1 beerChipUserTimer.c 
 	@-${MV} ${OBJECTDIR}/beerChipUserTimer.d ${OBJECTDIR}/beerChipUserTimer.p1.d 
 	@${FIXDEPS} ${OBJECTDIR}/beerChipUserTimer.p1.d $(SILENT) -rsi ${MP_CC_DIR}../  
+	
+${OBJECTDIR}/beerchipRelay.p1: beerchipRelay.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/beerchipRelay.p1.d 
+	@${RM} ${OBJECTDIR}/beerchipRelay.p1 
+	${MP_CC} --pass1 $(MP_EXTRA_CC_PRE) --chip=$(MP_PROCESSOR_OPTION) -Q -G  --double=32 --float=32 --opt=+asm,+asmfile,-speed,+space,-debug --addrqual=ignore --mode=free -P -N255 --warn=0 --asmlist -DXPRJ_default=$(CND_CONF)  --summary=default,-psect,-class,+mem,-hex,-file --output=default,-inhx032 --runtime=default,+clear,+init,-keep,-no_startup,+osccal,-resetbits,-download,-stackcall,+clib $(COMPARISON_BUILD)  --output=-mcof,+elf "--errformat=%f:%l: error: (%n) %s" "--warnformat=%f:%l: warning: (%n) %s" "--msgformat=%f:%l: advisory: (%n) %s"     -o${OBJECTDIR}/beerchipRelay.p1 beerchipRelay.c 
+	@-${MV} ${OBJECTDIR}/beerchipRelay.d ${OBJECTDIR}/beerchipRelay.p1.d 
+	@${FIXDEPS} ${OBJECTDIR}/beerchipRelay.p1.d $(SILENT) -rsi ${MP_CC_DIR}../  
 	
 endif
 

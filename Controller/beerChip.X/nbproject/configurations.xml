@@ -29,6 +29,7 @@
       <itemPath>beerChipA2D.c</itemPath>
       <itemPath>beerChipTempLookup.c</itemPath>
       <itemPath>beerChipUserTimer.c</itemPath>
+      <itemPath>beerchipRelay.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
