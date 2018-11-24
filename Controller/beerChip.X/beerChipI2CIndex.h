@@ -56,6 +56,13 @@ extern "C" {
 #define BEERCHIP_A2D_CHAN1_COUNT_BYTE0   0x1C
 #define BEERCHIP_A2D_CHAN1_COUNT_BYTE1   0x1D
     
+/*
+** Relays
+*/
+#define BEERCHIP_RELAY_ENABLE           0x20
+#define BEERCHIP_RELAY_CONTROL          0x21
+
+    
 
 
 

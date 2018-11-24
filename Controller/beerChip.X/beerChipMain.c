@@ -39,6 +39,7 @@
 #include "beerChipA2D.h"
 #include "beerChipTempLookup.h"
 #include "beerChipUserTimer.h"
+#include "beerChipRelay.h"
 
 /*
 ** Globals
@@ -46,6 +47,9 @@
 
 a2d_Reading_t a2dChan0;
 a2d_Reading_t a2dChan1;
+
+beerchip_relay_t enableRelay;
+beerchip_relay_t controlRelay;
 
 
 void blnk_Delay(void)
@@ -153,7 +157,13 @@ int main(int argc, char** argv)
     while( !a2d_PollReading( thisChan ) );
     
     usrTmr_Init( &testTmr );
-    beerChip_SetLEDMode( ledMode_On, BEERCHIP_BLINK_RATE );
+    beerChip_SetLEDMode( ledMode_Off, BEERCHIP_BLINK_RATE );
+    
+    /* Init Relays */
+    relay_Init( &enableRelay, BEERCHIP_RYL0_PIN );
+    relay_Init( &controlRelay, BEERCHIP_RYL1_PIN );
+    uint8_t relayTestState = BEERCHIP_RELAY_OFF;
+    
     GIE = 1; /* GO! */
 
     usrTmr_Start( &testTmr, 5 );
@@ -167,6 +177,10 @@ int main(int argc, char** argv)
         if( usrTmr_Check( &testTmr ) )
         {
             beerChip_ToggleLED();
+            relayTestState = (relayTestState == BEERCHIP_RELAY_OFF) ? 
+                                                BEERCHIP_RELAY_ON : 
+                                                BEERCHIP_RELAY_OFF;
+            relay_Switch( &enableRelay, relayTestState);
             usrTmr_Start( &testTmr, 10 );
         }
         

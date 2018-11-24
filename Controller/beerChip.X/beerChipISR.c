@@ -9,6 +9,7 @@
 #include "beerLock.h"
 #include "beerChipA2D.h"
 #include "beerChipTempLookup.h"
+#include "beerChipRelay.h"
 
 uint32_t uptime = 0x00000000;
 static uint8_t  secTickCnt = 0x00;
@@ -18,6 +19,9 @@ static int16_t tempChan0;
 extern a2d_Reading_t a2dChan1;
 static int16_t tempChan1;
 static uint8_t tempReadingCnt;
+
+extern beerchip_relay_t enableRelay;
+extern beerchip_relay_t controlRelay;
 
 // void __interrupt () ISR( void )
 void interrupt ISR( void )
@@ -92,6 +96,14 @@ void interrupt ISR( void )
                         }
                         tempReadingCnt++;
                     break;
+                    
+                    case BEERCHIP_RELAY_ENABLE:
+                        relay_Switch( &enableRelay, i2cValue );
+                    break;
+                    case BEERCHIP_RELAY_CONTROL:
+                        relay_Switch( &controlRelay, i2cValue );
+                    break;
+                    
                     default:
                         /* Do Nothing */
                     break;
@@ -208,9 +220,23 @@ void interrupt ISR( void )
                         i2c_MasterReadI2CData( *((uint8_t *)(&(a2dChan1Snapshot.count)) + 1) );
                         // i2c_MasterReadI2CData( 0x78 );
                     break;
+                    
+                    /*
+                    ** Relays 
+                    */
+                    case BEERCHIP_RELAY_ENABLE:
+                        i2c_MasterReadI2CData( enableRelay.state );
+                    break;
+                    case BEERCHIP_RELAY_CONTROL:
+                        i2c_MasterReadI2CData( controlRelay.state );
+                    break;
+                    
                     default:
                         i2c_MasterReadI2CData( BEERCHIP_I2C_CLEAR_CHAR );
                     break;
+                    
+                    
+                    
                 }
             }
          } while( SSP1IF );
