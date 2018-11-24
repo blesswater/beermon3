@@ -131,10 +131,6 @@ int main(int argc, char** argv)
 
     a2d_Reading_t *thisChan; 
     
-    volatile uint16_t temp;
-    volatile uint16_t rsltTemp;
-    userTmr_t testTmr;
-    
     beerchip_InitPIC();
 
     beerChip_InitLED();
@@ -156,35 +152,20 @@ int main(int argc, char** argv)
     a2d_StartReading( thisChan );
     while( !a2d_PollReading( thisChan ) );
     
-    usrTmr_Init( &testTmr );
     beerChip_SetLEDMode( ledMode_Off, BEERCHIP_BLINK_RATE );
     
     /* Init Relays */
     relay_Init( &enableRelay, BEERCHIP_RYL0_PIN );
     relay_Init( &controlRelay, BEERCHIP_RYL1_PIN );
-    uint8_t relayTestState = BEERCHIP_RELAY_OFF;
     
     GIE = 1; /* GO! */
 
-    usrTmr_Start( &testTmr, 5 );
     /* Dispatch Loop */
     while( 1 )
     {
         thisChan = (thisChan == &a2dChan0) ? &a2dChan1 : &a2dChan0;
         a2d_StartReading( thisChan );
         while( !a2d_PollReading( thisChan ) );
-        
-        if( usrTmr_Check( &testTmr ) )
-        {
-            beerChip_ToggleLED();
-            relayTestState = (relayTestState == BEERCHIP_RELAY_OFF) ? 
-                                                BEERCHIP_RELAY_ON : 
-                                                BEERCHIP_RELAY_OFF;
-            relay_Switch( &enableRelay, relayTestState);
-            usrTmr_Start( &testTmr, 10 );
-        }
-        
-        
     }
     return (EXIT_SUCCESS);
 }
