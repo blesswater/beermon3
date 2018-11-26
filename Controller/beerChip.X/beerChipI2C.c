@@ -75,7 +75,7 @@ BEERCHIP_INLINE void i2c_MasterReadI2CData( uint8_t value )
     do {
         SSPCON1 &= ~_SSPCON1_WCOL_MASK;
         SSP1BUF = value;
-    }while( SSPCON1 & _SSPCON1_WCOL_MASK );
+    }while( 0 &(SSPCON1 & _SSPCON1_WCOL_MASK) );
 
     SSPCON1 |= _SSPCON1_CKP_MASK;  /* Release the clock */
 }

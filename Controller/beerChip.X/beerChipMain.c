@@ -152,8 +152,6 @@ int main(int argc, char** argv)
     a2d_StartReading( thisChan );
     while( !a2d_PollReading( thisChan ) );
     
-    beerChip_SetLEDMode( ledMode_Off, BEERCHIP_BLINK_RATE );
-    
     /* Init Relays */
     relay_Init( &enableRelay, BEERCHIP_RYL0_PIN );
     relay_Init( &controlRelay, BEERCHIP_RYL1_PIN );

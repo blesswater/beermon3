@@ -13,6 +13,7 @@
       <itemPath>beerChipTempLookup.h</itemPath>
       <itemPath>beerChipUserTimer.h</itemPath>
       <itemPath>beerChipRelay.h</itemPath>
+      <itemPath>beerChipBeermon.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -30,6 +31,7 @@
       <itemPath>beerChipTempLookup.c</itemPath>
       <itemPath>beerChipUserTimer.c</itemPath>
       <itemPath>beerchipRelay.c</itemPath>
+      <itemPath>beerChipBeermon.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -50,7 +52,7 @@
         <targetPluginBoard></targetPluginBoard>
         <platformTool>PICkit3PlatformTool</platformTool>
         <languageToolchain>XC8</languageToolchain>
-        <languageToolchainVersion>1.21</languageToolchainVersion>
+        <languageToolchainVersion>2.00</languageToolchainVersion>
         <platform>3</platform>
       </toolsSet>
       <packs>

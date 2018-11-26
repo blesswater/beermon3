@@ -23,8 +23,8 @@ static uint8_t tempReadingCnt;
 extern beerchip_relay_t enableRelay;
 extern beerchip_relay_t controlRelay;
 
-// void __interrupt () ISR( void )
-void interrupt ISR( void )
+void __interrupt () ISR( void )
+// void interrupt ISR( void )
 {
     uint8_t i2cIndex;
     uint8_t i2cValue;
@@ -230,6 +230,123 @@ void interrupt ISR( void )
                     case BEERCHIP_RELAY_CONTROL:
                         i2c_MasterReadI2CData( controlRelay.state );
                     break;
+                    
+                    /*
+                    ** Test stuff
+                    */
+                    
+                    case (BEERCHIP_RELAY_CONTROL + 1):
+                        i2c_MasterReadI2CData( 0x01 );
+                    break;
+                    case (BEERCHIP_RELAY_CONTROL + 2):
+                        i2c_MasterReadI2CData( 0x02 );
+                    break;
+                    case (BEERCHIP_RELAY_CONTROL + 3):
+                        i2c_MasterReadI2CData( 0x03);
+                    break;
+                    case (BEERCHIP_RELAY_CONTROL + 4):
+                        i2c_MasterReadI2CData( 0x04 );
+                    break;
+                    case (BEERCHIP_RELAY_CONTROL + 5):
+                        i2c_MasterReadI2CData( 0x05 );
+                    break;
+                    case (BEERCHIP_RELAY_CONTROL + 6):
+                        i2c_MasterReadI2CData( 0x06 );
+                    break;
+                    case (BEERCHIP_RELAY_CONTROL + 7):
+                        i2c_MasterReadI2CData( 0x07 );
+                    break;
+                    case (BEERCHIP_RELAY_CONTROL + 8):
+                        i2c_MasterReadI2CData( 0x08 );
+                    break;
+                    case (BEERCHIP_RELAY_CONTROL + 9):
+                        i2c_MasterReadI2CData( 0x09 );
+                    break;
+                    case (BEERCHIP_RELAY_CONTROL + 10):
+                        i2c_MasterReadI2CData( 0x0A );
+                    break;
+                    case (BEERCHIP_RELAY_CONTROL + 11):
+                        i2c_MasterReadI2CData( 0x0B );
+                    break;
+                    case (BEERCHIP_RELAY_CONTROL + 12):
+                        i2c_MasterReadI2CData( 0x0C );
+                    break;
+                    case (BEERCHIP_RELAY_CONTROL + 13):
+                        i2c_MasterReadI2CData( 0x0D );
+                    break;
+                    case (BEERCHIP_RELAY_CONTROL + 14):
+                        i2c_MasterReadI2CData( 0x0E );
+                    break;
+                    case (BEERCHIP_RELAY_CONTROL + 15):
+                        i2c_MasterReadI2CData( 0x0F );
+                    break;
+                    case (BEERCHIP_RELAY_CONTROL + 16):
+                        i2c_MasterReadI2CData( 0x10 );
+                    break;
+                    case (BEERCHIP_RELAY_CONTROL + 17):
+                        i2c_MasterReadI2CData( 0x11 );
+                    break;
+                    case (BEERCHIP_RELAY_CONTROL + 18):
+                        i2c_MasterReadI2CData( 0x12 );
+                    break;
+                    case (BEERCHIP_RELAY_CONTROL + 19):
+                        i2c_MasterReadI2CData( 0x13 );
+                    break;
+                    case (BEERCHIP_RELAY_CONTROL + 20):
+                        i2c_MasterReadI2CData( 0x14 );
+                    break;
+                    case (BEERCHIP_RELAY_CONTROL + 21):
+                        i2c_MasterReadI2CData( 0x15 );
+                    break;
+                    case (BEERCHIP_RELAY_CONTROL + 22):
+                        i2c_MasterReadI2CData( 0x16 );
+                    break;
+                    case (BEERCHIP_RELAY_CONTROL + 23):
+                        i2c_MasterReadI2CData( 0x17 );
+                    break;
+                    case (BEERCHIP_RELAY_CONTROL + 24):
+                        i2c_MasterReadI2CData( 0x18 );
+                    break;
+                    case (BEERCHIP_RELAY_CONTROL + 25):
+                        i2c_MasterReadI2CData( 0x19 );
+                    break;
+                    case (BEERCHIP_RELAY_CONTROL + 26):
+                        i2c_MasterReadI2CData( 0x1A );
+                    break;
+                    case (BEERCHIP_RELAY_CONTROL + 27):
+                        i2c_MasterReadI2CData( 0x1B );
+                    break;
+                    case (BEERCHIP_RELAY_CONTROL + 28):
+                        i2c_MasterReadI2CData( 0x1C );
+                    break;
+                    case (BEERCHIP_RELAY_CONTROL + 29):
+                        i2c_MasterReadI2CData( 0x1D );
+                    break;
+                    case (BEERCHIP_RELAY_CONTROL + 30):
+                        i2c_MasterReadI2CData( 0x1E );
+                    break;
+                    case (BEERCHIP_RELAY_CONTROL + 31):
+                        i2c_MasterReadI2CData( 0x1F );
+                    break;
+                    case (BEERCHIP_RELAY_CONTROL + 32):
+                        i2c_MasterReadI2CData( 0x20 );
+                    break;
+                    case (BEERCHIP_RELAY_CONTROL + 33):
+                        i2c_MasterReadI2CData( 0x21 );
+                    break;
+                    case (BEERCHIP_RELAY_CONTROL + 34):
+                        i2c_MasterReadI2CData( 0x22 );
+                    break;
+                    case (BEERCHIP_RELAY_CONTROL + 35):
+                        i2c_MasterReadI2CData( 0x23 );
+                    break;
+                    case (BEERCHIP_RELAY_CONTROL + 36):
+                        i2c_MasterReadI2CData( 0x24 );
+                    break;
+                    
+                    
+                    
+                    
                     
                     default:
                         i2c_MasterReadI2CData( BEERCHIP_I2C_CLEAR_CHAR );
