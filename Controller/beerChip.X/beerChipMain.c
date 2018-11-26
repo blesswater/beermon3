@@ -40,6 +40,7 @@
 #include "beerChipTempLookup.h"
 #include "beerChipUserTimer.h"
 #include "beerChipRelay.h"
+#include "beerChipBeermon.h"
 
 /*
 ** Globals
@@ -50,6 +51,8 @@ a2d_Reading_t a2dChan1;
 
 beerchip_relay_t enableRelay;
 beerchip_relay_t controlRelay;
+
+beermonConfig_t beermonCfg;
 
 
 void blnk_Delay(void)
@@ -155,6 +158,9 @@ int main(int argc, char** argv)
     /* Init Relays */
     relay_Init( &enableRelay, BEERCHIP_RYL0_PIN );
     relay_Init( &controlRelay, BEERCHIP_RYL1_PIN );
+    
+    /* Beermon */
+    beermonConfig_Init( &beermonCfg );
     
     GIE = 1; /* GO! */
 

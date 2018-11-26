@@ -62,8 +62,24 @@ extern "C" {
 #define BEERCHIP_RELAY_ENABLE           0x20
 #define BEERCHIP_RELAY_CONTROL          0x21
 
-    
+/*
+** Beermon
+*/
 
+/* Config */
+    
+#define BEERCHIP_BEERMON_CFG_SETPT             0x30
+#define BEERCHIP_BEERMON_CFG_ON_DEBOUNCE_TIME  0x32
+#define BEERCHIP_BEERMON_CFG_OFF_DEBOUNCE_TIME 0x34
+#define BEERCHIP_BEERMON_CFG_SEQNUM            0x36
+#define BEERCHIP_BEERMON_CFG_CSUM              0x38
+#define BEERCHIP_BEERMON_CFG_UPDATE_STATE      0x3A
+
+
+/*
+**
+*/
+#define BEERCHIP_TEST_START             0x3C
 
 
 #ifdef	__cplusplus
