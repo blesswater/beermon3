@@ -18,6 +18,8 @@ extern "C" {
 #define BEERMON_DEFAULT_ON_DEBOUNCE_TIME  120     /* 2min */
 #define BEERMON_DEFAULT_OFF_DEBOUNCE_TIME 120     /* 2min */
     
+#define BEERMON_NUM_TEMP_PROBES  2
+    
 /* Beermon States */
 #define beermon_state_switched_out     0x00
 #define beermon_state_off              0x01
@@ -39,6 +41,8 @@ typedef struct {
     uint16_t onDebounceTime;
     uint16_t offDebounceTime;
     uint16_t seqNum;
+    uint8_t probe;
+    uint8_t rffu;
     uint16_t csum;
 } beermonConfig_t;
 

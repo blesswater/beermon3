@@ -141,6 +141,7 @@ void beermonConfig_Init( beermonConfig_t *cfg )
     cfg->setTemp = BEERMON_DEFAULT_SETPOINT;
     cfg->offDebounceTime = BEERMON_DEFAULT_OFF_DEBOUNCE_TIME;
     cfg->onDebounceTime = BEERMON_DEFAULT_ON_DEBOUNCE_TIME;
+    cfg->probe = 0x01;
 }
 
 void beermon_Init( beermonConfig_t *cfg, 

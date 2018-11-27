@@ -16,9 +16,8 @@
 uint32_t uptime = 0x00000001;
 static uint8_t  secTickCnt = 0x00;
 
-extern a2d_Reading_t a2dChan0;
+extern a2d_Reading_t a2dProbe[2];
 static int16_t tempChan0; 
-extern a2d_Reading_t a2dChan1;
 static int16_t tempChan1;
 static uint8_t tempReadingCnt;
 
@@ -90,19 +89,19 @@ void __interrupt () ISR( void )
                     break;
                     
                     case BEERCHIP_A2D_TRIGGER_READING:
-                        if( lock_Check( &(a2dChan0.lock) ) )
+                        if( lock_Check( &(a2dProbe[0].lock) ) )
                         {
-                            a2dChan0Snapshot.count = a2dChan0.count;
-                            a2dChan0Snapshot.reading = a2dChan0.reading;
-                            tempChan0 = tempLookup( a2dChan0.reading );
-                            // tempChan0 = 0x1234;
+                            a2dChan0Snapshot.count = a2dProbe[0].count;
+                            a2dChan0Snapshot.reading = a2dProbe[0].reading;
+                            // tempChan0 = tempLookup( a2dProbe[0].reading );
+                            tempChan0 = 0x1234;
                         }
-                        if( lock_Check( &(a2dChan1.lock) ) )
+                        if( lock_Check( &(a2dProbe[1].lock) ) )
                         {
-                            a2dChan1Snapshot.count = a2dChan1.count;
-                            a2dChan1Snapshot.reading = a2dChan1.reading;
-                            tempChan1 = tempLookup( a2dChan1.reading );
-                            // tempChan1 = 0x5678;
+                            a2dChan1Snapshot.count = a2dProbe[1].count;
+                            a2dChan1Snapshot.reading = a2dProbe[1].reading;
+                            // tempChan1 = tempLookup( a2dProbe[1].reading );
+                            tempChan1 = 0x5678;
                         }
                         tempReadingCnt++;
                     break;
@@ -241,6 +240,10 @@ void __interrupt () ISR( void )
                         i2c_MasterReadI2CData( controlRelay.state );
                     break;
                     
+                    /*
+                    ** Beermon Config
+                    */
+                    
                     case BEERCHIP_BEERMON_CFG_SETPT:
                         if( beerCfgState == beerCfgClean )
                         {
@@ -275,9 +278,13 @@ void __interrupt () ISR( void )
                     case (BEERCHIP_BEERMON_CFG_CSUM + 1):
                         i2c_MasterReadI2CData( *((uint8_t*)&workingBeermonCfg.csum + 1) );
                     break;
+                    case (BEERCHIP_BEERMON_CFG_CNTL_PROBE):
+                        i2c_MasterReadI2CData( *((uint8_t*)&workingBeermonCfg.probe) );
+                    break;
                     case (BEERCHIP_BEERMON_CFG_UPDATE_STATE):
                         i2c_MasterReadI2CData( beerCfgState );
                     break;
+                    
                     
                     
                     

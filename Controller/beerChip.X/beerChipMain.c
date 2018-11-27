@@ -46,8 +46,9 @@
 ** Globals
 */
 
-a2d_Reading_t a2dChan0;
-a2d_Reading_t a2dChan1;
+
+
+a2d_Reading_t a2dProbe[BEERMON_NUM_TEMP_PROBES];
 
 beerchip_relay_t enableRelay;
 beerchip_relay_t controlRelay;
@@ -134,7 +135,8 @@ uint8_t i2c_ReadI2CSelect()
 int main(int argc, char** argv) 
 {
 
-    a2d_Reading_t *thisChan; 
+    uint8_t thisChan; 
+    int16_t thisTemp;
     
     beerchip_InitPIC();
 
@@ -147,15 +149,15 @@ int main(int argc, char** argv)
     
     /* Init A2D */
     a2d_Init();
-    a2d_InitReading( &a2dChan0, BEERCHIP_A2D_CHAN0 );
-    a2d_InitReading( &a2dChan1, BEERCHIP_A2D_CHAN1 );
+    a2d_InitReading( &a2dProbe[0], BEERCHIP_A2D_CHAN0 );
+    a2d_InitReading( &a2dProbe[1], BEERCHIP_A2D_CHAN1 );
     /* Get a few readings before enabling interrupts */
-    thisChan = &a2dChan0;
-    a2d_StartReading( thisChan );
-    while( !a2d_PollReading( thisChan ) );
-    thisChan = &a2dChan1;
-    a2d_StartReading( thisChan );
-    while( !a2d_PollReading( thisChan ) );
+    thisChan = 0;
+    a2d_StartReading( &a2dProbe[thisChan] );
+    while( !a2d_PollReading( &a2dProbe[thisChan] ) );
+    thisChan = 1;
+    a2d_StartReading( &a2dProbe[thisChan] );
+    while( !a2d_PollReading( &a2dProbe[thisChan] ) );
     
     /* Init Relays */
     relay_Init( &enableRelay, BEERCHIP_RYL0_PIN );
@@ -172,9 +174,30 @@ int main(int argc, char** argv)
     /* Dispatch Loop */
     while( 1 )
     {
-        thisChan = (thisChan == &a2dChan0) ? &a2dChan1 : &a2dChan0;
-        a2d_StartReading( thisChan );
-        while( !a2d_PollReading( thisChan ) );
+        thisChan = (thisChan == 0) ? 1 : 0;
+        a2d_StartReading( &a2dProbe[thisChan] );
+        while( !a2d_PollReading( &a2dProbe[thisChan] ) );
+        
+        if( thisChan == beermonCfg.probe )
+        {
+            
+            if( lock_Take( &a2dProbe[thisChan].lock ) )
+            {
+                thisTemp = tempLookup( a2dProbe[thisChan].reading );
+                // thisTemp = 0x4000;
+
+                if( thisTemp > beermonCfg.setTemp )
+                {
+                    beermon_ProcessEvent( &beermonState, beermon_event_TGreater );
+                }
+                else
+                {
+                    beermon_ProcessEvent( &beermonState, beermon_event_TLess );
+                }
+                
+                lock_Release( &a2dProbe[thisChan].lock );
+            }
+        }
     }
     return (EXIT_SUCCESS);
 }
