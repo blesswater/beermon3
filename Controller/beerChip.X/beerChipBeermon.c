@@ -51,8 +51,8 @@ void gotoOff( beermonState_t *state )
     relay_Switch( state->enableRelay, BEERCHIP_RELAY_ON );
     relay_Switch( state->controlRelay, BEERCHIP_RELAY_OFF );
     state->stats->offCnt++;
-    // usrStopwatch_Stop( &(state->stats->onTime) );
-    // usrStopwatch_Start( &(state->stats->offTime) );
+    usrStopwatch_Stop( &(state->stats->onTime) );
+    usrStopwatch_Start( &(state->stats->offTime) );
     usrTmr_Stop( &state->tmr );
 }
 
@@ -62,8 +62,8 @@ void gotoOffNc( beermonState_t *state )
     state->state = beermon_state_off;
     relay_Switch( state->enableRelay, BEERCHIP_RELAY_ON );
     relay_Switch( state->controlRelay, BEERCHIP_RELAY_OFF );
-    // usrStopwatch_Stop( &(state->stats->onTime) );
-    // usrStopwatch_Start( &(state->stats->offTime) );
+    usrStopwatch_Stop( &(state->stats->onTime) );
+    usrStopwatch_Start( &(state->stats->offTime) );
     usrTmr_Stop( &state->tmr );
 }
 
@@ -73,8 +73,8 @@ void gotoExtern( beermonState_t *state )
     state->state = beermon_state_extern_cntl;
     relay_Switch( state->enableRelay, BEERCHIP_RELAY_OFF );
     relay_Switch( state->controlRelay, BEERCHIP_RELAY_OFF );
-    // usrStopwatch_Stop( &(state->stats->onTime) );
-    // usrStopwatch_Stop( &(state->stats->offTime) );
+    usrStopwatch_Stop( &(state->stats->onTime) );
+    usrStopwatch_Stop( &(state->stats->offTime) );
     usrTmr_Stop( &state->tmr );
 }
 
@@ -84,8 +84,8 @@ void gotoSwitchOut( beermonState_t *state )
     state->state = beermon_state_switched_out;
     relay_Switch( state->enableRelay, BEERCHIP_RELAY_OFF );
     relay_Switch( state->controlRelay, BEERCHIP_RELAY_OFF );
-    // usrStopwatch_Stop( &(state->stats->onTime) );
-    // usrStopwatch_Stop( &(state->stats->offTime) );
+    usrStopwatch_Stop( &(state->stats->onTime) );
+    usrStopwatch_Stop( &(state->stats->offTime) );
     usrTmr_Stop( &state->tmr );
 }
 
@@ -95,8 +95,8 @@ void gotoOnDbnc( beermonState_t *state )
     state->state = beermon_state_on_debounce;
     relay_Switch( state->enableRelay, BEERCHIP_RELAY_ON );
     relay_Switch( state->controlRelay, BEERCHIP_RELAY_OFF );
-    // usrStopwatch_Stop( &(state->stats->onTime) );
-    // usrStopwatch_Start( &(state->stats->offTime) );
+    usrStopwatch_Stop( &(state->stats->onTime) );
+    usrStopwatch_Start( &(state->stats->offTime) );
     usrTmr_Start( &state->tmr, state->config->onDebounceTime );
 }
 
@@ -107,8 +107,8 @@ void gotoOn( beermonState_t *state )
     relay_Switch( state->enableRelay, BEERCHIP_RELAY_ON );
     relay_Switch( state->controlRelay, BEERCHIP_RELAY_ON );
     state->stats->onCnt++;
-    // usrStopwatch_Start( &(state->stats->onTime) );
-    // usrStopwatch_Stop( &(state->stats->offTime) );
+    usrStopwatch_Start( &(state->stats->onTime) );
+    usrStopwatch_Stop( &(state->stats->offTime) );
     usrTmr_Stop( &state->tmr );
 }
 
@@ -118,8 +118,8 @@ void gotoOnNc( beermonState_t *state )
     state->state = beermon_state_on;
     relay_Switch( state->enableRelay, BEERCHIP_RELAY_ON );
     relay_Switch( state->controlRelay, BEERCHIP_RELAY_ON );
-    // usrStopwatch_Start( &(state->stats->onTime) );
-    // usrStopwatch_Stop( &(state->stats->offTime) );
+    usrStopwatch_Start( &(state->stats->onTime) );
+    usrStopwatch_Stop( &(state->stats->offTime) );
     usrTmr_Stop( &state->tmr );
 }
 
@@ -129,8 +129,8 @@ void gotoOffDbnc( beermonState_t *state )
     state->state = beermon_state_off_debounce;
     relay_Switch( state->enableRelay, BEERCHIP_RELAY_ON );
     relay_Switch( state->controlRelay, BEERCHIP_RELAY_ON );
-    // usrStopwatch_Start( &(state->stats->onTime) );
-    // usrStopwatch_Stop( &(state->stats->offTime) );
+    usrStopwatch_Start( &(state->stats->onTime) );
+    usrStopwatch_Stop( &(state->stats->offTime) );
     usrTmr_Start( &state->tmr, state->config->offDebounceTime );
 }
         
@@ -162,8 +162,8 @@ void beermon_Init( beermonConfig_t *cfg,
     
     memset( stats, 0x00, sizeof(beermonStats_t) );
     state->stats = stats;
-    // usrStopwatch_Init( &stats->offTime );
-    // usrStopwatch_Init( &stats->onTime );
+    usrStopwatch_Init( &stats->offTime );
+    usrStopwatch_Init( &stats->onTime );
     
     state->config = cfg;
 }

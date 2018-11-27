@@ -53,6 +53,8 @@ beerchip_relay_t enableRelay;
 beerchip_relay_t controlRelay;
 
 beermonConfig_t beermonCfg;
+beermonStats_t beermonStats;
+beermonState_t beermonState;
 
 
 void blnk_Delay(void)
@@ -161,6 +163,9 @@ int main(int argc, char** argv)
     
     /* Beermon */
     beermonConfig_Init( &beermonCfg );
+    beermon_Init( &beermonCfg, &beermonState, &beermonStats, 
+                  &enableRelay, &controlRelay );
+    beermon_ProcessEvent( &beermonState, beermon_event_switch_in );
     
     GIE = 1; /* GO! */
 

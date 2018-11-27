@@ -13,7 +13,7 @@
 #include "beerChipRelay.h"
 #include "beerChipBeermon.h"
 
-uint32_t uptime = 0x00000000;
+uint32_t uptime = 0x00000001;
 static uint8_t  secTickCnt = 0x00;
 
 extern a2d_Reading_t a2dChan0;

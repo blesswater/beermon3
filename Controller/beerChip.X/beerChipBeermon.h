@@ -45,8 +45,8 @@ typedef struct {
 typedef struct {
     uint16_t onCnt;
     uint16_t offCnt;
-    // usrStopwatch_t onTime;
-    // usrStopwatch_t offTime;
+    usrStopwatch_t onTime;
+    usrStopwatch_t offTime;
 } beermonStats_t;
 
 typedef struct {
