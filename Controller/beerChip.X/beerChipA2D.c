@@ -69,6 +69,7 @@ bool a2d_PollReading( a2d_Reading_t *reading )
         reading->reading = ADRESH;
         reading->reading = (reading->reading << 8) | ADRESL;
         reading->count++;
+        reading->temp = tempLookup( reading->reading );
         // reading->reading = 0x1234;
         // reading->count = 0x5678;
         lock_Release( &reading->lock );

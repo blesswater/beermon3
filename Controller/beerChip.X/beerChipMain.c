@@ -180,22 +180,13 @@ int main(int argc, char** argv)
         
         if( thisChan == beermonCfg.probe )
         {
-            
-            if( lock_Take( &a2dProbe[thisChan].lock ) )
+            if( a2dProbe[thisChan].temp > beermonCfg.setTemp )
             {
-                thisTemp = tempLookup( a2dProbe[thisChan].reading );
-                // thisTemp = 0x4000;
-
-                if( thisTemp > beermonCfg.setTemp )
-                {
-                    beermon_ProcessEvent( &beermonState, beermon_event_TGreater );
-                }
-                else
-                {
-                    beermon_ProcessEvent( &beermonState, beermon_event_TLess );
-                }
-                
-                lock_Release( &a2dProbe[thisChan].lock );
+                beermon_ProcessEvent( &beermonState, beermon_event_TGreater );
+            }
+            else
+            {
+                beermon_ProcessEvent( &beermonState, beermon_event_TLess );
             }
         }
     }

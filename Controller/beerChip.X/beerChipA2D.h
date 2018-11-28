@@ -36,6 +36,7 @@ typedef struct {
     uint8_t chan : 5;
     uint16_t count;
     uint16_t reading;
+    int16_t temp;
 } a2d_Reading_t;
 
 void a2d_Init( void );

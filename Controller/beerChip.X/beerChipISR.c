@@ -93,15 +93,16 @@ void __interrupt () ISR( void )
                         {
                             a2dChan0Snapshot.count = a2dProbe[0].count;
                             a2dChan0Snapshot.reading = a2dProbe[0].reading;
-                            // tempChan0 = tempLookup( a2dProbe[0].reading );
-                            tempChan0 = 0x1234;
+                            tempChan0 = a2dProbe[0].temp;
+                            // tempChan0 = 0x1234;
                         }
                         if( lock_Check( &(a2dProbe[1].lock) ) )
                         {
                             a2dChan1Snapshot.count = a2dProbe[1].count;
                             a2dChan1Snapshot.reading = a2dProbe[1].reading;
-                            // tempChan1 = tempLookup( a2dProbe[1].reading );
-                            tempChan1 = 0x5678;
+                            tempChan1 = tempLookup( a2dProbe[1].reading );
+                            tempChan1 = a2dProbe[1].temp;
+                            // tempChan1 = 0x5678;
                         }
                         tempReadingCnt++;
                     break;
