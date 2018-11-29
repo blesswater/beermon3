@@ -30,6 +30,17 @@ static beermonConfig_t workingBeermonCfg;
 #define beerCfgClean 0x00  /* No changes */
 #define beerCfgDirty 0x01  /* Changes Pending */
 
+extern beermonStats_t beermonStats;
+struct {
+    uint16_t onCnt;
+    uint16_t offCnt;
+    uint32_t onTime;
+    uint32_t offTime;
+} nowStats;
+static uint8_t statReadCnt;
+
+extern beermonState_t beermonState;
+
 void __interrupt () ISR( void )
 // void interrupt ISR( void )
 {
@@ -112,6 +123,16 @@ void __interrupt () ISR( void )
                     break;
                     case BEERCHIP_RELAY_CONTROL:
                         relay_Switch( &controlRelay, i2cValue );
+                    break;
+                    
+                    /* Stats */
+                    case BEERCHIP_BEERMON_STATS_READ:
+                        nowStats.onCnt = beermonStats.onCnt;
+                        nowStats.offCnt = beermonStats.offCnt;
+                        nowStats.onTime = usrStopwatch_GetTime( &beermonStats.onTime );
+                        nowStats.offTime = usrStopwatch_GetTime( &beermonStats.offTime );
+                        
+                        statReadCnt++;
                     break;
                     
                     default:
@@ -286,13 +307,56 @@ void __interrupt () ISR( void )
                         i2c_MasterReadI2CData( beerCfgState );
                     break;
                     
+                    /* Stats */
+                    case BEERCHIP_BEERMON_STATS_READ:
+                        i2c_MasterReadI2CData( statReadCnt );
+                    break;
+                    case BEERCHIP_BEERMON_STATS_ON_CNT:
+                        i2c_MasterReadI2CData( *((uint8_t*)&nowStats.onCnt + 0) );
+                    break;
+                    case (BEERCHIP_BEERMON_STATS_ON_CNT + 1):
+                        i2c_MasterReadI2CData( *((uint8_t*)&nowStats.onCnt + 1) );
+                    break;
+                    case BEERCHIP_BEERMON_STATS_OFF_CNT:
+                        i2c_MasterReadI2CData( *((uint8_t*)&nowStats.offCnt + 0) );
+                    break;
+                    case (BEERCHIP_BEERMON_STATS_OFF_CNT + 1):
+                        i2c_MasterReadI2CData( *((uint8_t*)&nowStats.offCnt + 1) );
+                    break;
+                    case (BEERCHIP_BEERMON_STATS_ON_TIME):
+                        i2c_MasterReadI2CData( *((uint8_t*)&nowStats.onTime + 0) );
+                    break;
+                    case (BEERCHIP_BEERMON_STATS_ON_TIME + 1):
+                        i2c_MasterReadI2CData( *((uint8_t*)&nowStats.onTime + 1) );
+                    break;
+                    case (BEERCHIP_BEERMON_STATS_ON_TIME + 2):
+                        i2c_MasterReadI2CData( *((uint8_t*)&nowStats.onTime + 2) );
+                    break;
+                    case (BEERCHIP_BEERMON_STATS_ON_TIME + 3):
+                        i2c_MasterReadI2CData( *((uint8_t*)&nowStats.onTime + 3) );
+                    break;
+                    case (BEERCHIP_BEERMON_STATS_OFF_TIME):
+                        i2c_MasterReadI2CData( *((uint8_t*)&nowStats.offTime + 0) );
+                    break;
+                    case (BEERCHIP_BEERMON_STATS_OFF_TIME + 1):
+                        i2c_MasterReadI2CData( *((uint8_t*)&nowStats.offTime + 1) );
+                    break;
+                    case (BEERCHIP_BEERMON_STATS_OFF_TIME + 2):
+                        i2c_MasterReadI2CData( *((uint8_t*)&nowStats.offTime + 2) );
+                    break;
+                    case (BEERCHIP_BEERMON_STATS_OFF_TIME + 3):
+                        i2c_MasterReadI2CData( *((uint8_t*)&nowStats.offTime + 3) );
+                    break;
                     
-                    
+                    /* Beemon State */
+                    case (BEERCHIP_BEERMON_STATE_STATE):
+                        i2c_MasterReadI2CData( beermonState.state );
+                    break;
                     
                     /*
                     ** Test stuff
                     */
-                    
+                   
                     case (BEERCHIP_TEST_START + 1):
                         i2c_MasterReadI2CData( 0x01 );
                     break;
@@ -332,6 +396,8 @@ void __interrupt () ISR( void )
                     case (BEERCHIP_TEST_START + 13):
                         i2c_MasterReadI2CData( 0x0D );
                     break;
+                    
+                    
                     case (BEERCHIP_TEST_START + 14):
                         i2c_MasterReadI2CData( 0x0E );
                     break;

@@ -72,10 +72,11 @@ void i2c_ResetI2CSlave( )
 /* The I2C master is performing a Read - Send it the data */
 BEERCHIP_INLINE void i2c_MasterReadI2CData( uint8_t value )
 {
+    
     do {
         SSPCON1 &= ~_SSPCON1_WCOL_MASK;
         SSP1BUF = value;
-    }while( 0 &(SSPCON1 & _SSPCON1_WCOL_MASK) );
+    }while( (SSPCON1 & _SSPCON1_WCOL_MASK) );
 
     SSPCON1 |= _SSPCON1_CKP_MASK;  /* Release the clock */
 }

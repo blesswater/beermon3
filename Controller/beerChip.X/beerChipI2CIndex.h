@@ -76,12 +76,20 @@ extern "C" {
 #define BEERCHIP_BEERMON_CFG_CNTL_PROBE        0x3A
 #define BEERCHIP_BEERMON_CFG_UPDATE_STATE      0x3B
 
+/* Stats */
+#define BEERCHIP_BEERMON_STATS_READ            0x40
+#define BEERCHIP_BEERMON_STATS_ON_CNT          0x42
+#define BEERCHIP_BEERMON_STATS_OFF_CNT         0x44
+#define BEERCHIP_BEERMON_STATS_ON_TIME         0x46
+#define BEERCHIP_BEERMON_STATS_OFF_TIME        0x4A
 
+/* State */
+#define BEERCHIP_BEERMON_STATE_STATE          0x4E
 
 /*
 **
 */
-#define BEERCHIP_TEST_START             0x3E
+#define BEERCHIP_TEST_START             0x50 /* 0x3E */
 
 
 #ifdef	__cplusplus
