@@ -158,6 +158,45 @@ void interrupt ISR( void )
                         beermonStateControlMsg = i2cValue;
                     break;
                     
+                    /* Configuration */
+                    case BEERCHIP_BEERMON_CFG_SETPT:
+                        *((uint8_t*)&workingBeermonCfg.setTemp + 0) = i2cValue;
+                        beerCfgState = beerCfgDirty;
+                    break;
+                    case (BEERCHIP_BEERMON_CFG_SETPT + 1):
+                        *((uint8_t*)&workingBeermonCfg.setTemp + 1) = i2cValue;
+                        beerCfgState = beerCfgDirty;
+                    break;
+                    case (BEERCHIP_BEERMON_CFG_ON_DEBOUNCE_TIME):
+                        *((uint8_t*)&workingBeermonCfg.onDebounceTime + 0) = i2cValue;
+                        beerCfgState = beerCfgDirty;
+                    break;
+                    case (BEERCHIP_BEERMON_CFG_ON_DEBOUNCE_TIME + 1):
+                        *((uint8_t*)&workingBeermonCfg.onDebounceTime + 1) = i2cValue;
+                        beerCfgState = beerCfgDirty;
+                    break;
+                    case (BEERCHIP_BEERMON_CFG_OFF_DEBOUNCE_TIME):
+                        *((uint8_t*)&workingBeermonCfg.offDebounceTime + 0) = i2cValue;
+                        beerCfgState = beerCfgDirty;
+                    break;
+                    case (BEERCHIP_BEERMON_CFG_OFF_DEBOUNCE_TIME + 1):
+                        *((uint8_t*)&workingBeermonCfg.offDebounceTime + 1) = i2cValue;
+                        beerCfgState = beerCfgDirty;
+                    break;
+                    case BEERCHIP_BEERMON_CFG_UPDATE_STATE:
+                        /* We write the new configuration */
+                        if( (beerCfgState == beerCfgDirty) && (i2cValue == 0x00) )
+                        {
+                            workingBeermonCfg.seqNum++;
+                            workingBeermonCfg.csum = 0x0000;
+                            workingBeermonCfg.csum = beermonConfig_CalcCsum( &workingBeermonCfg );
+                            memcpy( &beermonCfg, &workingBeermonCfg, sizeof(beermonConfig_t) );
+                            beerCfgState = beerCfgClean;
+                        }
+                    break;
+                    
+                    
+                    
                     default:
                         /* Do Nothing */
                     break;

@@ -51,6 +51,8 @@ typedef struct {
     uint8_t rffu;
     uint16_t csum;
 } beermonConfig_t;
+/* Make sure the beermonConfig_t is 16-bit aligned */
+#define BEERMON_CONFIG_RESULT  0x0A
 
 typedef struct {
     uint16_t onCnt;
@@ -69,6 +71,7 @@ typedef struct {
 } beermonState_t;
 
 void beermonConfig_Init( beermonConfig_t *cfg );
+uint16_t beermonConfig_CalcCsum( beermonConfig_t *cfg );
 
 void beermon_Init( beermonConfig_t *cfg, 
                    beermonState_t *state,

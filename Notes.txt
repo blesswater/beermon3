@@ -23,7 +23,7 @@ In /boot/config.txt
     CHANGE: dtparam=i2c_arm=on
     TO: dtparam=i2c_arm=on,i2c_arm_baudrate=32000
     TO: dtparam=i2c_arm=on,i2c_arm_baudrate=16000
-->  TO: dtparam=i2c_arm=on,i2c_arm_baudrate=8000
+->  TO: dtparam=i2c_arm=on,i2c_arm_baudrate=6000
 
 To check:
     xxd /sys/class/i2c-adapter/i2c-1/of_node/clock-frequency

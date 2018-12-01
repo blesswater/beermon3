@@ -142,6 +142,20 @@ void beermonConfig_Init( beermonConfig_t *cfg )
     cfg->offDebounceTime = BEERMON_DEFAULT_OFF_DEBOUNCE_TIME;
     cfg->onDebounceTime = BEERMON_DEFAULT_ON_DEBOUNCE_TIME;
     cfg->probe = 0x00;
+    cfg->csum = beermonConfig_CalcCsum( cfg );
+}
+
+uint16_t beermonConfig_CalcCsum( beermonConfig_t *cfg )
+{
+    uint8_t i;
+    /* Set to BEERMON_CONFIG_RESULT because we do not want all zeros to be valid */
+    uint16_t csum = BEERMON_CONFIG_RESULT; 
+    for( i = 0; i < sizeof(beermonConfig_t); i += 2 )
+    {
+        csum += *((uint16_t *)((uint8_t *)cfg + i));
+    }
+    csum = ~csum + 1;
+    return csum;
 }
 
 void beermon_Init( beermonConfig_t *cfg, 
