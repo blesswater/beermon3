@@ -138,6 +138,8 @@ int main(int argc, char** argv)
     uint8_t thisChan; 
     int16_t thisTemp;
     
+    usrStopwatch_t testSW;
+    
     beerchip_InitPIC();
 
     beerChip_InitLED();
@@ -170,6 +172,10 @@ int main(int argc, char** argv)
     beermon_ProcessEvent( &beermonState, beermon_event_switch_in );
     
     GIE = 1; /* GO! */
+    
+    usrStopwatch_Init( &testSW );
+    usrStopwatch_Start( &testSW );
+    usrStopwatch_Start( &testSW );
 
     /* Dispatch Loop */
     while( 1 )

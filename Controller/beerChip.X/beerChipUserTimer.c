@@ -49,21 +49,28 @@ void usrStopwatch_Init( usrStopwatch_t *stpw )
 
 void usrStopwatch_Start( usrStopwatch_t *stpw )
 {
-    BEERCHIP_SWI; /* Generate SWI */
-    stpw->startTime = uptime;
+    if( !(stpw->flags & BEERMON_USERTIMER_FLAG_RUNNING) )
+    {
+        BEERCHIP_SWI; /* Generate SWI */
+        stpw->startTime = uptime;
+        stpw->flags |= BEERMON_USERTIMER_FLAG_RUNNING;
+    }
 }
 void usrStopwatch_Stop( usrStopwatch_t *stpw ) 
 {
     BEERCHIP_SWI; /* Generate SWI */
-    stpw->accumTime += (uptime - stpw->startTime);
-    stpw->startTime = 0x0000;
+    if( stpw->flags & BEERMON_USERTIMER_FLAG_RUNNING )
+    {
+        BEERCHIP_SWI; /* Generate SWI */
+        stpw->accumTime += (uptime - stpw->startTime);
+        stpw->flags &= ~BEERMON_USERTIMER_FLAG_RUNNING;
+    }
 }
 uint32_t usrStopwatch_GetTime( usrStopwatch_t *stpw ) 
 {
     uint32_t totalTime;
-    if( stpw->startTime != 0x0000 )
+    if( stpw->flags & BEERMON_USERTIMER_FLAG_RUNNING)
     {
-        BEERCHIP_SWI; /* Generate SWI */
         totalTime = stpw->accumTime + uptime - stpw->startTime;
     }
     else

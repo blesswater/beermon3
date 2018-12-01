@@ -12,6 +12,8 @@
 extern "C" {
 #endif
 
+#define BEERMON_USRTIMER_START_CNT  0x00000000
+
 typedef struct {
     uint32_t expireTime;
 } userTmr_t;
@@ -24,11 +26,11 @@ bool usrTmr_Check( userTmr_t *tmr );
 /* Stopwatch 
 ** Keeps running time
 */
-#define BEERMON_USERTIMER_FLAG_MASK 0xF000
-#define BEERMON_USERTIMER_ACUM_MASK 0x0FFF
+#define BEERMON_USERTIMER_FLAG_RUNNING 0x01
 typedef struct {
     uint32_t startTime;
     uint32_t accumTime; /* Format bit[31:24] flags, bit[23:0] accumulated time */
+    uint8_t flags;
 } usrStopwatch_t;
 
 void usrStopwatch_Init( usrStopwatch_t *stpw );

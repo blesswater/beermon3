@@ -13,7 +13,7 @@
 #include "beerChipRelay.h"
 #include "beerChipBeermon.h"
 
-uint32_t uptime = 0x00000001;
+uint32_t uptime = BEERMON_USRTIMER_START_CNT;
 static uint8_t  secTickCnt = 0x00;
 
 extern a2d_Reading_t a2dProbe[2];
@@ -41,8 +41,8 @@ static uint8_t statReadCnt;
 
 extern beermonState_t beermonState;
 
-void __interrupt () ISR( void )
-// void interrupt ISR( void )
+// void __interrupt () ISR( void )
+void interrupt ISR( void )
 {
     uint8_t i2cIndex;
     uint8_t i2cValue;
@@ -70,6 +70,8 @@ void __interrupt () ISR( void )
             /* This should happen once per second */
             uptime++;
             secTickCnt = 0x00;
+            // nowStats.onTime = usrStopwatch_GetTime( &(beermonStats.onTime) );
+            // nowStats.offTime = usrStopwatch_GetTime( &(beermonStats.offTime) );
         }
 
         /* Set 16 Bit counter to roll over in 0.1sec */
@@ -129,10 +131,18 @@ void __interrupt () ISR( void )
                     case BEERCHIP_BEERMON_STATS_READ:
                         nowStats.onCnt = beermonStats.onCnt;
                         nowStats.offCnt = beermonStats.offCnt;
-                        nowStats.onTime = usrStopwatch_GetTime( &beermonStats.onTime );
-                        nowStats.offTime = usrStopwatch_GetTime( &beermonStats.offTime );
+                        nowStats.onTime = usrStopwatch_GetTime( &(beermonStats.onTime) );
+                        nowStats.offTime = usrStopwatch_GetTime( &(beermonStats.offTime) );
                         
                         statReadCnt++;
+                    break;
+                    
+                    /* Control probe select */
+                    case BEERCHIP_BEERMON_CFG_CNTL_PROBE:
+                        if( i2cValue < BEERMON_NUM_TEMP_PROBES )
+                        {
+                            beermonCfg.probe = i2cValue;
+                        }
                     break;
                     
                     default:

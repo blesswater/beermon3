@@ -53,7 +53,7 @@ void gotoOff( beermonState_t *state )
     state->stats->offCnt++;
     usrStopwatch_Stop( &(state->stats->onTime) );
     usrStopwatch_Start( &(state->stats->offTime) );
-    usrTmr_Stop( &state->tmr );
+    usrTmr_Stop( &(state->tmr) );
 }
 
 void gotoOffNc( beermonState_t *state )
@@ -64,7 +64,7 @@ void gotoOffNc( beermonState_t *state )
     relay_Switch( state->controlRelay, BEERCHIP_RELAY_OFF );
     usrStopwatch_Stop( &(state->stats->onTime) );
     usrStopwatch_Start( &(state->stats->offTime) );
-    usrTmr_Stop( &state->tmr );
+    usrTmr_Stop( &(state->tmr) );
 }
 
 void gotoExtern( beermonState_t *state )
@@ -75,7 +75,7 @@ void gotoExtern( beermonState_t *state )
     relay_Switch( state->controlRelay, BEERCHIP_RELAY_OFF );
     usrStopwatch_Stop( &(state->stats->onTime) );
     usrStopwatch_Stop( &(state->stats->offTime) );
-    usrTmr_Stop( &state->tmr );
+    usrTmr_Stop( &(state->tmr) );
 }
 
 void gotoSwitchOut( beermonState_t *state )
@@ -86,7 +86,7 @@ void gotoSwitchOut( beermonState_t *state )
     relay_Switch( state->controlRelay, BEERCHIP_RELAY_OFF );
     usrStopwatch_Stop( &(state->stats->onTime) );
     usrStopwatch_Stop( &(state->stats->offTime) );
-    usrTmr_Stop( &state->tmr );
+    usrTmr_Stop( &(state->tmr) );
 }
 
 void gotoOnDbnc( beermonState_t *state )
@@ -97,7 +97,7 @@ void gotoOnDbnc( beermonState_t *state )
     relay_Switch( state->controlRelay, BEERCHIP_RELAY_OFF );
     usrStopwatch_Stop( &(state->stats->onTime) );
     usrStopwatch_Start( &(state->stats->offTime) );
-    usrTmr_Start( &state->tmr, state->config->onDebounceTime );
+    usrTmr_Start( &(state->tmr), state->config->onDebounceTime );
 }
 
 void gotoOn( beermonState_t *state )
@@ -109,7 +109,7 @@ void gotoOn( beermonState_t *state )
     state->stats->onCnt++;
     usrStopwatch_Start( &(state->stats->onTime) );
     usrStopwatch_Stop( &(state->stats->offTime) );
-    usrTmr_Stop( &state->tmr );
+    usrTmr_Stop( &(state->tmr) );
 }
 
 void gotoOnNc( beermonState_t *state )
@@ -120,7 +120,7 @@ void gotoOnNc( beermonState_t *state )
     relay_Switch( state->controlRelay, BEERCHIP_RELAY_ON );
     usrStopwatch_Start( &(state->stats->onTime) );
     usrStopwatch_Stop( &(state->stats->offTime) );
-    usrTmr_Stop( &state->tmr );
+    usrTmr_Stop( &(state->tmr) );
 }
 
 void gotoOffDbnc( beermonState_t *state )
@@ -131,7 +131,7 @@ void gotoOffDbnc( beermonState_t *state )
     relay_Switch( state->controlRelay, BEERCHIP_RELAY_ON );
     usrStopwatch_Start( &(state->stats->onTime) );
     usrStopwatch_Stop( &(state->stats->offTime) );
-    usrTmr_Start( &state->tmr, state->config->offDebounceTime );
+    usrTmr_Start( &(state->tmr), state->config->offDebounceTime );
 }
         
 /* API */
@@ -141,7 +141,7 @@ void beermonConfig_Init( beermonConfig_t *cfg )
     cfg->setTemp = BEERMON_DEFAULT_SETPOINT;
     cfg->offDebounceTime = BEERMON_DEFAULT_OFF_DEBOUNCE_TIME;
     cfg->onDebounceTime = BEERMON_DEFAULT_ON_DEBOUNCE_TIME;
-    cfg->probe = 0x01;
+    cfg->probe = 0x00;
 }
 
 void beermon_Init( beermonConfig_t *cfg, 
@@ -163,8 +163,8 @@ void beermon_Init( beermonConfig_t *cfg,
     
     memset( stats, 0x00, sizeof(beermonStats_t) );
     state->stats = stats;
-    usrStopwatch_Init( &stats->offTime );
-    usrStopwatch_Init( &stats->onTime );
+    usrStopwatch_Init( &(stats->offTime) );
+    usrStopwatch_Init( &(stats->onTime) );
     
     state->config = cfg;
 }
@@ -172,7 +172,7 @@ void beermon_Init( beermonConfig_t *cfg,
 void beermon_ProcessEvent( beermonState_t *state, uint8_t event )
 {
     /* Process the timer */
-    if( usrTmr_Check( &state->tmr ) )
+    if( usrTmr_Check( &(state->tmr) ) )
     {
         stateTbl[state->state][beermon_event_TmrExpire]( state );
     }

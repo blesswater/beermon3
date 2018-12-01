@@ -13,6 +13,7 @@
 #include "beerLock.h"
 #include "beerChipLed.h"
 #include "beerChipA2D.h"
+#include "beerChipTempLookup.h"
 
 void a2d_Init( void )
 {
