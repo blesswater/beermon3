@@ -85,6 +85,7 @@ extern "C" {
 
 /* State */
 #define BEERCHIP_BEERMON_STATE_STATE          0x4E
+#define BEERCHIP_BEERMON_CNTL_CMD             0x4F
 
 /*
 **

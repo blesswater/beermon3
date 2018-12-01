@@ -57,6 +57,8 @@ beermonConfig_t beermonCfg;
 beermonStats_t beermonStats;
 beermonState_t beermonState;
 
+uint8_t beermonStateControlMsg;
+
 
 void blnk_Delay(void)
 {
@@ -137,7 +139,7 @@ int main(int argc, char** argv)
 
     uint8_t thisChan; 
     int16_t thisTemp;
-    
+
     usrStopwatch_t testSW;
     
     beerchip_InitPIC();
@@ -169,7 +171,6 @@ int main(int argc, char** argv)
     beermonConfig_Init( &beermonCfg );
     beermon_Init( &beermonCfg, &beermonState, &beermonStats, 
                   &enableRelay, &controlRelay );
-    beermon_ProcessEvent( &beermonState, beermon_event_switch_in );
     
     GIE = 1; /* GO! */
     
@@ -180,6 +181,25 @@ int main(int argc, char** argv)
     /* Dispatch Loop */
     while( 1 )
     {
+        
+        switch( beermonStateControlMsg ) 
+        {
+            case BEERMON_CONTROL_MSG_SWITCH_IN:
+                beermon_ProcessEvent( &beermonState, beermon_event_switch_in );
+            break;
+            case BEERMON_CONTROL_MSG_SWITCH_OUT:
+                beermon_ProcessEvent( &beermonState, beermon_event_switch_out );
+            break;
+            case BEERMON_CONTROL_MSG_EXTERN_IN:
+                beermon_ProcessEvent( &beermonState, beermon_state_extern_cntl );
+            break;
+            default:
+                /* Do nothing */
+            break;
+        }
+        beermonStateControlMsg = BEERMON_CONTROL_MSG_ACK;
+                    
+                    
         thisChan = (thisChan == 0) ? 1 : 0;
         a2d_StartReading( &a2dProbe[thisChan] );
         while( !a2d_PollReading( &a2dProbe[thisChan] ) );

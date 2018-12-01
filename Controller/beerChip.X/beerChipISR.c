@@ -30,6 +30,9 @@ static beermonConfig_t workingBeermonCfg;
 #define beerCfgClean 0x00  /* No changes */
 #define beerCfgDirty 0x01  /* Changes Pending */
 
+/* Command Register */
+extern uint8_t beermonStateControlMsg;
+
 extern beermonStats_t beermonStats;
 struct {
     uint16_t onCnt;
@@ -121,10 +124,16 @@ void interrupt ISR( void )
                     break;
                     
                     case BEERCHIP_RELAY_ENABLE:
-                        relay_Switch( &enableRelay, i2cValue );
+                        if( beermonState.state == beermon_state_extern_cntl )
+                        {
+                            relay_Switch( &enableRelay, i2cValue );
+                        }
                     break;
                     case BEERCHIP_RELAY_CONTROL:
-                        relay_Switch( &controlRelay, i2cValue );
+                        if( beermonState.state == beermon_state_extern_cntl )
+                        {
+                            relay_Switch( &controlRelay, i2cValue );
+                        }
                     break;
                     
                     /* Stats */
@@ -143,6 +152,10 @@ void interrupt ISR( void )
                         {
                             beermonCfg.probe = i2cValue;
                         }
+                    break;
+                    
+                    case BEERCHIP_BEERMON_CNTL_CMD:
+                        beermonStateControlMsg = i2cValue;
                     break;
                     
                     default:
@@ -361,6 +374,10 @@ void interrupt ISR( void )
                     /* Beemon State */
                     case (BEERCHIP_BEERMON_STATE_STATE):
                         i2c_MasterReadI2CData( beermonState.state );
+                    break;
+                    
+                    case (BEERCHIP_BEERMON_CNTL_CMD):
+                        i2c_MasterReadI2CData( beermonStateControlMsg );
                     break;
                     
                     /*

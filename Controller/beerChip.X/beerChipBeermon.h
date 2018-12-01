@@ -36,6 +36,12 @@ extern "C" {
 #define beermon_event_TmrExpire       0x04
 #define beermon_event_ExternEnable    0x05
 
+/* Beermon Control Messages */
+#define BEERMON_CONTROL_MSG_ACK            0x00
+#define BEERMON_CONTROL_MSG_SWITCH_IN      0x01
+#define BEERMON_CONTROL_MSG_SWITCH_OUT     0x02
+#define BEERMON_CONTROL_MSG_EXTERN_IN      0x03
+
 typedef struct {
     int16_t setTemp;
     uint16_t onDebounceTime;
