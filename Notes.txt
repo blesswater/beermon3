@@ -36,3 +36,5 @@ https://en.wikipedia.org/wiki/PIC_instruction_listings
 cd ./Controller/beerChip.X
 python ./makeBeerChipTempLookup.py > beerChipTempLookup.c
 
+# SQLite3
+sudo apt-get install sqlite3
