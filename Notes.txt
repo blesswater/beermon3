@@ -38,3 +38,8 @@ python ./makeBeerChipTempLookup.py > beerChipTempLookup.c
 
 # SQLite3
 sudo apt-get install sqlite3
+
+# To create databases
+.q For quit
+.show
+CREATE TABLE Project (id 
