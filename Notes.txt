@@ -78,3 +78,30 @@ select date(temp_time, 'localtime'),
        temp 
 from temperature 
 where proj_id=1 and probe_id=3
+
+#
+# Kiosk
+#
+From https://pimylifeup.com/raspberry-pi-kiosk
+
+# Remove Junk
+sudo apt-get purge wolfram-engine scratch scratch2 nuscratch sonic-pi idle3 -y
+sudo apt-get purge smartsim java-common minecraft-pi libreoffice* -y
+
+sudo apt-get clean
+sudo apt-get autoremove -y
+
+sudo apt-get update
+sudo apt-get upgrade
+
+# Install tools
+sudo apt-get install xdotool unclutter sed
+
+# Verify Autologin
+sudo raspi-config
+    3 Boot Options -> B1 Desktop / CLI -> B4 Desktop Autologin
+
+
+    
+
+
