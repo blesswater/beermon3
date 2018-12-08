@@ -39,7 +39,42 @@ python ./makeBeerChipTempLookup.py > beerChipTempLookup.c
 # SQLite3
 sudo apt-get install sqlite3
 
-# To create databases
+# SQLite Commands
 .q For quit
 .show
-CREATE TABLE Project (id 
+.tables
+.schema
+.headers on
+
+# To create databases
+CREATE TABLE Project (
+    id INTEGER PRIMARY KEY AUTOINCREMENT, 
+    proj_name TEXT);
+
+CREATE TABLE Probes (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    proj_id INTEGER,
+    probe_name TEXT,
+    probe_chan INTEGER);
+
+CREATE TABLE Temperature (
+   id INTEGER PRIMARY KEY AUTOINCREMENT,
+   proj_id INTEGER,
+   probe_id INTEGER,
+   temp_time INTEGER,
+   temp FLOAT );
+
+CREATE TABLE Event (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    proj_id INTEGER,
+    event_type TEXT,
+    event_time INTEGER );
+
+# Dealing w/ timestamps
+select date(temp_time, 'localtime'), 
+       time(temp_time, 'localtime'), 
+       datetime(temp_time, 'localtime'), 
+       strftime( '%H', temp_time, 'localtime'), 
+       temp 
+from temperature 
+where proj_id=1 and probe_id=3
