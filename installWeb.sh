@@ -54,6 +54,28 @@ chown root:root /etc/nginx/nginx.conf
 echo "chmod 644 /etc/nginx/nginx.conf"
 chmod 644 /etc/nginx/nginx.conf
 
+echo "#"
+echo "# Installing uwsgi startup"
+echo "#"
+if [ ! -d /etc/uwsgi ]; then
+	echo "# Creating /etc/uwsgi"
+	mkdir /etc/uwsgi
+	chmod 755 /etc/uwsgi
+fi
+cp ./www/conf/uwsgi.ini /etc/uwsgi/uwsgi.ini
+chmod 644 /etc/uwsgi/uwsgi.ini
+
+# Upstart files - not used
+# cp ./www/conf/uwsgi.conf /etc/init/uwsgi.conf
+# chmod 644 /etc/init/uwsgi.conf
+
+# Systemd start up
+cp ./www/conf/uwsgi.service /lib/systemd/system/uwsgi.service
+chmod 644 /lib/systemd/system/uwsgi.service
+if [ ! -f /etc/systemd/system/multi-user.target.wants/uwsgi.service ]; then
+	echo "Making multi-user systemd link"
+	ln -s /lib/systemd/system/uwsgi.service /etc/systemd/system/multi-user.target.wants/uwsgi.service
+fi
 
 
 
