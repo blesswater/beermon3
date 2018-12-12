@@ -1,11 +1,22 @@
 <head>
     <meta charset="utf-8"/>
 
+
     <link rel="stylesheet" type="text/css" href="css/refrigmonitor.css">
 
     <title>Hello World</title>
+
+    <script src="js/jquery.min.js"></script>
+    <script src="js/refrigMonConfig.js"></script>
+
+    <script>
+    function startMe() {
+        console.log( "Starting Up." );
+        getConfig();
+    } 
+    </script>
 </head>
-<body>
+<body onload="startMe();">
     <div id="headingDiv">
         <table width="100%"><tr>
             <td width="30%" align="left">
