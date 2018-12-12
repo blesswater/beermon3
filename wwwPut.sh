@@ -1,12 +1,6 @@
 #!/bin/bash
 
-PROJECT=RefMonitor
-WWW_LOCATION=/var/www/html
-
-WWW_USER=pi
-WWW_GROUP=www-data
-
-BASE_PY_FILES=beerChipDB.py
+. ./wwwConfig.sh
 
 reCreateSite() {
 	echo "Project file not found. Kill everything"
