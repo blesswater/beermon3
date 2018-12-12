@@ -6,6 +6,8 @@ WWW_LOCATION=/var/www/html
 WWW_USER=pi
 WWW_GROUP=www-data
 
+BASE_PY_FILES=beerChipDB.py
+
 reCreateSite() {
 	echo "Project file not found. Kill everything"
 	echo "    rm -r -f $WWW_LOCATION/."
@@ -50,8 +52,13 @@ echo "    cp ./$PROJECT/css/*.css $WWW_LOCATION/css"
 cp ./$PROJECT/css/*.css $WWW_LOCATION/css
 echo "    cp ./$PROJECT/js/*.js $WWW_LOCATION/js"
 cp ./$PROJECT/js/*.js $WWW_LOCATION/js
+
 echo "    cp ./$PROJECT/cgi/*.py $WWW_LOCATION/cgi"
 cp ./$PROJECT/cgi/*.py $WWW_LOCATION/cgi
+for file in $BASE_PY_FILES; do
+	echo "    cp ./DataLogger/$file $WWW_LOCATION/cgi"
+	cp ./DataLogger/$file $WWW_LOCATION/cgi
+done
 
 echo "    chown -R $WWW_USER:$WWW_GROUP $WWW_LOCATION"
 chown -R $WWW_USER:$WWW_GROUP $WWW_LOCATION
