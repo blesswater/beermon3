@@ -4,7 +4,9 @@ function getConfig() {
     $.ajax( {
         type: "POST",
         url: "/api/getConfig",
-        data: {},
+        dataType: 'json',
+        contentType: 'application/json',
+        data: JSON.stringify( {'bla' : 'blablablablablablablablablablablablablablablabla' } ),
         success: function( data, status, xhr ) {
             console.log( "Success!" );
         },

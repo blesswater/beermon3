@@ -49,9 +49,13 @@ cp ./$PROJECT/js/*.js $WWW_LOCATION/js
 
 echo "    cp ./$PROJECT/cgi/*.py $WWW_LOCATION/cgi"
 cp ./$PROJECT/cgi/*.py $WWW_LOCATION/cgi
-for file in $BASE_PY_FILES; do
+for file in ${BASE_PY_FILES[@]}; do
 	echo "    cp ./DataLogger/$file $WWW_LOCATION/cgi"
 	cp ./DataLogger/$file $WWW_LOCATION/cgi
+done
+for file in ${APPL_PY_FILES[@]}; do
+	echo "cp ./$PROJECT/cgi/$file $WWW_LOCATION/cgi"
+	cp ./$PROJECT/cgi/$file $WWW_LOCATION/cgi
 done
 
 echo "    chown -R $WWW_USER:$WWW_GROUP $WWW_LOCATION"

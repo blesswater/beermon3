@@ -1,3 +1,5 @@
+#!/bin/bash -x
+
 . ./wwwConfig.sh
 
 echo "    cp -r $WWW_LOCATION/*.html ./$PROJECT"
@@ -15,7 +17,7 @@ for file in $BASE_PY_FILES; do
 done
 
 echo "Get python common files"
-for file in $APPL_PY_FILES; do
+for file in ${APPL_PY_FILES[@]}; do
 	echo "    cp $WWW_LOCATION/cgi/$file $PROJECT/cgi"
 	cp $WWW_LOCATION/cgi/$file $PROJECT/cgi
 done
