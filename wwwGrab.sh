@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash
 
 . ./wwwConfig.sh
 
@@ -11,7 +11,7 @@ cp -r $WWW_LOCATION/js/*.js ./$PROJECT/js
 
 # Get Common py files
 echo "Get python application files"
-for file in $BASE_PY_FILES; do
+for file in ${BASE_PY_FILES[@]}; do
 	echo "    cp $WWW_LOCATION/cgi/$file ./DataLogger"
 	cp $WWW_LOCATION/cgi/$file ./DataLogger
 done

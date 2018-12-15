@@ -49,13 +49,23 @@ sudo apt-get install sqlite3
 # To create databases
 CREATE TABLE Project (
     id INTEGER PRIMARY KEY AUTOINCREMENT, 
-    proj_name TEXT);
+    proj_name TEXT,
+    activity int);
+# activity: 0 -> inactive (stale) not recording; 
+#           1 -> active data is being collected
+
 
 CREATE TABLE Probes (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     proj_id INTEGER,
     probe_name TEXT,
-    probe_chan INTEGER);
+    probe_chan INTEGER,
+    type VARCHAR(8),
+    min_range FLOAT,
+    max_range FLOAT);
+# Types:
+#    NTC_00 -> Thermistor
+#    Setpoint -> Control setpoint
 
 CREATE TABLE Temperature (
    id INTEGER PRIMARY KEY AUTOINCREMENT,

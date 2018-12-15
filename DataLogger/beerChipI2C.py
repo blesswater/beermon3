@@ -48,6 +48,16 @@ class beerChipI2C( beerChip ):
 
         return temp
 
+    def getControlProbeChan(self ):
+        cntlChan = self.bus.read_byte_data( self.i2cAddr, i2cInfo.beerChipI2CCmdAddr['BEERCHIP_BEERMON_CFG_CNTL_PROBE'] )
+        return cntlChan
+
+    def getUptime(self ):
+        low = self.bus.read_word_data( self.i2cAddr, i2cInfo.beerChipI2CCmdAddr['BEERCHIP_I2C_UPTIME_BYTE0'] )
+        hi = self.bus.read_word_data( self.i2cAddr, i2cInfo.beerChipI2CCmdAddr['BEERCHIP_I2C_UPTIME_BYTE0'] + 2 )
+        uptime = 65536 * hi + low
+        return uptime
+
 
 if( __name__ == '__main__'):
     bc = beerChipI2C( 1, 0x2e )
