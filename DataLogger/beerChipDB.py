@@ -40,6 +40,25 @@ class beerChipSQLiteDB( beerChipDB ):
         if( cur != None ):
             cur.close()
 
+    def querySafe(self, queryString, valueTuple ):
+        if( self.conn == None ):
+            print("ERROR: Database NOT connected")
+            return
+
+        cur = None
+        try:
+            cur = self.conn.cursor()
+            cur.execute(queryString, valueTuple )
+            for row in cur.fetchall():
+                yield row
+
+        except:
+            print("ERROR executing %s" % (queryString))
+
+        if (cur != None):
+            cur.close()
+
+
     def execute(self, sqlString):
         if (self.conn == None):
             print("ERROR: Database NOT connected")

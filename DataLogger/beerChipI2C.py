@@ -30,21 +30,36 @@ class beerChipI2C( beerChip ):
                                        i2cInfo.beerChipI2CCmdAddr['BEERCHIP_I2C_PROD_BUILD_INDEX'])
         return '%d.%d.%d' % (maj,min,bld)
 
-    def getTemperature(self, probeId):
-        if( probeId < len(i2cInfo.beerChipTemperatureProbe) ):
-            self.bus.write_byte_data(self.i2cAddr,
-                                     i2cInfo.beerChipTemperatureProbe[probeId]['Trigger'],
-                                     0x01)
-            tempWord = self.bus.read_word_data( self.i2cAddr,
-                                                i2cInfo.beerChipTemperatureProbe[probeId]['TempIndex'] )
-            if( tempWord & 0x8000 ):
+    def getTemperature(self, probeId, type = 'NTC_00'):
+        temp = 0.0
+        if( type == 'NTC_00'):
+            if( probeId < len(i2cInfo.beerChipTemperatureProbe) ):
+                self.bus.write_byte_data(self.i2cAddr,
+                                         i2cInfo.beerChipTemperatureProbe[probeId]['Trigger'],
+                                         0x01)
+                tempWord = self.bus.read_word_data( self.i2cAddr,
+                                                    i2cInfo.beerChipTemperatureProbe[probeId]['TempIndex'] )
+                if( tempWord & 0x8000 ):
+                    # Temperature is negative
+                    tempWord = (~tempWord + 1) & 0xFFFF
+                    temp = -1.0 * float(tempWord) / 256.0
+                else:
+                    temp = float(tempWord) / 256.0
+            else:
+                print( 'ERROR: Bad probe Id: %d' % (probeId) )
+
+        elif( type == 'setpoint' ):
+            tempWord = self.bus.read_word_data( self.i2cAddr, i2cInfo.beerChipI2CCmdAddr[BEERCHIP_BEERMON_CFG_SETPT] )
+            if (tempWord & 0x8000):
                 # Temperature is negative
                 tempWord = (~tempWord + 1) & 0xFFFF
                 temp = -1.0 * float(tempWord) / 256.0
             else:
                 temp = float(tempWord) / 256.0
+
         else:
-            print( 'ERROR: Bad probe Id: %d' % (probeId) )
+            print( 'ERROR: Invalid probe type %s' % (type) )
+
 
         return temp
 

@@ -3,10 +3,19 @@
 }
 
 #headingDiv {
-    border: 1px solid #000000;
+    /* border: 1px solid #000000; */
     position: fixed;
     left: 0;
     top: 0;
     width: 100%;
+    background-color: var(--bg-color);
+}
+
+#dataSelectorDiv {
+    /* border: 1px solid #000000; */
+    position: fixed;
+    left: 0;
+    top: 52;
+    width: 30%;
     background-color: var(--bg-color);
 }

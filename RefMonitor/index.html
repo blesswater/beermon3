@@ -12,6 +12,7 @@
     <script>
     function startMe() {
         console.log( "Starting Up." );
+        initConfig();
         getConfig();
     } 
     </script>
@@ -28,5 +29,10 @@
 	    <td width="30%" align="right"><p>MONITOR</p></td>
         </tr></table>
     </div>
-    <p>Hello World</p>
+
+    <div id="dataSelectorDiv">
+    <p>Select Dataset</p>
+    <select id="datasetSelect" onchange="datasetOnchange()">
+    </select>
+    </div>
 </body>

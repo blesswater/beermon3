@@ -49,6 +49,9 @@ def getConfigInfo( data ):
     except:
         result['result'] = 'Error'
 
+    if( dbConn != None ):
+        dbConn.close()
+
     return result
 
 

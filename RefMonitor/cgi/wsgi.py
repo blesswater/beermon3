@@ -1,6 +1,7 @@
 import json
 
 import configInfo
+import temperatureData
 
 import pdb
 
@@ -18,6 +19,9 @@ def application( env, start_response ):
     cmd = None
     if( env['PATH_INFO'] == '/api/getConfig' ):
         result = configInfo.getConfigInfo( data )
+    elif( env['PATH_INFO'] == '/api/datasetStat' ):
+        # pdb.set_trace()
+        result = temperatureData.getTempStat( data )
     else:
         result = { 'cmd' : 'None' }
 
