@@ -5,6 +5,7 @@
 userSelections = {
     selDatasetValue: -1,
     activeProbes: {},
+    tempDataTimer: null,
 };
 
 /*
@@ -72,6 +73,10 @@ function getTempStat( dsid ) {
 
 function handleTempStatData( data ) {
     console.log( "Handle temp stat data" );
+    if( userSelections.tempDataTimer != null ) {
+        window.clearTimeout( userSelections.tempDataTimer );
+        userSelections.tempDataTimer = null;
+    }
     var thermRow = document.getElementById( "thermometerRow" );
     var thermNameRow = document.getElementById( "thermometerNameRow" );
 
@@ -106,19 +111,23 @@ function handleTempStatData( data ) {
 
             userSelections.activeProbes[prb.id] = { therm: therm };
         }
+        else {
+            therm = userSelections.activeProbes[prb.id].therm;
+            therm.setCurrentValue( prb.currentTemp );
+            therm.updateMarker( "sdevHi", "", prb.avgTemp + prb.sdevTemp );
+            therm.updateMarker( "sdevLo", "", prb.avgTemp - prb.sdevTemp );
+        }
     });
+
+    userSelections.tempDataTimer = window.setTimeout( function() {
+        console.log( "Data time expire" );
+        getTempStat( userSelections.selDatasetValue );
+    }, 5000 );
 }
 
-/*
-** APIs
-*/
-
-function initConfig() {
-}
-
-function datasetOnchange() {
+function _newProbeSetup() {
     var sel = document.getElementById( "datasetSelect" );
-    if( sel.value != userSelections.selDatasetValue ) {
+    if( sel.value != userSelections.selDatasetValue ) { /* Redundant */
         for( prbKey in userSelections.activeProbes ) {
             if( userSelections.activeProbes.hasOwnProperty( prbKey )) {
                 // userSelections.activeProbes[prbKey].therm.destroy();
@@ -138,6 +147,26 @@ function datasetOnchange() {
         userSelections.activeProbes = {};
         userSelections.selDatasetValue = sel.value;
     }
+}
+
+function _handleProbeData() {
+    console.log( "Handle probe data" );
+    getTempStat( userSelections.selDatasetValue );
+}
+
+/*
+** APIs
+*/
+
+function initConfig() {
+}
+
+function datasetOnchange() {
+    if( userSelections.tempDataTimer != null ) {
+        window.clearTimeout( userSelections.tempDataTimer );
+        userSelections.tempDataTimer = null;
+    }
+    _newProbeSetup();
     getTempStat( userSelections.selDatasetValue );
 }
 

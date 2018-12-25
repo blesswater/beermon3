@@ -99,7 +99,6 @@ var Thermometer = (function(d3) {
         this._markers[name] = { text: text, value: value };
         this._svg
             .append("line")
-            // .attr("class", _createCssClass.call(this, label, "line"))
             .attr("class", Thermometer.classPrefix + "_marker_" + name)
             .attr("x1", this._config.width / 2 - this._config.tubeWidth / 2)
             .attr("x2", this._config.width / 2 + this._config.tubeWidth / 2 + 22)
@@ -110,8 +109,12 @@ var Thermometer = (function(d3) {
             .style("shape-rendering", "crispEdges");
 
 	}
-	Thermometer.prototype.setMarkerValue = function( name, value ) {
+	Thermometer.prototype.updateMarker = function( name, text, value ) {
 	    this._markers[name].value = value;
+	    this._svg
+	        .select( "." + Thermometer.classPrefix + "_marker_" + name )
+	        .attr("y1", this._axisData.scale(this._markers[name].value))
+	        .attr("y2", this._axisData.scale(this._markers[name].value));
 	}
 
 
