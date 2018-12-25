@@ -6,6 +6,9 @@
 
     <title>Hello World</title>
 
+    <script src="js/d3.v4.min.js"></script>
+    <!-- <script src="js/thermometer.min.js"></script> -->
+    <script src="js/thermometer.js"></script>
     <script src="js/jquery.min.js"></script>
     <script src="js/refrigMonConfig.js"></script>
 
@@ -35,4 +38,13 @@
     <select id="datasetSelect" onchange="datasetOnchange()">
     </select>
     </div>
+
+    <div id="dataDiv">
+        <div id="thermometerDiv">
+	    <table id="thermometerTable"> 
+                <tr id="thermometerNameRow"></tr>
+                <tr id="thermometerRow"></tr>
+	    </table>
+        </div>
+    <div>
 </body>

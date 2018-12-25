@@ -19,3 +19,14 @@
     width: 30%;
     background-color: var(--bg-color);
 }
+
+#dataDiv {
+    position: fixed;
+    left: 263;
+    top: 52;
+    background-color: green;
+}
+
+.thermNameCol {
+    text-align: center;
+}
