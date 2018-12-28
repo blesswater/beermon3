@@ -14,7 +14,7 @@ var Thermometer = (function(d3) {
 
 	Thermometer.defaults = {
 		width: 80,
-		height: 500,
+		height: 350,
 		mercuryColor: "rgb(230, 0, 0)",
 		bulbShineColor: "rgb(230, 200, 200)",
 		borderColor: "rgb(136, 136, 136)",
