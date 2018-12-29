@@ -46,7 +46,9 @@ sudo apt-get install sqlite3
 .schema
 .headers on
 
-# To create databases
+#
+# To create beermon databases
+#
 CREATE TABLE Project (
     id INTEGER PRIMARY KEY AUTOINCREMENT, 
     proj_name TEXT,
@@ -90,6 +92,44 @@ from temperature
 where proj_id=1 and probe_id=3
 
 #
+# Session database
+#
+CREATE TABLE User (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    username TEXT,
+    pwhash TEXT,
+    priv TEXT
+);
+
+CREATE TABLE Session (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    sessId TEXT,
+    userId INTEGER,
+    ipAddr TEXT,
+    last_time INTEGER
+);
+
+# PW: blabla
+INSERT INTO User (username, pwhash, priv)
+VALUES ('kiosk', 
+        '338466286ab294ab86042620b608b0157c96b9c725138023d68676a64db2cf34325ffb94ded84220f73fb8b5f99a107ca94a0b1647aec2de91e23aa63df36cd0$37a0bf15da254cc2a21b0a887c3ecdf1$',
+        'cntl'
+);
+
+# PW: dontc4r3
+INSERT INTO User (username, pwhash, priv)
+VALUES ('testuser0',
+        'b503cb8df109e6eda7218ae4edc0b31427d5f6eba8fd5d8dfeb9ee857c59ba8b8b8fc7d98ec9085ef5a572e95473f2a83a9d9b4711ca387d58477dec87aac16a$e85409c4cfcc4f0a8c466da3857adb7f$',
+        'cntl'
+);
+
+# Generate PW
+python
+>>> import hashlib, uuid
+>>> salt = uuid.uuid4().hex
+>>> phash = hashlib.sha512('blabla' + salt).hexdigest() + '$' + salt + '$'
+
+#
 # Kiosk
 #
 From https://pimylifeup.com/raspberry-pi-kiosk
@@ -114,6 +154,7 @@ sudo raspi-config
 # uWSGI commands
 systemctl stop uwsgi.service
 uwsgi /etc/uwsgi/uwsgi.ini --honour-stdin
+
     
 
 
