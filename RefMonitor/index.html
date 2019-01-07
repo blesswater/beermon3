@@ -11,9 +11,13 @@
     <script src="js/thermometer.js"></script>
     <script src="js/jquery.min.js"></script>
     <script src="js/refrigMonConfig.js"></script>
+    <script src="js/loginForm.js"></script>
 
     <script>
     function startMe() {
+        $(function(){
+            $("#loginFormContentDiv").load("loginForm.html");
+        });
         console.log( "Starting Up." );
         initConfig();
         getConfig();
@@ -26,10 +30,11 @@
             <td width="30%" align="left">
             <table>
                 <tr><td><p>Ver:</p></td><td id="versionInfo"></td></tr>
-		<tr><td><p>Uptime:</p></td><td id="uptimeInfo"></td></tr>
+                <tr><td><p>Uptime:</p></td><td id="uptimeInfo"></td></tr>
             </table>
-	    <td align="center"><p>Refrigerator Monitor</p></td>
-	    <td width="30%" align="right"><p>MONITOR</p></td>
+        <td align="center"><p>Refrigerator Monitor</p></td>
+        <td width="10%" align="center" onclick="toggleLoginDisplay()"><p id="loginDisplay">Login</p></td>
+        <td width="5%" align="center" onclick="changeMode()"><p id="modeDisplay">---</p></td>
         </tr></table>
     </div>
 
@@ -41,10 +46,14 @@
 
     <div id="dataDiv">
         <div id="thermometerDiv">
-	    <table id="thermometerTable"> 
+        <table id="thermometerTable">
                 <tr id="thermometerNameRow"></tr>
                 <tr id="thermometerRow"></tr>
-	    </table>
+        </table>
         </div>
-    <div>
+    </div>
+
+    <div id="loginFormContentDiv">
+
+    </div>
 </body>

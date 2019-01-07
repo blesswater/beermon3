@@ -2,12 +2,20 @@ import json
 
 import configInfo
 import temperatureData
+from beerSession import sessionId, sessionHandler
 
 import pdb
 
 def application( env, start_response ):
     # pdb.set_trace()
-    headers = [('Content-Type', 'application/json')]
+    sessMgr =  sessionHandler()
+    if( 'HTTP_COOKIE' in env ):
+        sess = sessMgr.getSession( env['HTTP_COOKIE'], env['REMOTE_ADDR'] )
+    else:
+        sess = sessMgr.getSession(None, env['REMOTE_ADDR'])
+        
+    headers = [('Content-Type', 'application/json'),
+               ('Set-Cookie', sess.sessId)]
     start_response( '200 OK', headers )
 
     result = {}
@@ -20,10 +28,26 @@ def application( env, start_response ):
     if( env['PATH_INFO'] == '/api/getConfig' ):
         result = configInfo.getConfigInfo( data )
     elif( env['PATH_INFO'] == '/api/datasetStat' ):
-        # pdb.set_trace()
         result = temperatureData.getTempStat( data )
+    elif( env['PATH_INFO'] == '/api/login' ):
+        if( ('username' in data) and ('password' in data) ):
+            result = sessMgr.login( sess, data['username'], data['password'] )
+        else:
+            result = { 'result' : 'ERROR: Invalid Username/Password' }
+    elif (env['PATH_INFO'] == '/api/logout'):
+        result = sessMgr.logout( sess )
     else:
-        result = { 'cmd' : 'None' }
+        result = { 'cmd' : 'No command' }
+
+    # Add session data to response
+    sessData = {
+        'info' : sess.info,
+        'privLevel' : sess.privLevel
+    }
+    if( len( sess.username ) > 0 ):
+        sessData['username'] = sess.username
+        sessData['greeting'] = result['greeting']
+    result['sessInfo'] = sessData
 
     resultJsonStr = json.dumps( result ).encode( 'utf-8' )
 

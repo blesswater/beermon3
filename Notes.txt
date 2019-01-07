@@ -98,7 +98,7 @@ CREATE TABLE User (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     username TEXT,
     pwhash TEXT,
-    priv TEXT
+    priv INTEGER
 );
 
 CREATE TABLE Session (
@@ -113,14 +113,14 @@ CREATE TABLE Session (
 INSERT INTO User (username, pwhash, priv)
 VALUES ('kiosk', 
         '338466286ab294ab86042620b608b0157c96b9c725138023d68676a64db2cf34325ffb94ded84220f73fb8b5f99a107ca94a0b1647aec2de91e23aa63df36cd0$37a0bf15da254cc2a21b0a887c3ecdf1$',
-        'cntl'
+        3
 );
 
 # PW: dontc4r3
 INSERT INTO User (username, pwhash, priv)
 VALUES ('testuser0',
         'b503cb8df109e6eda7218ae4edc0b31427d5f6eba8fd5d8dfeb9ee857c59ba8b8b8fc7d98ec9085ef5a572e95473f2a83a9d9b4711ca387d58477dec87aac16a$e85409c4cfcc4f0a8c466da3857adb7f$',
-        'cntl'
+        3
 );
 
 # Generate PW
@@ -155,6 +155,8 @@ sudo raspi-config
 systemctl stop uwsgi.service
 uwsgi /etc/uwsgi/uwsgi.ini --honour-stdin
 
-    
+# Information for popups
+https://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_login_form_modal    
+
 
 

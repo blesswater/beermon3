@@ -6,6 +6,9 @@ userSelections = {
     selDatasetValue: -1,
     activeProbes: {},
     tempDataTimer: null,
+    loggedIn: false,
+    privLevel: 0,
+    cntlMode: "MONITOR"
 };
 
 /*
@@ -60,6 +63,7 @@ function getTempStat( dsid ) {
             console.log( "Sent stat information");
             updateUptime( data.uptime );
             handleTempStatData( data );
+            handleSessInfo( data.sessInfo );
         },
         error: function( xhr, textStatus, errorMsg ) {
             console.log( "Error: " + errorMsg );
@@ -159,6 +163,7 @@ function _handleProbeData() {
 */
 
 function initConfig() {
+    changeMode();
 }
 
 function datasetOnchange() {
@@ -183,9 +188,10 @@ function getConfig() {
             console.log( "getConfig() Success!" );
             handleConfigInfo( data );
             datasetOnchange();
+            handleSessInfo( data.sessInfo );
         },
         error: function( xhr, textStatus, errorMsg ) {
             console.log( "Error: " + errorMsg );
-	}
+	    }
     });
 }

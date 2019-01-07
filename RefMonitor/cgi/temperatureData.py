@@ -6,6 +6,7 @@ from beerChipI2C import beerChipI2C as beerChip
 from beerChipDB import beerChipSQLiteDB as beerDB
 
 def getTempStat( data ):
+    # import pdb; pdb.set_trace()
     dbConn = None
     result = {}
     try:
@@ -57,18 +58,20 @@ def getTempStat( data ):
                 probeSql += 'AND (' + ') AND ('.join(probeWhere) + ')'
 
             for prbRow in dbConn.querySafe( probeSql, tupleWhere ):
-                probeData['avgTemp'] = prbRow[1]
-                probeData['sdevTemp'] = math.sqrt((prbRow[2] / prbRow[0]) - (probeData['avgTemp'] * probeData['avgTemp']))
-                # probeData['sdevTemp'] = result['uptime'] % 20
-                probeData['minTemp'] = prbRow[3]
-                probeData['maxTemp'] = prbRow[4]
+                if( prbRow[0] > 1 ):
+                    probeData['avgTemp'] = prbRow[1]
+                    probeData['sdevTemp'] = math.sqrt((prbRow[2] / prbRow[0]) - (probeData['avgTemp'] * probeData['avgTemp']))
+                    # probeData['sdevTemp'] = result['uptime'] % 20
+                    probeData['minTemp'] = prbRow[3]
+                    probeData['maxTemp'] = prbRow[4]
+
                 probeData['currentTemp'] = bc.getTemperature( row[2], row[3] )
 
                 result['probes'].append( probeData )
 
         result['result'] = 'OK'
     except:
-        result['result'] = 'Error'
+        result['result'] = 'ERROR: GetTempStat()'
 
     return result
 
