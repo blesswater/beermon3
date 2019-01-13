@@ -47,6 +47,41 @@ function handleConfigInfo( data ) {
 
 }
 
+function _addProbeRadioInputNew( formElement, prb ) {
+    cntlProbeTd = document.getElementById( "controlProbeTd" );
+
+    formDiv = document.createElement( "div" );
+    formDiv.setAttribute( "class", "form-check" );
+
+    probeInput = document.createElement( "input" );
+    probeInput.setAttribute("type", "radio" );
+    probeInput.setAttribute( "name", "controlProbeSelect" );
+    probeInput.setAttribute( "id", "controlProbeSelect_" + prb.id );
+    probeInput.setAttribute( "value", prb.id );
+    probeInput.setAttribute( "class", "form-check-input controlEnabled" );
+    probeInput.setAttribute( "onchange", "setControlProbe(" + prb.id + ")" );
+    if( prb.cntl ) {
+        probeInput.setAttribute( "checked", "checked")
+    }
+
+    probeLabel = document.createElement( "label" );
+    probeLabel.setAttribute( "class", "form-check-label" );
+    probeLabel.setAttribute( "for", "controlProbeSelect_" + prb.id );
+    probeLabel.innerHTML = prb.name
+
+    formDiv.appendChild( probeInput );
+    formDiv.appendChild( probeLabel );
+
+    cntlProbeTd.appendChild( formDiv );
+
+    if( userSelections.cntlMode == "CONTORL" ) {
+        $( ".controlEnabled" ).prop( "disabled", false );
+    }
+    else {
+        $( ".controlEnabled" ).prop( "disabled", true );
+    }
+}
+
 function getTempStat( dsid ) {
 
     statInfo = { datasetId: dsid,
@@ -88,7 +123,7 @@ function handleTempStatData( data ) {
 
     data.probes.forEach( function(prb) {
         console.log( "Looking at probe " + prb.name );
-        if( !userSelections.activeProbes.hasOwnProperty( prb.id) ) {
+        if( !userSelections.activeProbes.hasOwnProperty( prb.id ) ) {
             /* Name Thermometer Name Row */
             thermNameCol = document.createElement( "td" );
             thermNameCol.setAttribute( "id", "thermNameCol_" + prb.id );
@@ -114,6 +149,13 @@ function handleTempStatData( data ) {
             // therm.setMarkerValue( "sdevLo", prb.avgTemp - prb.sdevTemp );
 
             userSelections.activeProbes[prb.id] = { therm: therm };
+
+            /* Figure out which probe is in control and which is selected */
+            controlForm = document.getElementById( "controlProbeTd" );
+            if( prb.cntl_able ) {
+                _addProbeRadioInputNew( controlForm, prb );
+            }
+
         }
         else {
             therm = userSelections.activeProbes[prb.id].therm;
@@ -121,6 +163,7 @@ function handleTempStatData( data ) {
             therm.updateMarker( "sdevHi", "", prb.avgTemp + prb.sdevTemp );
             therm.updateMarker( "sdevLo", "", prb.avgTemp - prb.sdevTemp );
         }
+
     });
 
     userSelections.tempDataTimer = window.setTimeout( function() {
@@ -150,6 +193,11 @@ function _newProbeSetup() {
 
         userSelections.activeProbes = {};
         userSelections.selDatasetValue = sel.value;
+
+        var formElement = document.getElementById( "controlProbeTd" );
+        while( formElement.firstChild ) {
+            formElement.removeChild( formElement.firstChild );
+        }
     }
 }
 
@@ -192,6 +240,27 @@ function getConfig() {
         },
         error: function( xhr, textStatus, errorMsg ) {
             console.log( "Error: " + errorMsg );
+	    }
+    });
+}
+
+function setControlProbe( prbId ){
+    console.log( "Got control probe change: " + prbId );
+
+    data = { controlProbe :
+               { dataSetId: userSelections.selDatasetValue,
+                 probeId: prbId
+               }
+           }
+
+    $.ajax( {
+        type: "POST",
+        url: "/api/setConfig",
+        dataType: 'json',
+        contentType: 'application/json',
+        data: JSON.stringify( data ),
+        error: function( xhr, textStatus, errorMsg ) {
+            console.log( "Error: setControlProbe()" + errorMsg );
 	    }
     });
 }

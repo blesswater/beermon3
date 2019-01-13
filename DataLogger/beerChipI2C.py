@@ -1,9 +1,12 @@
 import smbus
+from time import sleep
 
 import beerChipI2CAddresses as i2cInfo
 from beerChip import beerChip
 
 class beerChipI2C( beerChip ):
+    errorCnt = 4
+
     def __init__(self, i2cDev, i2cAddr):
         self.i2cAddr = i2cAddr
         self.i2cDev = i2cDev
@@ -64,6 +67,7 @@ class beerChipI2C( beerChip ):
         return temp
 
     def getControlProbeChan(self ):
+        self.bus.read_word_data(self.i2cAddr, i2cInfo.beerChipI2CCmdAddr['BEERCHIP_BEERMON_CFG_SETPT'])
         cntlChan = self.bus.read_byte_data( self.i2cAddr, i2cInfo.beerChipI2CCmdAddr['BEERCHIP_BEERMON_CFG_CNTL_PROBE'] )
         return cntlChan
 
@@ -73,6 +77,23 @@ class beerChipI2C( beerChip ):
         uptime = 65536 * hi + low
         return uptime
 
+    def setControlProbeChan(self, chan ):
+        self.bus.write_byte_data( self.i2cAddr,
+                                  i2cInfo.beerChipI2CCmdAddr['BEERCHIP_BEERMON_CFG_CNTL_PROBE'],
+                                  chan )
+
+        val = self.getControlProbeChan()
+        errCnt = 0
+        while( (val != chan) and (errCnt < self.errorCnt) ):
+            sleep( 1.0 )
+            val = self.getControlProbeChan()
+            errCnt = errCnt + 1
+            print( 'chan = %d val = %d errcnt = %d' % (chan, val, errCnt) )
+        val = self.getControlProbeChan()
+        if( val == chan ):
+            return True
+        else:
+            return False
 
 if( __name__ == '__main__'):
     bc = beerChipI2C( 1, 0x2e )

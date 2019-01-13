@@ -3,6 +3,7 @@
 
 
     <link rel="stylesheet" type="text/css" href="css/refrigmonitor.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
 
     <title>Hello World</title>
 
@@ -29,8 +30,8 @@
         <table width="100%"><tr>
             <td width="30%" align="left">
             <table>
-                <tr><td><p>Ver:</p></td><td id="versionInfo"></td></tr>
-                <tr><td><p>Uptime:</p></td><td id="uptimeInfo"></td></tr>
+                <tr><td>Ver:</td><td id="versionInfo"></td></tr>
+                <tr><td>Uptime: </td><td id="uptimeInfo"></td></tr>
             </table>
         <td align="center"><p>Refrigerator Monitor</p></td>
         <td width="10%" align="center" onclick="toggleLoginDisplay()"><p id="loginDisplay">Login</p></td>
@@ -39,9 +40,16 @@
     </div>
 
     <div id="dataSelectorDiv">
-    <p>Select Dataset</p>
-    <select id="datasetSelect" onchange="datasetOnchange()">
-    </select>
+        <table>
+            <tr>
+                <td align="left">Select Dataset</td>
+                <td align="right"><select id="datasetSelect" onchange="datasetOnchange()"></select></td>
+            </tr>
+            <tr>
+                <td align="left">Control Probe</td>
+                <td align="left" style="vertical-align: middle;" id="controlProbeTd"></td>
+            </tr>
+        </table>
     </div>
 
     <div id="dataDiv">

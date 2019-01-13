@@ -27,15 +27,25 @@ def application( env, start_response ):
     cmd = None
     if( env['PATH_INFO'] == '/api/getConfig' ):
         result = configInfo.getConfigInfo( data )
+
     elif( env['PATH_INFO'] == '/api/datasetStat' ):
         result = temperatureData.getTempStat( data )
+
     elif( env['PATH_INFO'] == '/api/login' ):
         if( ('username' in data) and ('password' in data) ):
             result = sessMgr.login( sess, data['username'], data['password'] )
         else:
             result = { 'result' : 'ERROR: Invalid Username/Password' }
-    elif (env['PATH_INFO'] == '/api/logout'):
+
+    elif( env['PATH_INFO'] == '/api/logout' ):
         result = sessMgr.logout( sess )
+
+    elif( env['PATH_INFO'] == '/api/setConfig' ):
+        if( sess.privLevel >= 3 ):
+            result = configInfo.setConfigInfo( data )
+        else:
+            result = { 'result' : 'ERROR: Must be logged in!' }
+
     else:
         result = { 'cmd' : 'No command' }
 

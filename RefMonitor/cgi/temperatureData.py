@@ -15,17 +15,24 @@ def getTempStat( data ):
 
         bc = beerChip( beermonConfig['i2cBus'], beermonConfig['i2cAddr'] )
         result['uptime'] = bc.getUptime()
+        cntlChan = bc.getControlProbeChan()
         result['datasetId'] = data['datasetId']
         result['probes'] = []
 
-        sql =  "SELECT id, probe_name, probe_chan, type, min_range, max_range FROM Probes "
+        sql =  "SELECT id, probe_name, probe_chan, type, min_range, max_range, control_probe FROM Probes "
         sql += "WHERE proj_id = ?"
 
         for row in dbConn.querySafe( sql, (int(data['datasetId']),) ):
             probeData = { 'id' : row[0],
                           'name' : row[1],
                           'min_range': row[4],
-                          'max_range': row[5] }
+                          'max_range': row[5],
+                          'cntl_able' : row[6]}
+            if( row[2] == cntlChan ):
+                probeData['cntl'] = True
+            else:
+                probeData['cntl'] = False
+
             probeWhere = []
             tupleWhere = (data['datasetId'],)
             probeWhere.append( "probe_id = %d" % row[0] )

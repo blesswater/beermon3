@@ -28,7 +28,7 @@ def getConfigInfo( data ):
                 act = 'err'
             dat = { 'id' : row[0], 'name' : row[1], 'activity' : act, 'probes' : [] }
 
-            probeSql =  "SELECT id, probe_name, probe_chan, type, min_range, max_range FROM Probes "
+            probeSql =  "SELECT id, probe_name, probe_chan, type, min_range, max_range, control_probe FROM Probes "
             probeSql += "WHERE proj_id = %d" % (row[0])
             for prb in dbConn.query( probeSql ):
                 probe = { 'id' : prb[0],
@@ -36,7 +36,8 @@ def getConfigInfo( data ):
                           'chan' : prb[2],
                           'type' : prb[3],
                           'min_range' : prb[4],
-                          'maxRange' : prb[5] }
+                          'max_range' : prb[5],
+                          'cntl_able' : prb[6]}
                 if( probe['chan'] == cntlChan ):
                     probe['cntl'] = True
                 else:
@@ -53,6 +54,44 @@ def getConfigInfo( data ):
         dbConn.close()
 
     return result
+
+def setConfigInfo( data ):
+    result = { 'result': 'ERROR: setConfigInfo()'}
+    bc = beerChip(beermonConfig['i2cBus'], beermonConfig['i2cAddr'])
+
+    if( 'controlProbe' in data ):
+        prbInfo = data['controlProbe']
+        if( ('dataSetId' in prbInfo) and ('probeId' in prbInfo) ):
+            try:
+                dbConn = beerDB()
+                dbConn.connect(beermonConfig['dbLocation'])
+
+                sql =  "SELECT id, probe_chan, control_probe FROM Probes "
+                sql += "WHERE proj_id = ? AND id = ?"
+
+                row = dbConn.fetchOne( sql, (int(prbInfo['dataSetId']), int(prbInfo['probeId'])) )
+
+                if( row ):
+                    if( row[2] == 1 ): # If configured for control
+                        if( bc.setControlProbeChan( int(row[1]) ) ):
+                            result['result'] = 'OK'
+                        else:
+                            result['result'] = 'ERROR: Error writing chan %d to control chip' % (int(row[1]))
+                    else:
+                        result['result'] = 'ERROR: Probe not configured for control'
+                else:
+                    result['result'] = 'ERROR: Dataset/Probe not found.'
+
+            except:
+                result = {'result': 'ERROR: trying setConfigInfo()'}
+
+            finally:
+                if (dbConn != None):
+                    dbConn.close()
+
+    return result
+
+
 
 
 if( __name__ == '__main__' ):

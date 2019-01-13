@@ -10,6 +10,7 @@ function toggleLoginDisplay() {
     else {
         div.style.display = "none"
     }
+
 }
 
 function handleSessInfo( sess ) {
@@ -107,10 +108,12 @@ function changeMode() {
 
     if( (userSelections.cntlMode == "MONITOR") && (userSelections.privLevel >= 3) ) {
         userSelections.cntlMode = "CONTROL";
+        $( ".controlEnabled" ).prop( "disabled", false );
     }
     else
     {
         userSelections.cntlMode = "MONITOR";
+        $( ".controlEnabled" ).prop( "disabled", true );
     }
     document.getElementById( "modeDisplay" ).innerHTML = userSelections.cntlMode
 }
