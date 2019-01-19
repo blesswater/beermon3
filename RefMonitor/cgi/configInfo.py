@@ -3,7 +3,6 @@ from beerChipI2C import beerChipI2C as beerChip
 from beerChipDB import beerChipSQLiteDB as beerDB
 
 def getConfigInfo( data ):
-
     activityMap = ['stale', 'collecting']
     dbConn = None
     result = {}
@@ -16,6 +15,8 @@ def getConfigInfo( data ):
         bc = beerChip( beermonConfig['i2cBus'], beermonConfig['i2cAddr'] )
         cntlChan = bc.getControlProbeChan()
         result['uptime'] = bc.getUptime()
+        result['state'] = {}
+        result['state']['controlState'] = bc.getState()
 
         dataset = []
         sql =  "SELECT id, proj_name, activity FROM Project "
@@ -88,6 +89,13 @@ def setConfigInfo( data ):
             finally:
                 if (dbConn != None):
                     dbConn.close()
+
+    if( 'activate' in data ):
+        if( data['activate'] ):
+            bc.switchIn()
+        else:
+            bc.switchOut()
+        result = {'result': 'OK'}
 
     return result
 

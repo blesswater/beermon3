@@ -8,8 +8,18 @@ userSelections = {
     tempDataTimer: null,
     loggedIn: false,
     privLevel: 0,
-    cntlMode: "MONITOR"
+    cntlMode: "MONITOR",
+    activated: false
 };
+
+stateLed = {
+    "Switched Out" : "led-off",
+    "Off" : "led-red",
+    "On Debounce" : "led-red-blink",
+    "On" : "led-blue",
+    "Off Debounce" : "led-blue-blink",
+    "Ext Cntl" : "led-off"
+}
 
 /*
 ** Local functions
@@ -67,7 +77,7 @@ function _addProbeRadioInputNew( formElement, prb ) {
     probeLabel = document.createElement( "label" );
     probeLabel.setAttribute( "class", "form-check-label" );
     probeLabel.setAttribute( "for", "controlProbeSelect_" + prb.id );
-    probeLabel.innerHTML = prb.name
+    probeLabel.innerHTML = "<table><tr><td>" + prb.name + "</td><td align=\"left\"><div id=\"controlProbeSelectLed_" + prb.id + "\"></div></td></tr></table>"
 
     formDiv.appendChild( probeInput );
     formDiv.appendChild( probeLabel );
@@ -79,6 +89,27 @@ function _addProbeRadioInputNew( formElement, prb ) {
     }
     else {
         $( ".controlEnabled" ).prop( "disabled", true );
+    }
+}
+
+function _handleControlState( stateData ) {
+    if( stateData.hasOwnProperty( "controlState" ) ) {
+        stateTd = document.getElementById( "controlStateTd" )
+
+        led = "led-off"
+        if( stateLed.hasOwnProperty( stateData.controlState ) ) {
+            led = stateLed[stateData.controlState]
+        }
+
+        stateTd.innerHTML = "<table><tr><td>" + stateData.controlState + "</td>" +
+                            "<td><div class=\"" + led + "\"></div></td></tr></table>";
+
+        if( stateData.controlState == "Switched Out") {
+            userSelections.activated = false;
+        }
+        else {
+            userSelections.activated = true;
+        }
     }
 }
 
@@ -98,6 +129,7 @@ function getTempStat( dsid ) {
             console.log( "Sent stat information");
             updateUptime( data.uptime );
             handleTempStatData( data );
+            _handleControlState( data.state );
             handleSessInfo( data.sessInfo );
         },
         error: function( xhr, textStatus, errorMsg ) {
@@ -162,6 +194,16 @@ function handleTempStatData( data ) {
             therm.setCurrentValue( prb.currentTemp );
             therm.updateMarker( "sdevHi", "", prb.avgTemp + prb.sdevTemp );
             therm.updateMarker( "sdevLo", "", prb.avgTemp - prb.sdevTemp );
+        }
+
+        cntlLed = document.getElementById( "controlProbeSelectLed_" + prb.id );
+        if( cntlLed && prb.cntl_able ) {
+            if( prb.cntl ) {
+                cntlLed.setAttribute( "class", "led-green" );
+            }
+            else {
+                cntlLed.setAttribute( "class", "led-off" );
+            }
         }
 
     });
@@ -236,6 +278,7 @@ function getConfig() {
             console.log( "getConfig() Success!" );
             handleConfigInfo( data );
             datasetOnchange();
+            _handleControlState( data.state );
             handleSessInfo( data.sessInfo );
         },
         error: function( xhr, textStatus, errorMsg ) {
@@ -264,3 +307,18 @@ function setControlProbe( prbId ){
 	    }
     });
 }
+
+function activateButtonOnClick() {
+    data = { activate: !userSelections.activated }
+     $.ajax( {
+        type: "POST",
+        url: "/api/setConfig",
+        dataType: 'json',
+        contentType: 'application/json',
+        data: JSON.stringify( data ),
+        error: function( xhr, textStatus, errorMsg ) {
+            console.log( "Error: setControlProbe()" + errorMsg );
+	    }
+    });
+}
+

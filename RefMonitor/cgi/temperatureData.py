@@ -9,12 +9,17 @@ def getTempStat( data ):
     # import pdb; pdb.set_trace()
     dbConn = None
     result = {}
+
     try:
         dbConn = beerDB()
         dbConn.connect( beermonConfig['dbLocation'] )
 
         bc = beerChip( beermonConfig['i2cBus'], beermonConfig['i2cAddr'] )
         result['uptime'] = bc.getUptime()
+
+        result['state'] = {}
+        result['state']['controlState'] = bc.getState()
+
         cntlChan = bc.getControlProbeChan()
         result['datasetId'] = data['datasetId']
         result['probes'] = []

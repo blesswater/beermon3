@@ -7,6 +7,22 @@ from beerChip import beerChip
 class beerChipI2C( beerChip ):
     errorCnt = 4
 
+    controlCommands = {
+        'BEERMON_CONTROL_MSG_ACK' : 0x00,
+        'BEERMON_CONTROL_MSG_SWITCH_IN' : 0x01,
+        'BEERMON_CONTROL_MSG_SWITCH_OUT' : 0x02,
+        'BEERMON_CONTROL_MSG_EXTERN_IN' : 0x03
+    }
+
+    controlStates = {
+        0 : 'Switched Out',
+        1 : 'Off',
+        2 : 'On Debounce',
+        3 : 'On',
+        4 : 'Off Debounce',
+        5 : 'Ext Cntl'
+    }
+
     def __init__(self, i2cDev, i2cAddr):
         self.i2cAddr = i2cAddr
         self.i2cDev = i2cDev
@@ -94,6 +110,26 @@ class beerChipI2C( beerChip ):
             return True
         else:
             return False
+
+    def switchIn( self ):
+        self.bus.write_byte_data( self.i2cAddr,
+                                  i2cInfo.beerChipI2CCmdAddr['BEERCHIP_BEERMON_CNTL_CMD'],
+                                  self.controlCommands['BEERMON_CONTROL_MSG_SWITCH_IN'] )
+
+    def switchOut( self ):
+        self.bus.write_byte_data( self.i2cAddr,
+                                  i2cInfo.beerChipI2CCmdAddr['BEERCHIP_BEERMON_CNTL_CMD'],
+                                  self.controlCommands['BEERMON_CONTROL_MSG_SWITCH_OUT'] )
+
+    def getState( self ):
+        dat = self.bus.read_word_data( self.i2cAddr, i2cInfo.beerChipI2CCmdAddr['BEERCHIP_BEERMON_STATE_STATE'] )
+        if( dat in self.controlStates ):
+            return self.controlStates[dat]
+        else:
+            return 'Error'
+
+
+
 
 if( __name__ == '__main__'):
     bc = beerChipI2C( 1, 0x2e )

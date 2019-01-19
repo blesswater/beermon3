@@ -4,26 +4,26 @@
 
 #headingDiv {
     /* border: 1px solid #000000; */
-    position: fixed;
-    left: 0;
-    top: 0;
-    width: 100%;
+    /* position: fixed; */
+    /* left: 0; */
+    /* top: 0; */
+    /* width: 100%; */
     background-color: var(--bg-color);
 }
 
 #dataSelectorDiv {
-    /* border: 1px solid #000000; */
-    position: fixed;
-    left: 0;
-    top: 52;
-    width: 30%;
+    border: 1px solid #000000;
+    /* position: fixed; */
+    /* left: 0; */
+    /* top: 52; */
+    /* width: 30%; */
     background-color: var(--bg-color);
 }
 
 #dataDiv {
-    position: fixed;
-    left: 263;
-    top: 52;
+    /* position: fixed; */
+    /* left: 263; */
+    /* top: 52; */
     background-color: green;
 }
 
@@ -38,12 +38,13 @@
 /*
 ** Login Modal Dialog
 */
-.animate {
+.out_animate {
   -webkit-animation: animatezoom 0.6s;
   animation: animatezoom 0.6s
 }
 
-.modal {
+
+.out_modal {
     display: none; /* Hidden by default */
     /* display: block; For debug */
     position: fixed; /* Stay in place */
@@ -63,9 +64,11 @@
     // width: 23%; /* Could be more or less, depending on screen size */
 }
 
+/*
 .container {
     padding: 16px;
 }
+*/
 
 .inputBorder {
     border: 1px solid black;

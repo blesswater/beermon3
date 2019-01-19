@@ -2,15 +2,17 @@
 ** APIs
 */
 
-function toggleLoginDisplay() {
-    div = document.getElementById( "loginFormDiv" )
-    if( (div.style.display == "none") || (div.style.display == "") ){
-        div.style.display = "block"
+function displayLogin() {
+    logBtn = document.getElementById( "loginLogoutButton" )
+    if( userSelections.loggedIn == true ) {
+        logBtn.setAttribute( "onclick", "logoutOnClick()")
+        logBtn.innerHTML = "Logout"
     }
     else {
-        div.style.display = "none"
+        logBtn.setAttribute( "onclick", "loginOnClick()")
+        logBtn.innerHTML = "Login"
     }
-
+    $("#loginModalDialog").modal()
 }
 
 function handleSessInfo( sess ) {

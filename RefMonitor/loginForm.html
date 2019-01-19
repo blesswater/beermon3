@@ -1,19 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<div class="modal" id="loginFormDiv">
-    <div class="container animate">
-        <table>
-            <tr><td><label for="username">Username</label></td></tr>
-            <tr><td><input type="text" id="loginUserName" class="inputBorder" placeholder="Enter Username" name="username" required></td></tr>
-            <tr><td style="padding:5px"></td></tr>
-            <tr><td><label for="pw">Password</label></td></tr>
-            <tr><td><input type="password" id="loginPasswd" class="inputBorder" placeholder="Enter Password" name="pw" required></td></tr>
-            <tr><td style="padding:5px"></td></tr>
-            <tr><td><button onClick="loginOnClick()">Login</button></td><td><button onClick="logoutOnClick()">Logout</button></td></tr>
-        </table>
+<div class="modal fade" tabindex="-1" id="loginModalDialog" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <h4 class="modal-title w-100 font-weight-bold">Sign in</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body mx-3">
+                <form>
+                <div class="md-form mb-1">
+                    <label for="loginUserName">Username</label>
+                    <input type="text" id="loginUserName" class="form-control validate" placeholder="Username"/>
+                </div>
+
+                <div class="md-form mb-1">
+                    <label for="loginPasswd">Password</label>
+                    <input type="password" id="loginPasswd" class="form-control validate" placeholder="Password"/>
+                </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" id="loginLogoutButton" data-dismiss="modal"></button>
+                <button class="btn btn-default" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
     </div>
-
 </div>
-
 </html>
