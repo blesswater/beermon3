@@ -53,7 +53,7 @@ class sessionHandler:
 
             if( ipAddr == '127.0.0.1' ):
                 # This is the kiosk, always let it in.
-                rtnSess = sessionId( 0, 0, 3 )
+                rtnSess = sessionId( 0, '000000000', 3 )
                 makeNew = False
 
             elif( (sessId != None) and (self._sessIdIsGood( sessId )) ):
