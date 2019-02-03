@@ -107,15 +107,33 @@ function logoutOnClick() {
 }
 
 function changeMode() {
+    /*
+    td = document.getElementById( "setpointControlTd" );
+    while( td.firstChild ) {
+        td.removeChild( td.firstChild );
+    }
+    knob = createKnob();
+    */
 
     if( (userSelections.cntlMode == "MONITOR") && (userSelections.privLevel >= 3) ) {
         userSelections.cntlMode = "CONTROL";
         $( ".controlEnabled" ).prop( "disabled", false );
+        processKnobEvent( 4 ); /* Monitor Event */
+
     }
     else
     {
         userSelections.cntlMode = "MONITOR";
         $( ".controlEnabled" ).prop( "disabled", true );
+        /* knob.setAttribute( "data-readonly", "readonly" ); */
+        processKnobEvent( 3 ); /* Control Event */
     }
+
+    /*
+    td.appendChild( knob );
+    $(".knob").knob();
+    */
+
+
     document.getElementById( "modeDisplay" ).innerHTML = userSelections.cntlMode
 }

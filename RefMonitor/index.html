@@ -13,6 +13,8 @@
     <!-- <script src="js/thermometer.min.js"></script> -->
     <script src="js/thermometer.js"></script>
     <script src="js/jquery.min.js"></script>
+    <script src="js/jquery.knob.js"></script>
+    <script src="/js/dial.js"></script>
     <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script> -->
     <script src="/js/bootstrap.min.js"></script>
     <script src="js/refrigMonConfig.js"></script>
@@ -47,22 +49,30 @@
         </tr></table>
     </div>
 
-
     <div class="row content">
         <div class="col-sm-4 sidenav">
             <div id="dataSelectorDiv">
-                <table width="100%">
-                    <tr>
+                <table width="100%" cellpadding="10px">
+                    <tr class="dataSelectorRow">
                         <td align="left">Select Dataset</td>
                         <td align="right"><select id="datasetSelect" onchange="datasetOnchange()"></select></td>
                     </tr>
-                    <tr>
+                    <tr class="dataSelectorRow">
                         <td align="left">Control Probe</td>
                         <td align="left" style="vertical-align: middle;" id="controlProbeTd"></td>
                     </tr>
-                    <tr>
+                    <tr class="dataSelectorRow">
                         <td><button id="activateButton" type="button" class="btn btn-secondary controlEnabled" onclick="activateButtonOnClick()">Activate</button></td>
                         <td id="controlStateTd"></td>
+                    </tr>
+                    <tr>
+                        <td id="setpointControlTd" rowspan="2">
+                            <!-- <input class="knob controlEnabled" data-min="-10" data-max="80" data-step="0.5" data-angleOffset=-125 data-angleArc=250 data-fgColor="#66EE66" data-rotation="clockwise" value="35"> -->
+                        </td>
+                        <td><button class="btn btn-secondary controlEnabled">Submit</button></td>
+                    </tr>
+                    <tr>
+                        <td><button class="btn btn-secondary controlEnabled">Clear</button></td>
                     </tr>
                 </table>
             </div>
@@ -81,6 +91,6 @@
     </div>
 
     <div id="loginFormContentDiv">
-
     </div>
+
 </body>

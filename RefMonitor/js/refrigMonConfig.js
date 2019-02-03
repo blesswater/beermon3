@@ -9,7 +9,8 @@ userSelections = {
     loggedIn: false,
     privLevel: 0,
     cntlMode: "MONITOR",
-    activated: false
+    activated: false,
+    setpointControlKnob : {}
 };
 
 stateLed = {
@@ -51,9 +52,43 @@ function handleConfigInfo( data ) {
         opt.setAttribute( 'value', ds.id );
         opt.innerHTML = ds.name;
         sel.appendChild( opt );
+
+        if( ds.hasOwnProperty( "setpoints" ) && ds["setpoints"].length > 0 ) {
+            console.log( "Got Setpoints" );
+            userSelections.setpointControlKnob[ds.id] = {
+                state : 0,
+                value : ds["setpoints"][0].value,
+                setting : ds["setpoints"][0].value,
+                minRange : ds["setpoints"][0].min_range,
+                maxRange : ds["setpoints"][0].max_range,
+            }
+            initControlKnob( userSelections.setpointControlKnob[ds.id] );
+            processKnobEvent( 0 ); /* SwitchOut */
+        }
     });
 
+    processKnobEvent( 0 ); /* SwitchOut */
     userSelections.selDatasetValue = sel.value;
+    if( userSelections.cntlMode == 'MONITOR') {
+        processKnobEvent( 1 ); /* SwitchInMonitor */
+    }
+    else {
+        processKnobEvent( 2 ); /* SwitchInControl */
+    }
+
+
+    /* TODO: Store control knob data here */
+
+    /* Create setpoint control knob */
+    /*
+    td = document.getElementById( "setpointControlTd" );
+    knob = createKnob();
+    if( userSelections.cntlMode == "MONITOR" ) {
+        knob.setAttribute( "data-readonly", "readonly" );
+    }
+    td.appendChild( knob );
+    $(".knob").knob();
+    */
 
 }
 
@@ -110,6 +145,8 @@ function _handleControlState( stateData ) {
         else {
             userSelections.activated = true;
         }
+
+        processKnobEvent( 8 )
     }
 }
 
@@ -219,7 +256,7 @@ function _newProbeSetup() {
     if( sel.value != userSelections.selDatasetValue ) { /* Redundant */
         for( prbKey in userSelections.activeProbes ) {
             if( userSelections.activeProbes.hasOwnProperty( prbKey )) {
-                // userSelections.activeProbes[prbKey].therm.destroy();
+                userSelections.activeProbes[prbKey].therm.destroy();
             }
         }
 
@@ -234,7 +271,15 @@ function _newProbeSetup() {
         }
 
         userSelections.activeProbes = {};
+
+        processKnobEvent( 0 ); /* SwitchOut */
         userSelections.selDatasetValue = sel.value;
+        if( userSelections.cntlMode == 'MONITOR') {
+            processKnobEvent( 1 ); /* SwitchInMonitor */
+        }
+        else {
+            processKnobEvent( 2 ); /* SwitchInControl */
+        }
 
         var formElement = document.getElementById( "controlProbeTd" );
         while( formElement.firstChild ) {

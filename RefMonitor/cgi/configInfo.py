@@ -6,6 +6,7 @@ def getConfigInfo( data ):
     activityMap = ['stale', 'collecting']
     dbConn = None
     result = {}
+
     try:
         dbConn = beerDB()
         dbConn.connect( beermonConfig['dbLocation'] )
@@ -22,12 +23,14 @@ def getConfigInfo( data ):
         sql =  "SELECT id, proj_name, activity FROM Project "
         sql += "ORDER BY activity desc"
         for row in dbConn.query( sql ):
-            probes = []
             if( row[2] < len(activityMap) ):
                 act = activityMap[row[2]]
             else:
                 act = 'err'
             dat = { 'id' : row[0], 'name' : row[1], 'activity' : act, 'probes' : [] }
+
+            setpoints = []
+            hasSp = False
 
             probeSql =  "SELECT id, probe_name, probe_chan, type, min_range, max_range, control_probe FROM Probes "
             probeSql += "WHERE proj_id = %d" % (row[0])
@@ -41,11 +44,21 @@ def getConfigInfo( data ):
                           'cntl_able' : prb[6]}
                 if( probe['chan'] == cntlChan ):
                     probe['cntl'] = True
+                    hasSp = True
+
                 else:
                     probe['cntl'] = False
                 dat['probes'].append( probe )
 
+            if( hasSp ):
+                setpoints.append({'chan': 0,
+                                  'value': bc.getSetpoint(0),
+                                  'min_range': 20.0,
+                                  'max_range': 90.0
+                                  })
+            dat['setpoints'] = setpoints
             dataset.append( dat )
+
         result['dataset'] = dataset
         result['result'] = 'OK'
     except:

@@ -128,6 +128,17 @@ class beerChipI2C( beerChip ):
         else:
             return 'Error'
 
+    def getSetpoint( self, chan = 0 ):
+        tempWord = self.bus.read_word_data(self.i2cAddr, i2cInfo.beerChipI2CCmdAddr['BEERCHIP_BEERMON_CFG_SETPT'])
+        if (tempWord & 0x8000):
+            # Temperature is negative
+            tempWord = (~tempWord + 1) & 0xFFFF
+            temp = -1.0 * float(tempWord) / 256.0
+        else:
+            temp = float(tempWord) / 256.0
+
+        return temp
+
 
 
 

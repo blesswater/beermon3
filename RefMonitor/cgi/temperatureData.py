@@ -19,6 +19,7 @@ def getTempStat( data ):
 
         result['state'] = {}
         result['state']['controlState'] = bc.getState()
+        result['state']['setpoint'] = bc.getSetpoint()
 
         cntlChan = bc.getControlProbeChan()
         result['datasetId'] = data['datasetId']
