@@ -145,8 +145,10 @@ function _handleControlState( stateData ) {
         else {
             userSelections.activated = true;
         }
+    }
 
-        processKnobEvent( 8 )
+    if( stateData.hasOwnProperty( "setpoint" ) ) {
+        processKnobEvent( 8, stateData.setpoint );
     }
 }
 

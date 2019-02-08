@@ -1,3 +1,4 @@
+#!/usr/bin/python
 import sys
 import time
 
@@ -43,9 +44,9 @@ if __name__ == '__main__':
         sys.exit(1)
 
     probes = []
-    sql = "SELECT probe_name, probe_chan, id FROM Probes WHERE proj_id = %d" % (id)
+    sql = "SELECT probe_name, probe_chan, id, type FROM Probes WHERE proj_id = %d" % (id)
     for prb in dbConn.query( sql ):
-        probes.append( { 'probe_name' : prb[0], 'chan' : prb[1], 'probe_id' : prb[2], 'data' : 0.0 } )
+        probes.append( { 'probe_name' : prb[0], 'chan' : prb[1], 'type' : prb[3], 'probe_id' : prb[2], 'data' : 0.0 } )
 
     if( len( probes ) == 0 ):
         print( 'ERROR: Could not file data sensors for dataset %s' % projName )
@@ -54,7 +55,7 @@ if __name__ == '__main__':
 
     while( True ):
         for prb in probes:
-            prb['data'] = bc.getTemperature(prb['chan'])
+            prb['data'] = bc.getTemperature(prb['chan'], prb['type'])
             print('%s: %fF' % (prb['probe_name'], prb['data']))
 
             sql =  "INSERT INTO Temperature (proj_id, probe_id, temp_time, temp) VALUES ( "

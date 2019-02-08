@@ -7,6 +7,7 @@ $(function($) {
         release : function (value) {
             //console.log(this.$.attr('value'));
             console.log("release : " + value);
+            processKnobEvent( 5, value );
         },
         cancel : function () {
             console.log("cancel : ", this);
@@ -87,8 +88,7 @@ $(function($) {
 ** States:
 **     0: SwitchedOut
 **     1: Monitor
-**     2: Ready
-**     3: Adjust
+**     2: Control
 **
 ** Events:
 **    0: switchOut
@@ -105,12 +105,12 @@ var controlKnobSM = [
     /* Switched Out State */
     [
          /* Switch Out Event */
-         function( knobState ) { console.log( "State: 0, Event: 0 ");
+         function( knobState, eventData ) { console.log( "State: 0, Event: 0 ");
              _clearKnob();
              return 0
          },
          /* SwitchInMon */
-         function(knobState) {
+         function(knobState, eventData ) {
              console.log( "State: 0, Event: 1 ");
              td = document.getElementById( "setpointControlTd" );
              knob = createKnob(knobState);
@@ -120,7 +120,7 @@ var controlKnobSM = [
              return 1
          },
          /* SwitchInCntl */
-         function(knobState) { console.log( "State: 0, Event: 2 ");
+         function(knobState, eventData ) { console.log( "State: 0, Event: 2 ");
              console.log( "State: 1, Event: 1 ");
              td = document.getElementById( "setpointControlTd" );
              knob = createKnob(knobState);
@@ -128,43 +128,43 @@ var controlKnobSM = [
              $(".knob").knob();
              return 2
          },
-         function(knobState) { console.log( "State: 0, Event: 3 ");
+         function(knobState, eventData ) { console.log( "State: 0, Event: 3 ");
              return 0
          },
-         function(knobState) { console.log( "State: 0, Event: 4 ");
+         function(knobState, eventData ) { console.log( "State: 0, Event: 4 ");
                       return 0
                     },
-         function(knobState) { console.log( "State: 0, Event: 5 ");
+         function(knobState, eventData ) { console.log( "State: 0, Event: 5 ");
                       return 0
                     },
-         function(knobState) { console.log( "State: 0, Event: 6 ");
+         function(knobState, eventData ) { console.log( "State: 0, Event: 6 ");
                       return 0
                     },
-         function(knobState) { console.log( "State: 0, Event: 7 ");
+         function(knobState, eventData ) { console.log( "State: 0, Event: 7 ");
                       return 0
                     },
-         function(knobState) { console.log( "State: 0, Event: 8 ");
+         function(knobState, eventData ) { console.log( "State: 0, Event: 8 ");
                       return 0
                     },
     ],
     /* Monitor State */
     [
         /* Switch Out Event */
-        function(knobState) { console.log( "State: 1, Event: 0 ");
+        function(knobState, eventData ) { console.log( "State: 1, Event: 0 ");
              _clearKnob();
              return 0
         },
-        function(knobState) { console.log( "State: 1, Event: 1 ");
+        function(knobState, eventData ) { console.log( "State: 1, Event: 1 ");
             return 1
         },
-        function(knobState) { console.log( "State: 1, Event: 2 ");
+        function(knobState, eventData ) { console.log( "State: 1, Event: 2 ");
             return 1
         },
-        function(knobState) { console.log( "State: 1, Event: 3 ");
+        function(knobState, eventData ) { console.log( "State: 1, Event: 3 ");
             return 1
         },
         /* Control */
-        function(knobState) {
+        function(knobState, eventData ) {
             console.log( "State: 1, Event: 4 ");
             _clearKnob();
             td = document.getElementById( "setpointControlTd" );
@@ -173,101 +173,101 @@ var controlKnobSM = [
             $(".knob").knob();
             return 2
         },
-        function(knobState) { console.log( "State: 1, Event: 5 ");
+        function(knobState, eventData ) { console.log( "State: 1, Event: 5 ");
            return 1
         },
-        function(knobState) { console.log( "State: 1, Event: 6 ");
+        function(knobState, eventData ) { console.log( "State: 1, Event: 6 ");
             return 1
         },
-        function(knobState) { console.log( "State: 1, Event: 7 ");
+        function(knobState, eventData ) { console.log( "State: 1, Event: 7 ");
             return 1
         },
-        function(knobState) { console.log( "State: 1, Event: 8 ");
+        /* Statistics Data */
+        function(knobState, eventData ) {
+            console.log( "State: 1, Event: 8 ");
+
+            knobState.value = eventData;
+            _clearKnob();
+            td = document.getElementById( "setpointControlTd" );
+            knob = createKnob(knobState);
+            knob.setAttribute( "data-readonly", "readonly" );
+            td.appendChild( knob );
+            $(".knob").knob();
             return 1
         },
     ],
     /* Control State */
     [
         /* Switch Out Event */
-        function(knobState) { console.log( "State: 2, Event: 0 ");
+        function(knobState, eventData ) {
+            console.log( "State: 2, Event: 0 ");
             _clearKnob();
             return 0
         },
 
-        function(knobState) { console.log( "State: 2, Event: 1 ");
+        function(knobState, eventData ) {
+            console.log( "State: 2, Event: 1 ");
             return 2
         },
-         function(knobState) { console.log( "State: 2, Event: 2 ");
-                      return 2
-                    },
+        function(knobState, eventData ) {
+            console.log( "State: 2, Event: 2 ");
+            return 2
+        },
         /* Monitor Event */
-        function(knobState) {
+        function(knobState, eventData ) {
             console.log( "State: 2, Event: 3 ");
             _clearKnob();
             td = document.getElementById( "setpointControlTd" );
             knob = createKnob(knobState);
             knob.setAttribute( "data-readonly", "readonly" );
-            knob.value = "65"
             td.appendChild( knob );
             $(".knob").knob();
             return 1
         },
         /* Control */
-        function(knobState) { console.log( "State: 2, Event: 4 ");
+        function(knobState, eventData ) {
+            console.log( "State: 2, Event: 4 ");
             return 2
         },
-         function(knobState) { console.log( "State: 2, Event: 5 ");
-                      return 2
-                    },
-         function(knobState) { console.log( "State: 2, Event: 6 ");
-                      return 2
-                    },
-         function(knobState) { console.log( "State: 2, Event: 7 ");
-                      return 2
-                    },
-         function(knobState) { console.log( "State: 2, Event: 8 ");
-                      return 2
-                    },
-    ],
-    /* Adjust State */
-    [
-        /* Switch Out Event */
-        function(knobState) {
-            console.log( "State: 3, Event: 0 ");
-           _clearKnob();
-           return 3
+        /* Release */
+        function(knobState, eventData ) {
+            console.log( "State: 2, Event: 5 ");
+            knobState.setting = eventData;
+            return 2
         },
-        function(knobState) { console.log( "State: 3, Event: 1 ");
-            return 3
+        /* Submit */
+        function(knobState, eventData ) {
+            console.log( "State: 2, Event: 6 ");
+            data = { setpoint: { id : 0, setting : knobState.setting } }
+            $.ajax( {
+                type: "POST",
+                url: "/api/setConfig",
+                dataType: 'json',
+                contentType: 'application/json',
+                data: JSON.stringify( data ),
+                error: function( xhr, textStatus, errorMsg ) {
+                    console.log( "Error: setControlProbe()" + errorMsg );
+	            }
+            });
+            return 2
         },
-        function(knobState) { console.log( "State: 3, Event: 2 ");
-            return 3
-        },
-        /* Monitor Event */
-        function(knobState) { console.log( "State: 3, Event: 3 ");
+        /* Clear */
+        function(knobState, eventData ) {
+            console.log( "State: 2, Event: 7 ");
+            knobState.setting = knobState.value;
             _clearKnob();
             td = document.getElementById( "setpointControlTd" );
             knob = createKnob(knobState);
-            knob.setAttribute( "data-readonly", "readonly" );
             td.appendChild( knob );
             $(".knob").knob();
-            return 1
+            return 2
         },
-         function(knobState) { console.log( "State: 3, Event: 4 ");
-                      return 3
-                    },
-         function(knobState) { console.log( "State: 3, Event: 5 ");
-                      return 3
-                    },
-         function(knobState) { console.log( "State: 3, Event: 6 ");
-                      return 3
-                    },
-         function(knobState) { console.log( "State: 3, Event: 7 ");
-                      return 3
-                    },
-         function(knobState) { console.log( "State: 3, Event: 8 ");
-                      return 3
-                    },
+        /* Statistics */
+        function(knobState, eventData ) {
+            console.log( "State: 2, Event: 8 ");
+            knobState.value = eventData
+            return 2;
+        },
     ],
 ]
 
@@ -281,7 +281,14 @@ function createKnob(knobState) {
     knob.setAttribute( "data-angleArc", "250" );
     knob.setAttribute( "data-fgColor", "#66EE66" );
     knob.setAttribute( "data-rotation", "clockwise" );
-    knob.setAttribute( "value", knobState.value );
+    val = knobState.value.toFixed( 1 );
+    if( knobState.value > knobState.maxRange ) {
+        val = knobState.maxRange;
+    }
+    else if( knobState.value < knobState.minRange ) {
+        val = knobState.minRange;
+    }
+    knob.setAttribute( "value", val );
 
     return knob;
 }
@@ -293,16 +300,16 @@ function _clearKnob() {
     }
 }
 
-function processControlKnobSM( knobState, knobEvent ) {
-    knobState.state = controlKnobSM[knobState.state][knobEvent](knobState);
+function processControlKnobSM( knobState, knobEvent, eventData ) {
+    knobState.state = controlKnobSM[knobState.state][knobEvent](knobState, eventData);
 }
 
 function initControlKnob( knobState ) {
      knobState.state = 0;
 }
 
-function processKnobEvent( knobEvent ) {
+function processKnobEvent( knobEvent, eventData = 0) {
     if( userSelections.setpointControlKnob.hasOwnProperty( userSelections.selDatasetValue ) ) {
-        processControlKnobSM( userSelections.setpointControlKnob[userSelections.selDatasetValue], knobEvent )
+        processControlKnobSM( userSelections.setpointControlKnob[userSelections.selDatasetValue], knobEvent, eventData )
     }
 }

@@ -44,10 +44,12 @@ def getConfigInfo( data ):
                           'cntl_able' : prb[6]}
                 if( probe['chan'] == cntlChan ):
                     probe['cntl'] = True
-                    hasSp = True
-
                 else:
                     probe['cntl'] = False
+
+                if( probe['cntl_able'] == 1 ):
+                    hasSp = True
+
                 dat['probes'].append( probe )
 
             if( hasSp ):
@@ -109,6 +111,15 @@ def setConfigInfo( data ):
         else:
             bc.switchOut()
         result = {'result': 'OK'}
+
+    if( 'setpoint' in data ):
+        try:
+            if( ('id' in data['setpoint']) and ('setting' in data['setpoint']) ):
+                if( int(data['setpoint']['id']) == 0 ):
+                    temp = float( data['setpoint']['setting'] )
+                    bc.setSetpoint(temp)
+        except:
+            print( 'ERROR: Setting setpoint')
 
     return result
 

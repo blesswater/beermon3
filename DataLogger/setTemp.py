@@ -1,8 +1,8 @@
+#!/usr/bin/python
+
 import sys
-import time
 
 from beerChipI2C import beerChipI2C as beerChip
-from beerChipDB import beerChipSQLiteDB as beerDB
 
 def usage():
     print( '' )
@@ -20,11 +20,6 @@ if __name__ == '__main__':
 
     try:
         temp = float( sys.argv[1] )
-        bc.setPoint( temp )
-
-
-
-
-
-
-
+        bc.setSetpoint( temp )
+    except:
+        print( 'ERROR: Writing setpoint' )

@@ -77,6 +77,7 @@
         this.rH = function (value) {
             //console.log(this.$.attr('value'));
             console.log("release : " + value);
+            processKnobEvent( 5, value );
         }
         this.scale = 1; // scale factor
         this.relative = false;

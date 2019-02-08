@@ -68,7 +68,7 @@ class beerChipI2C( beerChip ):
                 print( 'ERROR: Bad probe Id: %d' % (probeId) )
 
         elif( type == 'setpoint' ):
-            tempWord = self.bus.read_word_data( self.i2cAddr, i2cInfo.beerChipI2CCmdAddr[BEERCHIP_BEERMON_CFG_SETPT] )
+            tempWord = self.bus.read_word_data( self.i2cAddr, i2cInfo.beerChipI2CCmdAddr['BEERCHIP_BEERMON_CFG_SETPT'] )
             if (tempWord & 0x8000):
                 # Temperature is negative
                 tempWord = (~tempWord + 1) & 0xFFFF
@@ -138,6 +138,22 @@ class beerChipI2C( beerChip ):
             temp = float(tempWord) / 256.0
 
         return temp
+
+    def setSetpoint( self, temp ):
+        if( temp >= 0 ):
+            tempWord = int( round( temp * 256.0 ) )
+            tempWord = tempWord & 0xFFFF
+        else:
+            tempWord = int(round( -1.0 * temp * 256.0) )
+            tempWord = (~tempWord + 1) & 0xFFFF
+
+        self.bus.write_word_data(self.i2cAddr,
+                                 i2cInfo.beerChipI2CCmdAddr['BEERCHIP_BEERMON_CFG_SETPT'],
+                                 tempWord)
+        # Write the configuration
+        self.bus.write_byte_data(self.i2cAddr,
+                                 i2cInfo.beerChipI2CCmdAddr['BEERCHIP_BEERMON_CFG_UPDATE_STATE'],
+                                 0x00)
 
 
 
