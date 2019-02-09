@@ -24,8 +24,10 @@ if [ `id -u` != 0 ]; then
 fi
 
 if [ ! -d $WWW_LOCATION ]; then
-	echo "$WWW_LOCATION not found. - Give up"
-	exit 1
+	echo "$WWW_LOCATION not found - creating"
+	mkdir $WWW_LOCATION
+	chown $WWW_USER:$WWW_GROUP $WWW_LOCATION
+	chmod 755 $WWW_LOCATION
 fi
 
 if [ ! -f $WWW_LOCATION/proj.sh ]; then
