@@ -4,6 +4,17 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
+      <logicalFolder name="MCC Generated Files"
+                     displayName="MCC Generated Files"
+                     projectFiles="true">
+        <itemPath>mcc_generated_files/device_config.h</itemPath>
+        <itemPath>mcc_generated_files/pin_manager.h</itemPath>
+        <itemPath>mcc_generated_files/memory.h</itemPath>
+        <itemPath>mcc_generated_files/mcc.h</itemPath>
+        <itemPath>mcc_generated_files/interrupt_manager.h</itemPath>
+        <itemPath>mcc_generated_files/adc.h</itemPath>
+        <itemPath>mcc_generated_files/i2c1.h</itemPath>
+      </logicalFolder>
       <itemPath>beerChipConfig.h</itemPath>
       <itemPath>beerChipI2C.h</itemPath>
       <itemPath>beerChipI2CIndex.h</itemPath>
@@ -22,6 +33,17 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
+      <logicalFolder name="MCC Generated Files"
+                     displayName="MCC Generated Files"
+                     projectFiles="true">
+        <itemPath>mcc_generated_files/memory.c</itemPath>
+        <itemPath>mcc_generated_files/device_config.c</itemPath>
+        <itemPath>mcc_generated_files/mcc.c</itemPath>
+        <itemPath>mcc_generated_files/pin_manager.c</itemPath>
+        <itemPath>mcc_generated_files/adc.c</itemPath>
+        <itemPath>mcc_generated_files/interrupt_manager.c</itemPath>
+        <itemPath>mcc_generated_files/i2c1.c</itemPath>
+      </logicalFolder>
       <itemPath>beerChipMain.c</itemPath>
       <itemPath>beerChipI2C.c</itemPath>
       <itemPath>beerChipLed.c</itemPath>
@@ -32,11 +54,13 @@
       <itemPath>beerChipUserTimer.c</itemPath>
       <itemPath>beerchipRelay.c</itemPath>
       <itemPath>beerChipBeermon.c</itemPath>
+      <itemPath>main.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
                    projectFiles="false">
       <itemPath>Makefile</itemPath>
+      <itemPath>MyConfig.mc3</itemPath>
     </logicalFolder>
   </logicalFolder>
   <sourceRootList>
@@ -47,16 +71,16 @@
     <conf name="default" type="2">
       <toolsSet>
         <developmentServer>localhost</developmentServer>
-        <targetDevice>PIC16F1509</targetDevice>
+        <targetDevice>PIC18F14K50</targetDevice>
         <targetHeader></targetHeader>
         <targetPluginBoard></targetPluginBoard>
-        <platformTool>PICkit3PlatformTool</platformTool>
+        <platformTool>Simulator</platformTool>
         <languageToolchain>XC8</languageToolchain>
         <languageToolchainVersion>1.21</languageToolchainVersion>
         <platform>3</platform>
       </toolsSet>
       <packs>
-        <pack name="PIC12-16F1xxx_DFP" vendor="Microchip" version="1.0.10"/>
+        <pack name="PIC18F-K_DFP" vendor="Microchip" version="1.0.40"/>
       </packs>
       <compileType>
         <linkerTool>
@@ -220,13 +244,6 @@
         <property key="periphComp6.gte" value="gt"/>
         <property key="reset.scl" value="false"/>
         <property key="reset.type" value="MCLR"/>
-        <property key="tracecontrol.include.timestamp" value="summarydataenabled"/>
-        <property key="tracecontrol.select" value="0"/>
-        <property key="tracecontrol.stallontracebufferfull" value="false"/>
-        <property key="tracecontrol.timestamp" value="0"/>
-        <property key="tracecontrol.tracebufmax" value="546000"/>
-        <property key="tracecontrol.tracefile" value="defmplabxtrace.log"/>
-        <property key="tracecontrol.traceresetonrun" value="false"/>
         <property key="uart0io.output" value="window"/>
         <property key="uart0io.outputfile" value=""/>
         <property key="uart0io.uartioenabled" value="false"/>

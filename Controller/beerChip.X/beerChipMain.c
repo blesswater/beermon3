@@ -164,8 +164,8 @@ int main(int argc, char** argv)
     while( !a2d_PollReading( &a2dProbe[thisChan] ) );
     
     /* Init Relays */
-    relay_Init( &enableRelay, BEERCHIP_RYL0_PIN );
-    relay_Init( &controlRelay, BEERCHIP_RYL1_PIN );
+    relay_Init( &enableRelay, BEERCHIP_RYL0_PIN, BEERCHIP_RYL0_ANSEL_BIT );
+    relay_Init( &controlRelay, BEERCHIP_RYL1_PIN, BEERCHIP_RYL1_ANSEL_BIT );
     
     /* Beermon */
     beermonConfig_Init( &beermonCfg );
