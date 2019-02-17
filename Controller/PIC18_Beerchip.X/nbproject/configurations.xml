@@ -18,6 +18,11 @@
       <itemPath>beerChipConfig.h</itemPath>
       <itemPath>beerChipISRRoutines.h</itemPath>
       <itemPath>beerChipLed.h</itemPath>
+      <itemPath>beerChipA2D.h</itemPath>
+      <itemPath>beerLock.h</itemPath>
+      <itemPath>beerChipBeermon.h</itemPath>
+      <itemPath>beerChipRelay.h</itemPath>
+      <itemPath>beerChipUserTimer.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -40,6 +45,11 @@
       <itemPath>main.c</itemPath>
       <itemPath>beerChipISRRoutines.c</itemPath>
       <itemPath>beerChipLed.c</itemPath>
+      <itemPath>beerChipA2D.c</itemPath>
+      <itemPath>beerLock.c</itemPath>
+      <itemPath>beerChipBeermon.c</itemPath>
+      <itemPath>beerChipUserTimer.c</itemPath>
+      <itemPath>beerchipRelay.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -57,7 +67,7 @@
       <toolsSet>
         <developmentServer>localhost</developmentServer>
         <targetDevice>PIC18F14K50</targetDevice>
-        <targetHeader></targetHeader>
+        <targetHeader>AC244023</targetHeader>
         <targetPluginBoard></targetPluginBoard>
         <platformTool>PICkit3PlatformTool</platformTool>
         <languageToolchain>XC8</languageToolchain>

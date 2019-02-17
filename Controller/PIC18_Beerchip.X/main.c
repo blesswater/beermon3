@@ -43,18 +43,53 @@
 
 #include "mcc_generated_files/mcc.h"
 #include "beerChipLed.h"
+#include "beerChipConfig.h" /* For beerLock.h */
+#include "beerLock.h" /* For beerChipA2D.h */
+#include "beerChipA2D.h"
 #include "beerChipISRRoutines.h"
+#include "beerChipRelay.h"
+#include "beerChipUserTimer.h"
+#include "beerChipBeermon.h"
+
+/*
+** Globals
+*/
+a2d_Reading_t a2dProbe[BEERMON_NUM_TEMP_PROBES];
+
+beermonConfig_t beermonCfg;
+beermonStats_t beermonStats;
+beermonState_t beermonState;
 
 /*
                          Main application
  */
 void main(void)
 {
+    char thisChan = 0;
+    
+    beerchip_relay_t enableRelay;
+    beerchip_relay_t controlRelay;
+    
+    userTmr_t testTimer;
+    
     // Initialize the device
     SYSTEM_Initialize();
     
     beerChip_InitLED();
-    beerChip_SetLEDMode( ledMode_Blink, 0x08 );
+    beerChip_SetLEDMode( ledMode_Blink, 0x32 );
+    
+    /* Init A/D */
+    a2d_Init();
+    a2d_InitReading( &a2dProbe[0], BEERCHIP_A2D_CHAN0 );
+    a2d_InitReading( &a2dProbe[1], BEERCHIP_A2D_CHAN1 );
+    
+    /* Init Relays for Beermon */
+    relay_Init( &enableRelay, BEERCHIP_RYL0_PIN );
+    relay_Init( &controlRelay,  BEERCHIP_RYL1_PIN );
+    
+    beermonConfig_Init( &beermonCfg );
+    beermon_Init( &beermonCfg, &beermonState, &beermonStats, 
+                  &enableRelay, &controlRelay );
     
     TMR1_SetInterruptHandler( beerChipTimerISR );
 
@@ -77,6 +112,19 @@ void main(void)
     while (1)
     {
         // Add your application code
+        thisChan = (++thisChan >= BEERMON_NUM_TEMP_PROBES) ? 0 : thisChan;
+        a2d_GetTemperatureReading( &a2dProbe[thisChan] );
+        if( thisChan == beermonCfg.probe )
+        {
+            if( a2dProbe[thisChan].temp > beermonCfg.setTemp )
+            {
+                beermon_ProcessEvent( &beermonState, beermon_event_TGreater );
+            }
+            else
+            {
+                beermon_ProcessEvent( &beermonState, beermon_event_TLess );
+            }
+        }
     }
 }
 /**
