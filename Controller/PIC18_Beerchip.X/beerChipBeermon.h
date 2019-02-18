@@ -68,6 +68,7 @@ typedef struct {
     beerchip_relay_t *controlRelay;
     beermonStats_t *stats;
     beermonConfig_t *config;
+    uint8_t event; /* For debugging */
 } beermonState_t;
 
 void beermonConfig_Init( beermonConfig_t *cfg );

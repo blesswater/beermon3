@@ -14,6 +14,10 @@ extern "C" {
 
 void beerChipTimerISR( void );
 
+void beerChipI2CHandler(I2C1_SLAVE_DRIVER_STATUS i2c_bus_state);
+
+#define beerCfgClean 0x00  /* No changes */
+#define beerCfgDirty 0x01  /* Changes Pending */
 
 #ifdef	__cplusplus
 }

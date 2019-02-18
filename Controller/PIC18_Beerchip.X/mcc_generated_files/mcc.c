@@ -53,6 +53,7 @@ void SYSTEM_Initialize(void)
     INTERRUPT_Initialize();
     PIN_MANAGER_Initialize();
     OSCILLATOR_Initialize();
+    I2C1_Initialize();
     TMR1_Initialize();
     ADC_Initialize();
 }

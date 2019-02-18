@@ -60,13 +60,9 @@ void __interrupt() INTERRUPT_InterruptManager (void)
     // interrupt handler
     if(INTCONbits.PEIE == 1)
     {
-        if(PIE2bits.BCLIE == 1 && PIR2bits.BCLIF == 1)
+        if(PIE1bits.SSPIE == 1 && PIR1bits.SSPIF == 1)
         {
-            i2c1_driver_busCollisionISR();
-        } 
-        else if(PIE1bits.SSPIE == 1 && PIR1bits.SSPIF == 1)
-        {
-            i2c1_driver_i2cISR();
+            I2C1_ISR();
         } 
         else if(PIE1bits.TMR1IE == 1 && PIR1bits.TMR1IF == 1)
         {

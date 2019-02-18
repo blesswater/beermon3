@@ -60,15 +60,17 @@ beermonConfig_t beermonCfg;
 beermonStats_t beermonStats;
 beermonState_t beermonState;
 
+beerchip_relay_t enableRelay;
+beerchip_relay_t controlRelay;
+
+uint8_t beermonStateControlMsg;
+
 /*
                          Main application
  */
 void main(void)
 {
     char thisChan = 0;
-    
-    beerchip_relay_t enableRelay;
-    beerchip_relay_t controlRelay;
     
     userTmr_t testTimer;
     
@@ -92,6 +94,8 @@ void main(void)
                   &enableRelay, &controlRelay );
     
     TMR1_SetInterruptHandler( beerChipTimerISR );
+    
+    I2C1_SetInterruptHandler( beerChipI2CHandler );
 
     // If using interrupts in PIC18 High/Low Priority Mode you need to enable the Global High and Low Interrupts
     // If using interrupts in PIC Mid-Range Compatibility Mode you need to enable the Global and Peripheral Interrupts
@@ -108,10 +112,29 @@ void main(void)
 
     // Disable the Peripheral Interrupts
     //INTERRUPT_PeripheralInterruptDisable();
-
+    
     while (1)
     {
         // Add your application code
+        switch( beermonStateControlMsg ) 
+        {
+            case BEERMON_CONTROL_MSG_SWITCH_IN:
+                beermon_ProcessEvent( &beermonState, beermon_event_switch_in );
+            break;
+            case BEERMON_CONTROL_MSG_SWITCH_OUT:
+                beermon_ProcessEvent( &beermonState, beermon_event_switch_out );
+            break;
+            case BEERMON_CONTROL_MSG_EXTERN_IN:
+                beermon_ProcessEvent( &beermonState, beermon_state_extern_cntl );
+            break;
+            default:
+                /* Do nothing */
+            break;
+        }
+        beermonStateControlMsg = BEERMON_CONTROL_MSG_ACK;
+        
+        beermon_ProcessEvent( &beermonState, beermon_event_switch_in );
+        
         thisChan = (++thisChan >= BEERMON_NUM_TEMP_PROBES) ? 0 : thisChan;
         a2d_GetTemperatureReading( &a2dProbe[thisChan] );
         if( thisChan == beermonCfg.probe )

@@ -72,7 +72,7 @@ void a2d_GetTemperatureReading( a2d_Reading_t *reading )
     while( lock_Take( &reading->lock ) == 0 );
     
     reading->reading = ADC_GetConversion( (adc_channel_t)reading->chan );
-    reading->temp = reading->reading + 3;
+    reading->temp = 0x7FFF;
     reading->count++;
     
     lock_Release( &reading->lock );

@@ -188,7 +188,9 @@ void beermon_ProcessEvent( beermonState_t *state, uint8_t event )
     /* Process the timer */
     if( usrTmr_Check( &(state->tmr) ) )
     {
+        state->event = beermon_event_TmrExpire;
         stateTbl[state->state][beermon_event_TmrExpire]( state );
     }
+    state->event = event;
     stateTbl[state->state][event]( state );
 }
