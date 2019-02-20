@@ -3,6 +3,7 @@
 import sys
 
 from beerChipI2C import beerChipI2C as beerChip
+from beerChipPersistant import beerChipPersistant
 
 def usage():
     print( '' )
@@ -11,7 +12,7 @@ def usage():
     print( '' )
 
 if __name__ == '__main__':
-    bc = beerChip( 1, 0x2e )
+    bc = beerChipPersistant( beerChip( 1, 0x2e ) )
 
     if( len(sys.argv) != 2 ):
         print( 'ERROR: Usage' )
