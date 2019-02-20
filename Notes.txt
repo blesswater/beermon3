@@ -87,6 +87,12 @@ CREATE TABLE Event (
     event_type TEXT,
     event_time INTEGER );
 
+CREATE TABLE Scalar (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    type varchar(64),
+    value varchar(512) );
+    
+
 # Dealing w/ timestamps
 select date(temp_time, 'localtime'), 
        time(temp_time, 'localtime'), 
