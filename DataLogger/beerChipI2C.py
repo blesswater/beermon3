@@ -121,6 +121,11 @@ class beerChipI2C( beerChip ):
                                   i2cInfo.beerChipI2CCmdAddr['BEERCHIP_BEERMON_CNTL_CMD'],
                                   self.controlCommands['BEERMON_CONTROL_MSG_SWITCH_OUT'] )
 
+    def extCntl(self):
+        self.bus.write_byte_data(self.i2cAddr,
+                                 i2cInfo.beerChipI2CCmdAddr['BEERCHIP_BEERMON_CNTL_CMD'],
+                                 self.controlCommands['BEERMON_CONTROL_MSG_EXTERN_IN'])
+
     def getState( self ):
         dat = self.bus.read_word_data( self.i2cAddr, i2cInfo.beerChipI2CCmdAddr['BEERCHIP_BEERMON_STATE_STATE'] )
         if( dat in self.controlStates ):
