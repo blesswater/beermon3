@@ -94,7 +94,7 @@ class beerChipPersistant( beerChip ):
         return self.bc.getControlProbeChan()
 
     def getUptime(self):
-        return self.bc.getUptime
+        return self.bc.getUptime()
 
     def setControlProbeChan( self, chan ):
         self.cfg['cntlChan'] = chan

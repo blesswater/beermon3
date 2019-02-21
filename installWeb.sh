@@ -1,8 +1,7 @@
 #!/bin/bash
 
-WEB_DIR=/var/www/html
-WEB_USER=www-data
-MGMT_USER=pi
+
+. ./wwwConfig.sh
 
 if [ `id -u` != 0 ]; then
 	echo "ERROR: Must be run as root"
@@ -10,31 +9,31 @@ if [ `id -u` != 0 ]; then
 fi
 
 
-echo "cp ./www/index.html $WEB_DIR"
-cp ./www/index.html $WEB_DIR
-echo "chown $MGMT_USER:$WEB_USER $WEB_DIR/index.html"
-chown $MGMT_USER:$WEB_USER $WEB_DIR/index.html
-echo "chmod 640 $WEB_DIR/index.html"
-chmod 640 $WEB_DIR/index.html
+echo "cp ./www/index.html $WEB_LOCATION"
+cp ./www/index.html $WEB_LOCATION
+echo "chown $MGMT_USER:$WWW_GROUP $WEB_LOCATION/index.html"
+chown $MGMT_USER:$WWW_GROUP $WEB_LOCATION/index.html
+echo "chmod 640 $WEB_LOCATION/index.html"
+chmod 640 $WEB_LOCATION/index.html
 
-if [ ! -d "$WEB_DIR/cgi" ]; then
+if [ ! -d "$WEB_LOCATION/cgi" ]; then
 	echo "#"
 	echo "# Creating CGI directory"
 	echo "#"
-	echo "mkdir $WEB_DIR/cgi"
-	mkdir $WEB_DIR/cgi
-	echo "chown -R $MGMT_USER:$WEB_USER $WEB_DIR/cgi"
-	chown -R $MGMT_USER:$WEB_USER $WEB_DIR/cgi
-	echo "chmod 750 $WEB_DIR/cgi"
-	chmod 750 $WEB_DIR/cgi
+	echo "mkdir $WEB_LOCATION/cgi"
+	mkdir $WEB_LOCATION/cgi
+	echo "chown -R $MGMT_USER:$WWW_GROUP $WEB_LOCATION/cgi"
+	chown -R $MGMT_USER:$WWW_GROUP $WEB_LOCATION/cgi
+	echo "chmod 750 $WEB_LOCATION/cgi"
+	chmod 750 $WEB_LOCATION/cgi
 fi
 
-echo "cp ./www/cgi/*.py $WEB_DIR/cgi"
-cp ./www/cgi/*.py $WEB_DIR/cgi
-echo "chown -R $MGMT_USER:$WEB_USER $WEB_DIR/cgi"
-chown -R $MGMT_USER:$WEB_USER $WEB_DIR/cgi
-echo "chmod 640 $WEB_DIR/cgi"
-chmod 640 $WEB_DIR/cgi/*
+echo "cp ./www/cgi/*.py $WEB_LOCATION/cgi"
+cp ./www/cgi/*.py $WEB_LOCATION/cgi
+echo "chown -R $MGMT_USER:$WWW_GROUP $WEB_LOCATION/cgi"
+chown -R $MGMT_USER:$WWW_GROUP $WEB_LOCATION/cgi
+echo "chmod 640 $WEB_LOCATION/cgi"
+chmod 640 $WEB_LOCATION/cgi/*
 
 echo "#"
 echo "# Installing Config Files"
@@ -77,5 +76,13 @@ if [ ! -f /etc/systemd/system/multi-user.target.wants/uwsgi.service ]; then
 	ln -s /lib/systemd/system/uwsgi.service /etc/systemd/system/multi-user.target.wants/uwsgi.service
 fi
 
+#
+# Install Kiosk
+#
+echo "cat ./Kiosk/kiosk.sh | sed 's/\\\$KIOSK_USER\\\$/$KIOSK_USER/g'"
+setStr="s/\\\$KIOSK_USER\\\$/$KIOSK_USER/g"
+echo $setStr
+# cat ./Kiosk/kiosk.sh | sed 's/\\\$KIOSK_USER\\\$/$KIOSK_USER/g'
+cat ./Kiosk/kiosk.sh | sed $setStr > /home/$KIOSK_USER/kiosk.sh
 
 

@@ -1,5 +1,3 @@
-import sys
-sys.path.insert( 0, '../../DataLogger' )
 
 from beermonConfig import beermonConfig
 from beerChipI2C import beerChipI2C as beerChip
