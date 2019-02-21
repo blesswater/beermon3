@@ -97,7 +97,7 @@ class beerChipPersistant( beerChip ):
         return self.bc.getUptime()
 
     def setControlProbeChan( self, chan ):
-        self.cfg['cntlChan'] = chan
+        self.cfg['cntlProbe'] = chan
         self.dirty = True
         self.bc.setControlProbeChan( chan )
         self._writeConfigToDb()
