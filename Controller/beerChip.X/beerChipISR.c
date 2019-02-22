@@ -25,7 +25,7 @@ extern beerchip_relay_t enableRelay;
 extern beerchip_relay_t controlRelay;
 
 extern beermonConfig_t beermonCfg;
-static beermonConfig_t workingBeermonCfg;
+beermonConfig_t workingBeermonCfg;
 /* beer cfg states */
 #define beerCfgClean 0x00  /* No changes */
 #define beerCfgDirty 0x01  /* Changes Pending */

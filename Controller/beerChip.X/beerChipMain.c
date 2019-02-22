@@ -54,6 +54,8 @@ beerchip_relay_t enableRelay;
 beerchip_relay_t controlRelay;
 
 beermonConfig_t beermonCfg;
+extern beermonConfig_t workingBeermonCfg; /* Working config used in ISR */
+
 beermonStats_t beermonStats;
 beermonState_t beermonState;
 
@@ -139,8 +141,6 @@ int main(int argc, char** argv)
 
     uint8_t thisChan; 
     int16_t thisTemp;
-
-    usrStopwatch_t testSW;
     
     beerchip_InitPIC();
 
@@ -169,15 +169,12 @@ int main(int argc, char** argv)
     
     /* Beermon */
     beermonConfig_Init( &beermonCfg );
+    beermonConfig_Init( &workingBeermonCfg );
     beermon_Init( &beermonCfg, &beermonState, &beermonStats, 
                   &enableRelay, &controlRelay );
     
     GIE = 1; /* GO! */
     
-    usrStopwatch_Init( &testSW );
-    usrStopwatch_Start( &testSW );
-    usrStopwatch_Start( &testSW );
-
     /* Dispatch Loop */
     while( 1 )
     {
