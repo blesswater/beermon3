@@ -113,7 +113,11 @@ for file in beerChipBePersistant.py logTemp.py; do
 	chmod root:root $BEERMON_DATA_DIR/bin/$file
 done
 
-for file in beermon-persist.service beermon-persist.service; do
+echo "#"
+echo "# Adding services"
+echo "#"
+for file in beermon-persist.service beermon-datacollect.service; do
+	echo "# Adding $file service"
 	if [ -f /lib/systemd/system/$file ]; then
 		echo "# Disabling service $file"
 		echo "systemctl stop $file"
@@ -125,6 +129,7 @@ for file in beermon-persist.service beermon-persist.service; do
         	echo "systemctl daemon-reload" 
         	systemctl daemon-reload 
 	fi
+	echo "# Adding $file service"
 	echo "# Starting service $file"
 	echo "cp $PROJECT/conf/$file /lib/systemd/system"
 	cp $PROJECT/conf/$file /lib/systemd/system
