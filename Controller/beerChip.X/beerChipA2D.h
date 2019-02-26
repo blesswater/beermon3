@@ -23,12 +23,19 @@ extern "C" {
 #define BEERCHIP_A2D_TRIS0  TRISC
 #define BEERCHIP_A2D_ANSEL0 ANSELC
     
-/* Channel 0 is AN5 - RC0 - pin 15 */
+/* Channel 1 is AN5 - RC1 - pin 15 */
 #define BEERCHIP_A2D_CHAN1  5
 #define BEERCHIP_A2D_PIN1   0x02 /* AN5 */
 #define BEERCHIP_A2D_PORT1  PORTC
 #define BEERCHIP_A2D_TRIS1  TRISC
 #define BEERCHIP_A2D_ANSEL1 ANSELC
+    
+/* Channel 2 is AN6 - RC2 - pin 14 */
+#define BEERCHIP_A2D_CHAN2  6
+#define BEERCHIP_A2D_PIN2   0x04 /* RC2 / AN6 */
+#define BEERCHIP_A2D_PORT2  PORTC
+#define BEERCHIP_A2D_TRIS2  TRISC
+#define BEERCHIP_A2D_ANSEL2 ANSELC
 
 typedef struct {
     lock_t lock;

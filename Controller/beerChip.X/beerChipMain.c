@@ -155,6 +155,7 @@ int main(int argc, char** argv)
     a2d_Init();
     a2d_InitReading( &a2dProbe[0], BEERCHIP_A2D_CHAN0 );
     a2d_InitReading( &a2dProbe[1], BEERCHIP_A2D_CHAN1 );
+    a2d_InitReading( &a2dProbe[2], BEERCHIP_A2D_CHAN1 );
     /* Get a few readings before enabling interrupts */
     thisChan = 0;
     a2d_StartReading( &a2dProbe[thisChan] );
@@ -197,7 +198,8 @@ int main(int argc, char** argv)
         beermonStateControlMsg = BEERMON_CONTROL_MSG_ACK;
                     
                     
-        thisChan = (thisChan == 0) ? 1 : 0;
+        // thisChan = (thisChan == 0) ? 1 : 0;
+        thisChan = ((thisChan + 1) < BEERMON_NUM_TEMP_PROBES) ? ++thisChan : 0;
         a2d_StartReading( &a2dProbe[thisChan] );
         while( !a2d_PollReading( &a2dProbe[thisChan] ) );
         
