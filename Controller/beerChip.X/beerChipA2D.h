@@ -39,8 +39,7 @@ extern "C" {
 
 typedef struct {
     lock_t lock;
-    uint8_t flags : 3;
-    uint8_t chan : 5;
+    uint8_t chan;
     uint16_t count;
     uint16_t reading;
     int16_t temp;

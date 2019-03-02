@@ -155,12 +155,15 @@ int main(int argc, char** argv)
     a2d_Init();
     a2d_InitReading( &a2dProbe[0], BEERCHIP_A2D_CHAN0 );
     a2d_InitReading( &a2dProbe[1], BEERCHIP_A2D_CHAN1 );
-    a2d_InitReading( &a2dProbe[2], BEERCHIP_A2D_CHAN1 );
+    a2d_InitReading( &a2dProbe[2], BEERCHIP_A2D_CHAN2 );
     /* Get a few readings before enabling interrupts */
     thisChan = 0;
     a2d_StartReading( &a2dProbe[thisChan] );
     while( !a2d_PollReading( &a2dProbe[thisChan] ) );
     thisChan = 1;
+    a2d_StartReading( &a2dProbe[thisChan] );
+    while( !a2d_PollReading( &a2dProbe[thisChan] ) );
+    thisChan = 2;
     a2d_StartReading( &a2dProbe[thisChan] );
     while( !a2d_PollReading( &a2dProbe[thisChan] ) );
     

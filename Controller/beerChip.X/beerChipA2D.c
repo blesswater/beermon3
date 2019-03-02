@@ -51,10 +51,10 @@ void a2d_StartReading( a2d_Reading_t *reading )
 {
     uint8_t wt;
     
-    if( ((ADCON0 & _ADCON0_CHS0_MASK) >> _ADCON0_CHS0_POSN) != reading->chan )
+    if( ((ADCON0 & _ADCON0_CHS_MASK) >> _ADCON0_CHS0_POSN) != reading->chan )
     {
         /* Write channel */
-        ADCON0 = (ADCON0 & ~_ADCON0_CHS0_MASK) | reading->chan << _ADCON0_CHS0_POSN;
+        ADCON0 = (ADCON0 & ~_ADCON0_CHS_MASK) | reading->chan << _ADCON0_CHS0_POSN;
         /* Now, we wait for cap to charge? Not sure if this is necessary */
         wt = 0x80;
         while( wt-- != 0x00 );
