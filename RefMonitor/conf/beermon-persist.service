@@ -1,0 +1,12 @@
+[Unit]
+After=uwsgi.service
+Description=Beermon
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=10
+ExecStart=/opt/beermon/bin/beerChipBePersistant.py 20
+
+[Install]
+WantedBy=multi-user.target
