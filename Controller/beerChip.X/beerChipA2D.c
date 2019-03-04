@@ -26,6 +26,9 @@ void a2d_Init( void )
     BEERCHIP_A2D_TRIS2 |= BEERCHIP_A2D_PIN2; /* Set TRIS to Input */
     BEERCHIP_A2D_ANSEL2 |= BEERCHIP_A2D_PIN2;
     
+    BEERCHIP_A2D_TRIS3 |= BEERCHIP_A2D_PIN3; /* Set TRIS to Input */
+    BEERCHIP_A2D_ANSEL3 |= BEERCHIP_A2D_PIN3;
+    
     ADCON1 = (0x01 << _ADCON1_ADFM_POSN) | /* Make right justified MSBs set to 0 */
              (0x05 << _ADCON1_ADCS_POSN) | /* Fosc/16 conversion clock */
              (0x00 << _ADCON1_ADPREF_POSN); /* Use Vdd for Vref */

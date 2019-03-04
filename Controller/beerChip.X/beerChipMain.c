@@ -156,6 +156,7 @@ int main(int argc, char** argv)
     a2d_InitReading( &a2dProbe[0], BEERCHIP_A2D_CHAN0 );
     a2d_InitReading( &a2dProbe[1], BEERCHIP_A2D_CHAN1 );
     a2d_InitReading( &a2dProbe[2], BEERCHIP_A2D_CHAN2 );
+    a2d_InitReading( &a2dProbe[3], BEERCHIP_A2D_CHAN3 );
     /* Get a few readings before enabling interrupts */
     thisChan = 0;
     a2d_StartReading( &a2dProbe[thisChan] );
@@ -166,7 +167,9 @@ int main(int argc, char** argv)
     thisChan = 2;
     a2d_StartReading( &a2dProbe[thisChan] );
     while( !a2d_PollReading( &a2dProbe[thisChan] ) );
-    
+    thisChan = 3;
+    a2d_StartReading( &a2dProbe[thisChan] );
+    while( !a2d_PollReading( &a2dProbe[thisChan] ) );
     /* Init Relays */
     relay_Init( &enableRelay, BEERCHIP_RYL0_PIN );
     relay_Init( &controlRelay, BEERCHIP_RYL1_PIN );

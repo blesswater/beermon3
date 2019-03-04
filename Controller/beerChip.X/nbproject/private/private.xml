@@ -33,9 +33,11 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/R:/HomeProjects/beermon3_1/Controller/beerChip.X/beerChipMain.c</file>
+            <file>file:/C:/Program%20Files%20(x86)/Microchip/xc8/v1.21/include/pic16f1509.h</file>
             <file>file:/R:/HomeProjects/beermon3_1/Controller/beerChip.X/beerChipA2D.c</file>
+            <file>file:/R:/HomeProjects/beermon3_1/Controller/beerChip.X/beerChipTempLookup.c</file>
             <file>file:/R:/HomeProjects/beermon3_1/Controller/beerChip.X/beerChipISR.c</file>
-            <file>file:/R:/HomeProjects/beermon3_1/Controller/beerChip.X/beerChipI2CIndex.h</file>
+            <file>file:/R:/HomeProjects/beermon3_1/Controller/beerChip.X/beerChipA2D.h</file>
             <file>file:/R:/HomeProjects/beermon3_1/Controller/beerChip.X/beerChipConfig.h</file>
         </group>
     </open-files>

@@ -36,6 +36,13 @@ extern "C" {
 #define BEERCHIP_A2D_PORT2  PORTC
 #define BEERCHIP_A2D_TRIS2  TRISC
 #define BEERCHIP_A2D_ANSEL2 ANSELC
+    
+/* Channel 2 is AN6 - RC2 - pin 14 */
+#define BEERCHIP_A2D_CHAN3  3
+#define BEERCHIP_A2D_PIN3   0x10 /* RA4 / AN3 */
+#define BEERCHIP_A2D_PORT3  PORTA
+#define BEERCHIP_A2D_TRIS3  TRISA
+#define BEERCHIP_A2D_ANSEL3 ANSELA
 
 typedef struct {
     lock_t lock;

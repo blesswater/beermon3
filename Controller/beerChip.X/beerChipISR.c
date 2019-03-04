@@ -20,6 +20,7 @@ extern a2d_Reading_t a2dProbe[BEERMON_NUM_TEMP_PROBES];
 static int16_t tempChan0; 
 static int16_t tempChan1;
 static int16_t tempChan2;
+static int16_t tempChan3;
 static uint8_t tempReadingCnt;
 
 extern beerchip_relay_t enableRelay;
@@ -59,7 +60,7 @@ void interrupt ISR( void )
     static struct {
         uint16_t reading;
         uint16_t count;
-    } a2dChan0Snapshot, a2dChan1Snapshot, a2dChan2Snapshot;
+    } a2dChan0Snapshot, a2dChan1Snapshot, a2dChan2Snapshot, a2dChan3Snapshot;
     
     // a2dChan0Snapshot.count = 0x89ab;
     // a2dChan0Snapshot.reading = 0xcdef;
@@ -127,6 +128,14 @@ void interrupt ISR( void )
                             a2dChan2Snapshot.reading = a2dProbe[2].reading;
                             tempChan2 = tempLookup( a2dProbe[2].reading );
                             tempChan2 = a2dProbe[2].temp;
+                            // tempChan1 = 0x5678;
+                        }
+                        if( lock_Check( &(a2dProbe[3].lock) ) )
+                        {
+                            a2dChan3Snapshot.count = a2dProbe[3].count;
+                            a2dChan3Snapshot.reading = a2dProbe[3].reading;
+                            tempChan3 = tempLookup( a2dProbe[3].reading );
+                            tempChan3 = a2dProbe[3].temp;
                             // tempChan1 = 0x5678;
                         }
                         tempReadingCnt++;
@@ -344,6 +353,30 @@ void interrupt ISR( void )
                     break;
                     case BEERCHIP_A2D_CHAN2_COUNT_BYTE1:
                         i2c_MasterReadI2CData( *((uint8_t *)(&(a2dChan2Snapshot.count)) + 1) );
+                        // i2c_MasterReadI2CData( 0x78 );
+                    break;
+                    
+                    /* Chan 3 */  
+                    case BEERCHIP_A2D_CHAN3_TEMP_BYTE0:
+                        i2c_MasterReadI2CData( *(uint8_t *)&(tempChan3) );
+                    break;
+                    case BEERCHIP_A2D_CHAN3_TEMP_BYTE1:
+                        i2c_MasterReadI2CData( *((uint8_t *)&(tempChan3) + 1) );
+                    break;
+                    case BEERCHIP_A2D_CHAN3_READING_BYTE0:
+                        i2c_MasterReadI2CData( *(uint8_t *)&(a2dChan3Snapshot.reading) );
+                        // i2c_MasterReadI2CData( 0x12 );
+                    break;
+                    case BEERCHIP_A2D_CHAN3_READING_BYTE1:
+                        i2c_MasterReadI2CData( *((uint8_t *)(&(a2dChan3Snapshot.reading)) + 1) );
+                        // i2c_MasterReadI2CData( 0x34 );
+                    break;
+                    case BEERCHIP_A2D_CHAN3_COUNT_BYTE0:
+                        i2c_MasterReadI2CData( *(uint8_t *)(&(a2dChan3Snapshot.count)) );
+                        // i2c_MasterReadI2CData( 0x56 );
+                    break;
+                    case BEERCHIP_A2D_CHAN3_COUNT_BYTE1:
+                        i2c_MasterReadI2CData( *((uint8_t *)(&(a2dChan3Snapshot.count)) + 1) );
                         // i2c_MasterReadI2CData( 0x78 );
                     break;
                     
