@@ -25,7 +25,7 @@ def getConfigInfo( data ):
         sql =  "SELECT id, proj_name, activity FROM Project "
         sql += "ORDER BY activity desc"
         for row in dbConn.query( sql ):
-            if( row[2] < len(activityMap) ):
+            if( row[2] and (row[2] < len(activityMap)) ):
                 act = activityMap[row[2]]
             else:
                 act = 'err'
