@@ -44,7 +44,11 @@ if __name__ == '__main__':
         sys.exit(1)
 
     probes = []
-    sql = "SELECT probe_name, probe_chan, id, type FROM Probes WHERE proj_id = %d" % (id)
+    sql  = "SELECT probe_name, probe_chan, id, type "
+    sql += "FROM Probes "
+    sql += "WHERE proj_id = %d " % (id)
+    sql += "AND type in ( 'NTC_00', 'setpoint' )"
+
     for prb in dbConn.query( sql ):
         probes.append( { 'probe_name' : prb[0], 'chan' : prb[1], 'type' : prb[3], 'probe_id' : prb[2], 'data' : 0.0 } )
 
