@@ -7,7 +7,13 @@ class beerChipDB:
     def query(self, queryString ):
         raise NotImplementedError("Should have implemented this")
 
+    def querySafe(self, queryString, valueTuple):
+        raise NotImplementedError("Should have implemented this")
+
     def execute(self, sqlString):
+        raise NotImplementedError("Should have implemented this")
+
+    def fetchOne(self, queryString, valueTuple):
         raise NotImplementedError("Should have implemented this")
 
     def close(self):
@@ -60,6 +66,7 @@ class beerChipSQLiteDB( beerChipDB ):
 
 
     def execute(self, sqlString):
+        numRows = 0
         if (self.conn == None):
             print("ERROR: Database NOT connected")
             return
@@ -69,11 +76,14 @@ class beerChipSQLiteDB( beerChipDB ):
             cur = self.conn.cursor()
             cur.execute(sqlString)
             self.conn.commit()
+            numRows = cur.rowcount
         except:
             print( 'ERROR: Error executing %s' % (sqlString) )
 
         if( cur != None ):
             cur.close()
+
+        return numRows
 
     def fetchOne(self, queryString, valueTuple ):
         if (self.conn == None):

@@ -4,10 +4,8 @@ import configInfo
 import temperatureData
 from beerSession import sessionId, sessionHandler
 
-import pdb
 
 def application( env, start_response ):
-    # pdb.set_trace()
     sessMgr =  sessionHandler()
     if( 'HTTP_COOKIE' in env ):
         sess = sessMgr.getSession( env['HTTP_COOKIE'], env['REMOTE_ADDR'] )

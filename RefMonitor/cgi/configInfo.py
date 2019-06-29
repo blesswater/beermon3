@@ -1,6 +1,8 @@
+
 from beermonConfig import beermonConfig
 from beerChipI2C import beerChipI2C as beerChip
 from beerChipDB import beerChipSQLiteDB as beerDB
+from beerChipPersistant import beerChipPersistant
 
 def getConfigInfo( data ):
     activityMap = ['stale', 'collecting']
@@ -13,7 +15,7 @@ def getConfigInfo( data ):
 
         result['version'] = '%d.%d.%d' % (beermonConfig['majVersion'], beermonConfig['minVersion'], beermonConfig['buildVersion'])
 
-        bc = beerChip( beermonConfig['i2cBus'], beermonConfig['i2cAddr'] )
+        bc = beerChipPersistant( beerChip( beermonConfig['i2cBus'], beermonConfig['i2cAddr'] ) )
         cntlChan = bc.getControlProbeChan()
         result['uptime'] = bc.getUptime()
         result['state'] = {}
@@ -23,7 +25,7 @@ def getConfigInfo( data ):
         sql =  "SELECT id, proj_name, activity FROM Project "
         sql += "ORDER BY activity desc"
         for row in dbConn.query( sql ):
-            if( row[2] < len(activityMap) ):
+            if( row[2] and (row[2] < len(activityMap)) ):
                 act = activityMap[row[2]]
             else:
                 act = 'err'
@@ -73,7 +75,7 @@ def getConfigInfo( data ):
 
 def setConfigInfo( data ):
     result = { 'result': 'ERROR: setConfigInfo()'}
-    bc = beerChip(beermonConfig['i2cBus'], beermonConfig['i2cAddr'])
+    bc = beerChipPersistant( beerChip(beermonConfig['i2cBus'], beermonConfig['i2cAddr']) )
 
     if( 'controlProbe' in data ):
         prbInfo = data['controlProbe']
@@ -122,9 +124,6 @@ def setConfigInfo( data ):
             print( 'ERROR: Setting setpoint')
 
     return result
-
-
-
 
 if( __name__ == '__main__' ):
     getConfigInfo( {} )

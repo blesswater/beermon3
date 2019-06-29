@@ -59,6 +59,7 @@ def getTempStat( data ):
                 ts = startts - timedelta( seconds = int(data['statInterval']) )
                 probeWhere.append("temp_time > '%s'" % (ts.isoformat()))
 
+            """
             probeSql  = "SELECT "
             probeSql +=     "COUNT(*) as cnt, "
             probeSql +=     "AVG(temp) as avg, "
@@ -81,6 +82,10 @@ def getTempStat( data ):
                 probeData['currentTemp'] = bc.getTemperature( row[2], row[3] )
 
                 result['probes'].append( probeData )
+            """
+            probeData['currentTemp'] = bc.getTemperature( row[2], row[3] )
+            result['probes'].append( probeData )
+        
 
         result['result'] = 'OK'
     except:

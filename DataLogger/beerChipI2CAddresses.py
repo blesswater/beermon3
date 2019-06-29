@@ -20,4 +20,6 @@ beerChipI2CConstants = {
 beerChipTemperatureProbe = [
     {'Trigger' : 0x10, 'TempIndex' : 0x12, 'D2AIndex' : 0x14},
     {'Trigger' : 0x10, 'TempIndex' : 0x18, 'D2AIndex' : 0x1A},
+    {'Trigger' : 0x10, 'TempIndex' : 0x22, 'D2AIndex' : 0x24},
+    {'Trigger' : 0x10, 'TempIndex' : 0x28, 'D2AIndex' : 0x2A},
 ]

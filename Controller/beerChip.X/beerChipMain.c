@@ -18,7 +18,7 @@
 #pragma config FOSC = INTOSC    // Oscillator Selection Bits (INTOSC oscillator: I/O function on CLKIN pin)
 #pragma config WDTE = OFF       // Watchdog Timer Enable (WDT disabled)
 #pragma config PWRTE = OFF      // Power-up Timer Enable (PWRT disabled)
-#pragma config MCLRE = ON       // MCLR Pin Function Select (MCLR/VPP pin function is MCLR)
+#pragma config MCLRE = OFF      // MCLR Pin Function Select (MCLR/VPP pin function is MCLR) - WAS: ON
 #pragma config CP = OFF         // Flash Program Memory Code Protection (Program memory code protection is disabled)
 #pragma config BOREN = ON       // Brown-out Reset Enable (Brown-out Reset enabled)
 #pragma config CLKOUTEN = OFF   // Clock Out Enable (CLKOUT function is disabled. I/O or oscillator function on the CLKOUT pin)
@@ -31,6 +31,7 @@
 #pragma config BORV = LO        // Brown-out Reset Voltage Selection (Brown-out Reset Voltage (Vbor), low trip point selected.)
 #pragma config LPBOR = OFF      // Low-Power Brown Out Reset (Low-Power BOR is disabled)
 #pragma config LVP = OFF        // Low-Voltage Programming Enable (High-voltage on MCLR/VPP must be used for programming)
+// #pragma config LVP = ON        // Low-Voltage Programming Enable (High-voltage on MCLR/VPP must be used for programming)
 
 #include "beerChipConfig.h"
 #include "beerChipLed.h"
@@ -54,6 +55,8 @@ beerchip_relay_t enableRelay;
 beerchip_relay_t controlRelay;
 
 beermonConfig_t beermonCfg;
+extern beermonConfig_t workingBeermonCfg; /* Working config used in ISR */
+
 beermonStats_t beermonStats;
 beermonState_t beermonState;
 
@@ -139,8 +142,6 @@ int main(int argc, char** argv)
 
     uint8_t thisChan; 
     int16_t thisTemp;
-
-    usrStopwatch_t testSW;
     
     beerchip_InitPIC();
 
@@ -155,6 +156,8 @@ int main(int argc, char** argv)
     a2d_Init();
     a2d_InitReading( &a2dProbe[0], BEERCHIP_A2D_CHAN0 );
     a2d_InitReading( &a2dProbe[1], BEERCHIP_A2D_CHAN1 );
+    a2d_InitReading( &a2dProbe[2], BEERCHIP_A2D_CHAN2 );
+    a2d_InitReading( &a2dProbe[3], BEERCHIP_A2D_CHAN3 );
     /* Get a few readings before enabling interrupts */
     thisChan = 0;
     a2d_StartReading( &a2dProbe[thisChan] );
@@ -162,22 +165,24 @@ int main(int argc, char** argv)
     thisChan = 1;
     a2d_StartReading( &a2dProbe[thisChan] );
     while( !a2d_PollReading( &a2dProbe[thisChan] ) );
-    
+    thisChan = 2;
+    a2d_StartReading( &a2dProbe[thisChan] );
+    while( !a2d_PollReading( &a2dProbe[thisChan] ) );
+    thisChan = 3;
+    a2d_StartReading( &a2dProbe[thisChan] );
+    while( !a2d_PollReading( &a2dProbe[thisChan] ) );
     /* Init Relays */
-    relay_Init( &enableRelay, BEERCHIP_RYL0_PIN, BEERCHIP_RYL0_ANSEL_BIT );
-    relay_Init( &controlRelay, BEERCHIP_RYL1_PIN, BEERCHIP_RYL1_ANSEL_BIT );
+    relay_Init( &enableRelay, BEERCHIP_RYL0_PIN );
+    relay_Init( &controlRelay, BEERCHIP_RYL1_PIN );
     
     /* Beermon */
     beermonConfig_Init( &beermonCfg );
+    beermonConfig_Init( &workingBeermonCfg );
     beermon_Init( &beermonCfg, &beermonState, &beermonStats, 
                   &enableRelay, &controlRelay );
     
     GIE = 1; /* GO! */
     
-    usrStopwatch_Init( &testSW );
-    usrStopwatch_Start( &testSW );
-    usrStopwatch_Start( &testSW );
-
     /* Dispatch Loop */
     while( 1 )
     {
@@ -200,7 +205,8 @@ int main(int argc, char** argv)
         beermonStateControlMsg = BEERMON_CONTROL_MSG_ACK;
                     
                     
-        thisChan = (thisChan == 0) ? 1 : 0;
+        // thisChan = (thisChan == 0) ? 1 : 0;
+        thisChan = ((thisChan + 1) < BEERMON_NUM_TEMP_PROBES) ? ++thisChan : 0;
         a2d_StartReading( &a2dProbe[thisChan] );
         while( !a2d_PollReading( &a2dProbe[thisChan] ) );
         

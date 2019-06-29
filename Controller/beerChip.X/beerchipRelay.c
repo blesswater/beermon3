@@ -12,16 +12,13 @@
 #include "beerChipConfig.h"
 #include "beerChipRelay.h"
 
-void relay_Init( beerchip_relay_t *rly, uint8_t pin, uint8_t anselBit )
+void relay_Init( beerchip_relay_t *rly, uint8_t pin )
 {
     memset( rly, 0x00, sizeof(beerchip_relay_t) );
     rly->portMask = pin;
     
     BEERCHIP_RLY_TRIS = BEERCHIP_RLY_TRIS & ~rly->portMask;
-    if( anselBit != 0x00 )
-    {
-        BEERCHIP_RLY_ANSEL = BEERCHIP_RLY_ANSEL & ~anselBit;
-    }
+    BEERCHIP_RLY_ANSEL = BEERCHIP_RLY_ANSEL & ~rly->portMask;
     BEERCHIP_RLY_PORT = BEERCHIP_RLY_PORT & ~rly->portMask;
 }
 

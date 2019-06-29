@@ -18,10 +18,16 @@
 void a2d_Init( void )
 {
     BEERCHIP_A2D_TRIS0 |= BEERCHIP_A2D_PIN0; /* Set TRIS to Input */
-    BEERCHIP_A2D_ANSEL0 |= BEERCHIP_A2D_ANSEL0_BIT;
+    BEERCHIP_A2D_ANSEL0 |= BEERCHIP_A2D_PIN0;
     
     BEERCHIP_A2D_TRIS1 |= BEERCHIP_A2D_PIN1; /* Set TRIS to Input */
-    BEERCHIP_A2D_ANSEL1 |= BEERCHIP_A2D_ANSEL1_BIT;
+    BEERCHIP_A2D_ANSEL1 |= BEERCHIP_A2D_PIN1;
+    
+    BEERCHIP_A2D_TRIS2 |= BEERCHIP_A2D_PIN2; /* Set TRIS to Input */
+    BEERCHIP_A2D_ANSEL2 |= BEERCHIP_A2D_PIN2;
+    
+    BEERCHIP_A2D_TRIS3 |= BEERCHIP_A2D_PIN3; /* Set TRIS to Input */
+    BEERCHIP_A2D_ANSEL3 |= BEERCHIP_A2D_PIN3;
     
     ADCON1 = (0x01 << _ADCON1_ADFM_POSN) | /* Make right justified MSBs set to 0 */
              (0x05 << _ADCON1_ADCS_POSN) | /* Fosc/16 conversion clock */
@@ -48,10 +54,10 @@ void a2d_StartReading( a2d_Reading_t *reading )
 {
     uint8_t wt;
     
-    if( ((ADCON0 & _ADCON0_CHS0_MASK) >> _ADCON0_CHS0_POSN) != reading->chan )
+    if( ((ADCON0 & _ADCON0_CHS_MASK) >> _ADCON0_CHS0_POSN) != reading->chan )
     {
         /* Write channel */
-        ADCON0 = (ADCON0 & ~_ADCON0_CHS0_MASK) | reading->chan << _ADCON0_CHS0_POSN;
+        ADCON0 = (ADCON0 & ~_ADCON0_CHS_MASK) | reading->chan << _ADCON0_CHS0_POSN;
         /* Now, we wait for cap to charge? Not sure if this is necessary */
         wt = 0x80;
         while( wt-- != 0x00 );
