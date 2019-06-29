@@ -46,8 +46,8 @@ static uint8_t statReadCnt;
 
 extern beermonState_t beermonState;
 
-// void __interrupt () ISR( void )
-void interrupt ISR( void )
+void __interrupt () ISR( void )
+// void interrupt ISR( void )
 {
     uint8_t i2cIndex;
     uint8_t i2cValue;

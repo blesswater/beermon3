@@ -17,8 +17,8 @@ extern "C" {
 #define BEERCHIP_RLY_TRIS  TRISC
 #define BEERCHIP_RLY_LAT   LATC
     
-#define BEERCHIP_RYL0_PIN   0x20   /* Port RC5 */
-#define BEERCHIP_RYL1_PIN   0x40   /* Port RC6 */
+#define BEERCHIP_RYL0_PIN   0x10   /* Port RC5 - Pin 6 */
+#define BEERCHIP_RYL1_PIN   0x40   /* Port RC6 - Pin 8 */
     
 #define BEERCHIP_RELAY_ON  1
 #define BEERCHIP_RELAY_OFF 0

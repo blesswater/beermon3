@@ -18,7 +18,7 @@ extern "C" {
 #define BEERCHIP_PRODUCT_ID    0x0B
 #define BEERCHIP_MAJOR_VERSION 0
 #define BEERCHIP_MINOR_VERSION 0
-#define BEERCHIP_BUILD         0x30
+#define BEERCHIP_BUILD         0x32
 
 /*
 ** Different clock values for OSCCON
@@ -38,7 +38,7 @@ extern "C" {
 
 #define BEERCHIP_INLINE
 
-#define BEERCHIP_BLINK_RATE  0 /* In 1/10 sec */
+#define BEERCHIP_BLINK_RATE  0x00 /* In 1/10 sec */
 /*
 ** I2C Config
 */
