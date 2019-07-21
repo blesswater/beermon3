@@ -99,11 +99,15 @@ void __interrupt () ISR( void )
                 switch( i2cIndex )
                 {
                     case BEERCHIP_I2C_LED_MODE:
-                        beerChip_SetLEDMode( i2cValue, ledState.cngCnt );
+                        beerChip_SetLEDMode( i2cValue, ledState.cngCnt, ledState.offCnt );
                     break;
 
                     case BEERCHIP_I2C_LED_CNT_LIMIT:
-                        beerChip_SetLEDMode( ledState.mode, i2cValue );
+                        beerChip_SetLEDMode( ledState.mode, i2cValue, ledState.offCnt );
+                    break;
+                    
+                    case BEERCHIP_I2C_LED_CNT_OFF:
+                        beerChip_SetLEDMode( ledState.mode, ledState.cngCnt, i2cValue );
                     break;
                     
                     case BEERCHIP_A2D_TRIGGER_READING:
@@ -274,6 +278,9 @@ void __interrupt () ISR( void )
                         i2c_MasterReadI2CData( ledState.cnt );
                     break;
                     case BEERCHIP_I2C_LED_CNT_LIMIT:
+                        i2c_MasterReadI2CData( ledState.cngCnt );
+                    break;
+                    case BEERCHIP_I2C_LED_CNT_OFF:
                         i2c_MasterReadI2CData( ledState.cngCnt );
                     break;
                     

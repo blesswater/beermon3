@@ -26,39 +26,54 @@ void beerChip_InitLED()
 
 void beerChip_KickLED( void )
 {
-    if( ledState.mode == ledMode_Blink )
+    uint8_t cngCnt;
+    
+    switch( ledState.mode )
     {
-        if( ledState.cnt++ == ledState.cngCnt )
-        {
-            BEERCHIP_LED_PORT = BEERCHIP_LED_PORT ^ BEERCHIP_LED_PIN;
-            ledState.cnt = 0x00;
-        }
+        case ledMode_Blink:
+            if( ledState.cnt++ == ledState.cngCnt )
+            {
+                BEERCHIP_LED_PORT = BEERCHIP_LED_PORT ^ BEERCHIP_LED_PIN;
+                ledState.cnt = 0x00;
+            }
+        break;
+        
+        case ledMode_Flash:
+            cngCnt = (BEERCHIP_LED_PORT & BEERCHIP_LED_PIN) ? ledState.cngCnt : ledState.offCnt;
+            if( ledState.cnt++ == cngCnt )
+            {
+                BEERCHIP_LED_PORT = BEERCHIP_LED_PORT ^ BEERCHIP_LED_PIN;
+                ledState.cnt = 0x00;
+            }
+        break;
+        default: /* Do nothing */
+        break;
     }
 }
 
-void beerChip_SetLEDMode( uint8_t mode, uint8_t cnt )
+void beerChip_SetLEDMode( uint8_t mode, uint8_t cnt, uint8_t offCnt )
 {
-    switch( mode )
+    if( (mode >= ledMode_Off) && (mode <= ledMode_Flash) )
     {
-        case ledMode_Off:
-            ledState.mode = ledMode_Off;
-            BEERCHIP_LED_PORT = BEERCHIP_LED_PORT & ~BEERCHIP_LED_PIN;
-        break;
+        ledState.mode = mode;
+        ledState.cnt = 0x00;
+        ledState.cngCnt = cnt;
+        ledState.offCnt = offCnt;
 
-        case ledMode_On:
-            ledState.mode = ledMode_On;
-            BEERCHIP_LED_PORT = BEERCHIP_LED_PORT | BEERCHIP_LED_PIN;
-        break;
+        switch( mode )
+        {
+            case ledMode_Off:
+                BEERCHIP_LED_PORT = BEERCHIP_LED_PORT & ~BEERCHIP_LED_PIN;
+            break;
 
-        case ledMode_Blink:
-            ledState.mode = ledMode_Blink;
-            ledState.cnt = 0x00;
-            ledState.cngCnt = cnt;
-        break;
+            case ledMode_On:
+                BEERCHIP_LED_PORT = BEERCHIP_LED_PORT | BEERCHIP_LED_PIN;
+            break;
 
-        default:
-            /* Do nothing */
-        break;
+            default:
+                /* Do nothing */
+            break;
+        }
     }
 }
 

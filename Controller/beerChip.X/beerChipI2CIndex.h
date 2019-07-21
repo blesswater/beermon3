@@ -34,6 +34,7 @@ extern "C" {
 #define BEERCHIP_I2C_LED_MODE               0x08
 #define BEERCHIP_I2C_LED_CNT                0x09
 #define BEERCHIP_I2C_LED_CNT_LIMIT          0x0A
+#define BEERCHIP_I2C_LED_CNT_OFF            0x0B
     
 /*
 ** A2D 

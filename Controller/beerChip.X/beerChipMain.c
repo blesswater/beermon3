@@ -42,6 +42,7 @@
 #include "beerChipUserTimer.h"
 #include "beerChipRelay.h"
 #include "beerChipBeermon.h"
+#include "beerChipBloopDet.h"
 
 /*
 ** Globals
@@ -61,6 +62,8 @@ beermonStats_t beermonStats;
 beermonState_t beermonState;
 
 uint8_t beermonStateControlMsg;
+
+bloopDetState_t bloopDetState;
 
 
 void blnk_Delay(void)
@@ -146,7 +149,7 @@ int main(int argc, char** argv)
     beerchip_InitPIC();
 
     beerChip_InitLED();
-    beerChip_SetLEDMode( ledMode_Blink, BEERCHIP_BLINK_RATE );
+    beerChip_SetLEDMode( ledMode_Flash, BEERCHIP_BLINK_RATE, BEERCHIP_BLINK_RATE );
 
     /* Init I2C */
     i2c_InitI2CSlave( BEERCHIP_I2C_ADDRESS + (uint8_t)i2c_ReadI2CSelect() );
@@ -180,6 +183,8 @@ int main(int argc, char** argv)
     beermonConfig_Init( &workingBeermonCfg );
     beermon_Init( &beermonCfg, &beermonState, &beermonStats, 
                   &enableRelay, &controlRelay );
+    
+    bloopDet_Init( &bloopDetState );
     
     GIE = 1; /* GO! */
     
@@ -221,6 +226,9 @@ int main(int argc, char** argv)
                 beermon_ProcessEvent( &beermonState, beermon_event_TLess );
             }
         }
+        
+        bloopDet_Process( &bloopDetState );
+        
     }
     return (EXIT_SUCCESS);
 }
