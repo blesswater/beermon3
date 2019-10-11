@@ -205,5 +205,5 @@ if( __name__ == '__main__'):
             print( "BLOOP %d" % blp )
             bc.ackBloopDet()
 
-        print( '%fF' % (bc.getTemperature(1) ) )
+        # print( '%fF' % (bc.getTemperature(1) ) )
 
