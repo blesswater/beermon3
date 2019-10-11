@@ -23,6 +23,9 @@ class beerChipI2C( beerChip ):
         5 : 'Ext Cntl'
     }
 
+    bloopCnt = 0
+    bloopAckCnt = 0
+
     def __init__(self, i2cDev, i2cAddr):
         self.i2cAddr = i2cAddr
         self.i2cDev = i2cDev
@@ -159,6 +162,10 @@ class beerChipI2C( beerChip ):
         self.bus.write_byte_data(self.i2cAddr,
                                  i2cInfo.beerChipI2CCmdAddr['BEERCHIP_BEERMON_CFG_UPDATE_STATE'],
                                  0x00)
+
+    def resetBloopDet( self ):
+        self.bus.write_byte_data( self.i2cAddr,
+                                  i2cInfo.beerChipI2CCmdAddr['
 
 
 

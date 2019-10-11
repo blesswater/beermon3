@@ -34,5 +34,17 @@ class beerChip:
     def setSetpoint(self, temp):
         raise NotImplementedError("Should have implemented this")
 
+    def resetBloopDet(self):
+        raise NotImplementedError("Should have implemented this")
+
+    def isBloopDet(self):
+        raise NotImplementedError("Should have implemented this")
+
+    def ackBloopDet(self):
+        raise NotImplementedError("Should have implemented this")
+
+    def getCountBloopDet(self):
+        raise NotImplementedError("Should have implemented this")
+
 
 
