@@ -64,7 +64,7 @@ if __name__ == '__main__':
     bc.resetBloopDet()
 
     while( True ):
-        if( datetime.now() <= nextTime ):
+        if( datetime.now() >= nextTime ):
             for prb in probes:
                 prb['data'] = bc.getTemperature(prb['chan'], prb['type'])
                 print('%s: %fF' % (prb['probe_name'], prb['data']))
