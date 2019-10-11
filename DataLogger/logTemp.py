@@ -77,8 +77,8 @@ if __name__ == '__main__':
                 sql += ")"
 
                 dbConn.execute( sql )
-
-                nextTime = datetime.now()
+                
+            nextTime = datetime.now()
 
         if( bc.isBloopDet() ):
             dbConn.execute( bloopSql )
