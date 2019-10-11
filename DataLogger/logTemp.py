@@ -85,14 +85,3 @@ if __name__ == '__main__':
             bc.ackBloopDet()
 
 
-        print( '---------' )
-
-        time.sleep(5)
-
-
-
-
-
-
-
-
