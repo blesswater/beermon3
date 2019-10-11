@@ -1,7 +1,7 @@
 #!/usr/bin/python
 import sys
 import time
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from beerChipI2C import beerChipI2C as beerChip
 from beerChipDB import beerChipSQLiteDB as beerDB
@@ -77,8 +77,8 @@ if __name__ == '__main__':
                 sql += ")"
 
                 dbConn.execute( sql )
-                
-            nextTime = datetime.now()
+
+            nextTime = datetime.now() + timedelta( seconds=5 )
 
         if( bc.isBloopDet() ):
             dbConn.execute( bloopSql )
