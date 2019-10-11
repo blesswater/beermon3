@@ -1,6 +1,7 @@
 #!/usr/bin/python
 import sys
 import time
+from datetime import datetime
 
 from beerChipI2C import beerChipI2C as beerChip
 from beerChipDB import beerChipSQLiteDB as beerDB
@@ -57,19 +58,32 @@ if __name__ == '__main__':
         dbConn.close()
         sys.exit(1)
 
+    nextTime = datetime.now()
+    bloopSql  = "INSERT INTO Event (proj_id, event_type, event_time) "
+    bloopSql += "VALUES( %d, 'bloop' datetime( 'now' ) ) " % (prb['probe_id'])
+    bc.resetBloopDet()
+
     while( True ):
-        for prb in probes:
-            prb['data'] = bc.getTemperature(prb['chan'], prb['type'])
-            print('%s: %fF' % (prb['probe_name'], prb['data']))
+        if( datetime.now() <= nextTime ):
+            for prb in probes:
+                prb['data'] = bc.getTemperature(prb['chan'], prb['type'])
+                print('%s: %fF' % (prb['probe_name'], prb['data']))
 
-            sql =  "INSERT INTO Temperature (proj_id, probe_id, temp_time, temp) VALUES ( "
-            sql += "%d, " % (id)
-            sql += "%d, " % (prb['probe_id'])
-            sql += "datetime( 'now' ), "
-            sql += "%f " % (prb['data'])
-            sql += ")"
+                sql =  "INSERT INTO Temperature (proj_id, probe_id, temp_time, temp) VALUES ( "
+                sql += "%d, " % (id)
+                sql += "%d, " % (prb['probe_id'])
+                sql += "datetime( 'now' ), "
+                sql += "%f " % (prb['data'])
+                sql += ")"
 
-            dbConn.execute( sql )
+                dbConn.execute( sql )
+
+                nextTime = datetime.now()
+
+        if( bc.isBloopDet() ):
+            dbConn.execute( bloopSql )
+            bc.ackBloopDet()
+
 
         print( '---------' )
 
