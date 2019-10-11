@@ -60,7 +60,7 @@ if __name__ == '__main__':
 
     nextTime = datetime.now()
     bloopSql  = "INSERT INTO Event (proj_id, event_type, event_time) "
-    bloopSql += "VALUES( %d, 'bloop' datetime( 'now' ) ) " % (id)
+    bloopSql += "VALUES( %d, 'bloop', datetime( 'now' ) ) " % (id)
     bc.resetBloopDet()
 
     while( True ):
