@@ -31,6 +31,8 @@ extern "C" {
 #define ledMode_On         0x01
 #define ledMode_Blink      0x02
 #define ledMode_Flash      0x03
+#define ledMode_Oneshot    0x04
+#define ledMode_Bloop      0x05
 
 typedef struct {
     uint8_t mode;
@@ -45,6 +47,7 @@ void beerChip_InitLED();
 void beerChip_SetLEDMode( uint8_t mode, uint8_t cnt, uint8_t offCnt );
 void beerChip_KickLED( void );
 void beerChip_ToggleLED( void );
+void beerChip_BloopEvent( uint8_t event );
 
 #ifdef	__cplusplus
 }

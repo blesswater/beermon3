@@ -12,6 +12,7 @@
 #include "beerChipTempLookup.h"
 #include "beerChipRelay.h"
 #include "beerChipBeermon.h"
+#include "beerChipBloopDet.h"
 
 uint32_t uptime = BEERMON_USRTIMER_START_CNT;
 static uint8_t  secTickCnt = 0x00;
@@ -46,6 +47,8 @@ static uint8_t statReadCnt;
 
 extern beermonState_t beermonState;
 
+extern bloopDetState_t bloopDetState;
+
 void __interrupt () ISR( void )
 // void interrupt ISR( void )
 {
@@ -67,6 +70,7 @@ void __interrupt () ISR( void )
 
     if( TMR1IF )
     {
+        bloopDet_Process( &bloopDetState );
         beerChip_KickLED();
 
         /* Do time tick */
@@ -217,7 +221,19 @@ void __interrupt () ISR( void )
                         }
                     break;
                     
-                    
+                    /* Bloop detector 
+                    ** Writing to this address ACKS a bloop
+                    */
+                    case BEERCHIP_BLOOPDET_STATE:
+                        if( (i2cValue == bloopdet_event_reset) )
+                        {
+                            bloopDet_ProcessEvent( &bloopDetState, bloopdet_event_reset );
+                        }
+                        else
+                        {
+                            bloopDet_ProcessEvent( &bloopDetState, bloopdet_event_bloopack );
+                        }
+                    break;
                     
                     default:
                         /* Do Nothing */
@@ -493,9 +509,31 @@ void __interrupt () ISR( void )
                     break;
                     
                     /*
+                    ** Bloop detector
+                    */
+                    case BEERCHIP_BLOOPDET_STATE:
+                        i2c_MasterReadI2CData( (uint8_t)bloopDetState.state );
+                    break;
+                    
+                    case BEERCHIP_BLOOPDET_CNT:
+                        i2c_MasterReadI2CData( *((uint8_t *)&(bloopDetState.bloopCnt)) );
+                    break;
+                    case (BEERCHIP_BLOOPDET_CNT + 1):
+                        i2c_MasterReadI2CData( *(((uint8_t *)&(bloopDetState.bloopCnt)) + 1) );
+                    break;
+                    
+                    case BEERCHIP_BLOOPDET_ACK:
+                        i2c_MasterReadI2CData( *((uint8_t *)&(bloopDetState.bloopAckCnt)) );
+                    break;
+                    case (BEERCHIP_BLOOPDET_ACK + 1):
+                        i2c_MasterReadI2CData( *(((uint8_t *)&(bloopDetState.bloopAckCnt)) + 1) );
+                    break;
+                    
+                    
+                    /*
                     ** Test stuff
                     */
-                   
+#if 0
                     case (BEERCHIP_TEST_START + 1):
                         i2c_MasterReadI2CData( 0x01 );
                     break;
@@ -606,6 +644,7 @@ void __interrupt () ISR( void )
                     case (BEERCHIP_TEST_START + 36):
                         i2c_MasterReadI2CData( 0x24 );
                     break;
+#endif
                     
                     default:
                         i2c_MasterReadI2CData( BEERCHIP_I2C_CLEAR_CHAR );

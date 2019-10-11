@@ -99,11 +99,16 @@ extern "C" {
 /* State */
 #define BEERCHIP_BEERMON_STATE_STATE          0x4E
 #define BEERCHIP_BEERMON_CNTL_CMD             0x4F
+    
+/* Bloop Detection */
+#define BEERCHIP_BLOOPDET_STATE               0x50
+#define BEERCHIP_BLOOPDET_CNT                 0x51
+#define BEERCHIP_BLOOPDET_ACK                 0x53
 
 /*
 **
 */
-#define BEERCHIP_TEST_START             0x50 /* 0x3E */
+#define BEERCHIP_TEST_START             0x60 /* 0x3E */
 
 
 #ifdef	__cplusplus

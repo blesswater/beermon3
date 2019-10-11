@@ -40,6 +40,8 @@ class beerChipI2C( beerChip ):
                 print( 'INFO: Connected to beerChip!' )
             else:
                 print( 'ERROR: Could not connect to beerChip product')
+
+            self.resetBloopDet()
         except:
             print( 'ERROR: Could not connect to beerChip I2C')
 
@@ -163,10 +165,33 @@ class beerChipI2C( beerChip ):
                                  i2cInfo.beerChipI2CCmdAddr['BEERCHIP_BEERMON_CFG_UPDATE_STATE'],
                                  0x00)
 
-    def resetBloopDet( self ):
-        self.bus.write_byte_data( self.i2cAddr,
-                                  i2cInfo.beerChipI2CCmdAddr['
+    def ackBloopDet(self):
+        self.bus.write_byte_data(self.i2cAddr,
+                                 i2cInfo.beerChipI2CCmdAddr['BEERCHIP_BEERMON_BLOOPDET_STATE'],
+                                 0x00)
+        self.bloopAckCnt += 1
 
+    def resetBloopDet( self ):
+        self.bus.write_byte_data(self.i2cAddr,
+                                 i2cInfo.beerChipI2CCmdAddr['BEERCHIP_BEERMON_BLOOPDET_STATE'],
+                                 0x00)
+        self.bus.write_byte_data( self.i2cAddr,
+                                  i2cInfo.beerChipI2CCmdAddr['BEERCHIP_BEERMON_BLOOPDET_STATE'],
+                                  0x03 )
+        self.bloopCnt = 0
+        self.bloopAckCnt = 0
+
+    def isBloopDet(self):
+        blp = self.bus.read_byte_data( self.i2cAddr,
+                                       i2cInfo.beerChipI2CCmdAddr['BEERCHIP_BEERMON_BLOOPDET_STATE'] )
+        if( blp == 1 ):
+            self.bloopCnt += 1
+            return True
+        else:
+            return False
+
+    def getCountBloopDet(self):
+        return (self.bloopCnt, self.bloopAckCnt)
 
 
 
@@ -175,5 +200,10 @@ if( __name__ == '__main__'):
     print( 'Version: %s' % (bc.getVersion()) )
 
     while( True ):
+        if( bc.isBloopDet() ):
+            (blp, blpAck) = bc.getCountBloopDet()
+            print( "BLOOP %d" % blp )
+            bc.ackBloopDet()
+
         print( '%fF' % (bc.getTemperature(1) ) )
 

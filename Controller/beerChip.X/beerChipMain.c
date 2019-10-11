@@ -226,9 +226,6 @@ int main(int argc, char** argv)
                 beermon_ProcessEvent( &beermonState, beermon_event_TLess );
             }
         }
-        
-        bloopDet_Process( &bloopDetState );
-        
     }
     return (EXIT_SUCCESS);
 }

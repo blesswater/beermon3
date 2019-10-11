@@ -46,6 +46,18 @@ void beerChip_KickLED( void )
                 ledState.cnt = 0x00;
             }
         break;
+        
+        case ledMode_Oneshot:
+        case ledMode_Bloop:
+            if( ledState.cnt < ledState.cngCnt )
+            {
+                if( ++ledState.cnt >= ledState.cngCnt )
+                {
+                    BEERCHIP_LED_PORT = BEERCHIP_LED_PORT & ~BEERCHIP_LED_PIN;
+                }
+            }
+        break;
+        
         default: /* Do nothing */
         break;
     }
@@ -53,12 +65,13 @@ void beerChip_KickLED( void )
 
 void beerChip_SetLEDMode( uint8_t mode, uint8_t cnt, uint8_t offCnt )
 {
-    if( (mode >= ledMode_Off) && (mode <= ledMode_Flash) )
+    if( (mode >= ledMode_Off) && (mode <= ledMode_Bloop) )
     {
         ledState.mode = mode;
         ledState.cnt = 0x00;
         ledState.cngCnt = cnt;
         ledState.offCnt = offCnt;
+        BEERCHIP_LED_PORT = BEERCHIP_LED_PORT & ~BEERCHIP_LED_PIN;
 
         switch( mode )
         {
@@ -67,6 +80,7 @@ void beerChip_SetLEDMode( uint8_t mode, uint8_t cnt, uint8_t offCnt )
             break;
 
             case ledMode_On:
+            case ledMode_Oneshot:
                 BEERCHIP_LED_PORT = BEERCHIP_LED_PORT | BEERCHIP_LED_PIN;
             break;
 
@@ -88,5 +102,20 @@ void beerChip_ToggleLED( void )
     {
         ledState.mode = ledMode_On;
         BEERCHIP_LED_PORT = BEERCHIP_LED_PORT | BEERCHIP_LED_PIN;
+    }
+}
+
+void beerChip_BloopEvent( uint8_t event )
+{
+    /* event 1 -> bloop
+    **       0 -> bloop ACK
+    */
+    if( ledState.mode == ledMode_Bloop )
+    {
+        if( event == 0x01 )
+        {
+            BEERCHIP_LED_PORT = BEERCHIP_LED_PORT | BEERCHIP_LED_PIN;
+            ledState.cnt = 0x00;
+        }
     }
 }
