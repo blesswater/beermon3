@@ -162,7 +162,7 @@ class beerChipSQLiteDB( beerChipDB ):
             return result
 
         sql  = "SELECT id, probe_name FROM Probes WHERE proj_id = ?"
-        for row in self.querySafe( sql, (self.projId) ):
+        for row in self.querySafe( sql, (self.projId,) ):
             result.append( (row[0], row[1]) )
         return result
 
