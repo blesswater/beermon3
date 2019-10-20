@@ -172,13 +172,16 @@ class beerChipSQLiteDB( beerChipDB ):
         for prb in probes:
             prbSql  = "SELECT CAST(strftime('%%s', temp_time) / %d AS INTEGER) AS time_group, " % (interval)
             prbSql += "datetime(avg(strftime('%%s', temp_time)),'unixepoch') AS centerTime, "
+            prb2List = []
             for prb2 in probes:
                 if( prb2[0] == prb[0] ):
-                    prbSql += "AVG(temp) AS %s" % (prb[1].replace(' ', ''))
+                    prb2Sql = "AVG(temp) AS %s" % (prb2[1].replace(' ', ''))
                 else:
-                    prbSql += "0.0 AS %s" % (prb[1].replace(' ', '' ))
+                    prb2Sql = "0.0 AS %s" % (prb2[1].replace(' ', '' ))
+                prb2List.append( prb2Sql )
+            prbSql += ", ".join(prb2List) + " "
             prbSql += "FROM Temperature WHERE probe_id=%d " % (prb[0])
-            prbSql += "GROUP BY strftime('%%s', temp_time) / %d" % interval
+            prbSql += "GROUP BY strftime('%%s', temp_time) / %d " % interval
             probeUnion.append( prbSql )
         sql  = "SELECT x.time_group, "
         sql += "DATETIME(AVG(STRFTIME('%%s',x.centerTime)),'unixepoch'), "
