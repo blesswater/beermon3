@@ -19,7 +19,7 @@ if __name__ == '__main__':
         print( 'ERROR: Usage' )
         usage()
         print( 'Datasets:')
-        for proj in dbConn.getAvailableProj()
+        for proj in dbConn.getAvailableProj():
             print( '\t%s' % proj )
         dbConn.close()
         sys.exit(1)
