@@ -179,3 +179,28 @@ wget https://use.fontawesome.com/releases/v5.6.3/css/all.css
 # jQuery-knob
 #
 git clone https://github.com/aterrien/jQuery-Knob.git
+
+#
+# Data Collection experiments
+#
+select datetime(avg(strftime('%s', temp_time)),'unixepoch'), count(*) from Temperature group by strftime('%s', temp_time) / 20 limit 5;
+
+
+SELECT x.time_group, 
+       DATETIME(AVG(STRFTIME('%s',x.centerTime)),'unixepoch'),
+       MAX(x.prb1_avg), MAX(x.prb2_avg) 
+FROM (
+        SELECT CAST(strftime('%s', temp_time) / 20 AS INTEGER) AS time_group, 
+            datetime(avg(strftime('%s', temp_time)),'unixepoch') AS centerTime,
+            avg(temp) AS prb1_avg,
+            0.0 as prb2_avg
+        FROM Temperature WHERE probe_id=10
+        GROUP BY strftime('%s', temp_time) / 20
+    UNION
+        SELECT CAST(strftime('%s', temp_time) / 20 AS INTEGER) AS time_group, 
+               datetime(avg(strftime('%s', temp_time)),'unixepoch') AS certerTime,
+               0.0 AS prb1_avg,
+               avg(temp) as prb2_avg
+        FROM Temperature WHERE probe_id=11
+        GROUP BY strftime('%s', temp_time) / 20
+) x GROUP BY x.time_group
