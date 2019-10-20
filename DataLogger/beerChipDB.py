@@ -170,7 +170,6 @@ class beerChipSQLiteDB( beerChipDB ):
         probes = self.getProbes()
         probeUnion = []
         for prb in probes:
-            prb[1] = prb[1].replace(' ', '' )
             prbSql  = "SELECT CAST(strftime('%%s', temp_time) / %d AS INTEGER) AS time_group, " % (interval)
             prbSql += "datetime(avg(strftime('%%s', temp_time)),'unixepoch') AS centerTime, "
             for prb2 in probes:
