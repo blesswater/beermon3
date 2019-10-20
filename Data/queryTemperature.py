@@ -29,9 +29,9 @@ if __name__ == '__main__':
     if( dbConn.setProject( projName ) ):
         header = ['timestamp']
         for prb in dbConn.getProbes():
-            header.append( prb.replace(' ', '') )
+            header.append( prb[1].replace(' ', '') )
         print( ','.join(header) )
         for data in dbConn.fetchTemperatures():
-            print( ','.join(data) )
+            print( ','.join( [str(s) for s in data] ) )
 
     dbConn.close()
