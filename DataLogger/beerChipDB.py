@@ -166,6 +166,26 @@ class beerChipSQLiteDB( beerChipDB ):
             result.append( (row[0], row[1]) )
         return result
 
+    def fetchTemperatures(self, interval = 20 ):
+        probes = self.getProbes()
+        probeUnion = []
+        for prb in probes:
+            prb[1] = prb[1].replace(' ', '' )
+            prbSql  = "SELECT CAST(strftime('%%s', temp_time) / %d AS INTEGER) AS time_group, " % (interval)
+            prbSql += "datetime(avg(strftime('%%s', temp_time)),'unixepoch') AS centerTime, "
+            for prb2 in probes:
+                if( prb2[0] == prb[0] ):
+                    prbSql += "AVG(temp) AS %s" % (prb[1])
+                else:
+                    prbSql += "0.0 AS %s" % (prb[1])
+            prbSql += "FROM Temperature WHERE probe_id=%d " % (prb[0])
+            prbSql += "GROUP BY strftime('%%s', temp_time) / %d" % interval
+            probeUnion.append( prbSql )
+        sql  = "SELECT x.time_group, "
+        sql += "DATETIME(AVG(STRFTIME('%s',x.centerTime)),'unixepoch'), "
+        sql += [x for x in probes[1]]
+
+
     def close(self):
         if( self.conn != None ):
             self.conn.close()
