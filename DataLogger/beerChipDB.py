@@ -145,7 +145,7 @@ class beerChipSQLiteDB( beerChipDB ):
         sql  = "SELECT id FROM Project WHERE proj_name = ?"
         projId = None
         result = False
-        for row in self.querySafe( sql, (projName) ):
+        for row in self.querySafe( sql, (projName,) ):
             projId = row[0]
         if( projId != None ):
             self.projId = projId
