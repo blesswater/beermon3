@@ -8,7 +8,7 @@ from beerChipDB import beerChipSQLiteDB as beerDB
 def usage():
     print( '' )
     print( 'Usage:')
-    print( '    python logTemp.py "DatasetName" ')
+    print( '    python queryTemperature.py "DatasetName" ')
     print( '' )
 
 if __name__ == '__main__':
