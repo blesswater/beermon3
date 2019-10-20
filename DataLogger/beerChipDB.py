@@ -16,12 +16,29 @@ class beerChipDB:
     def fetchOne(self, queryString, valueTuple):
         raise NotImplementedError("Should have implemented this")
 
+    #
+    # Utility Functions
+    #
+    def setProject(self, projName ):
+        raise NotImplementedError("Should have implemented this")
+
+    def getAvailableProject(self):
+        raise NotImplementedError("Should have implemented this")
+
+    def getProbes( self ):
+        raise NotImplementedError("Should have implemented this")
+
+    def fetchTemperatures(self):
+        raise NotImplementedError("Should have implemented this")
+
     def close(self):
         raise NotImplementedError("Should have implemented this")
 
 class beerChipSQLiteDB( beerChipDB ):
     def __init__(self):
         self.conn = None
+        self.projName = None
+        self.projId = None
 
     def connect(self, dbFilename ):
         try:
@@ -104,6 +121,50 @@ class beerChipSQLiteDB( beerChipDB ):
                 cur.close()
 
         return row
+
+    def getAvailableProj(self):
+        result = []
+        if (self.conn == None):
+            print("ERROR: Database NOT connected")
+            return result
+        cur = None
+        try:
+            cur = self.conn.cursor()
+            sql  = "SELECT proj_name FROM Project"
+            cur.execute( sql )
+            for row in cur.fetchall():
+                result.append( row[0] )
+        except:
+            print( "ERROR finding Projects" )
+        finally:
+            if( cur != None ):
+                cur.close()
+        return result
+
+    def setProject(self, projName ):
+        sql  = "SELECT id FROM Project WHERE proj_name = ?"
+        projId = None
+        result = False
+        for row in self.querySafe( sql, (projName) ):
+            projId = row[0]
+        if( projId != None ):
+            self.projId = projId
+            self.projName = projName
+            result = True
+        else:
+            print( "ERROR: Cannot find project %s" % (projName) )
+        return result
+
+    def getProbes( self ):
+        result = []
+        if( self.projId == None ):
+            print( "ERROR: Must set project" )
+            return result
+
+        sql  = "SELECT id, probe_name FROM Probes WHERE proj_id = ?"
+        for row in self.querySafe( sql, (self.projId) ):
+            result.append( (row[0], row[1]) )
+        return result
 
     def close(self):
         if( self.conn != None ):
