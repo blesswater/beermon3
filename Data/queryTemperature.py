@@ -18,10 +18,15 @@ if __name__ == '__main__':
     if( len(sys.argv) != 2 ):
         print( 'ERROR: Usage' )
         usage()
-        sql = "SELECT proj_name FROM Project"
         print( 'Datasets:')
-        for proj in dbConn.query( sql ):
-            print( '\t%s' % proj[0] )
-
+        for proj in dbConn.getAvailableProj()
+            print( '\t%s' % proj )
         dbConn.close()
         sys.exit(1)
+
+    projName = sys.argv[1]
+    if( dbConn.setProject( projName ) ):
+        for data in dbConn.fetchTemperatures():
+            print( 'data' )
+
+    dbConn.close()
