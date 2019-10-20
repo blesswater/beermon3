@@ -183,7 +183,7 @@ class beerChipSQLiteDB( beerChipDB ):
             prbSql += "FROM Temperature WHERE probe_id=%d " % (prb[0])
             prbSql += "GROUP BY strftime('%%s', temp_time) / %d " % interval
             probeUnion.append( prbSql )
-        sql  = "SELECT x.time_group, "
+        sql  = "SELECT "
         sql += "DATETIME(AVG(STRFTIME('%%s',x.centerTime)),'unixepoch'), "
         sql += ', '.join([str('MAX(x.' + x[1] + ')') for x in probes]) + ' '
         sql += "FROM ( "

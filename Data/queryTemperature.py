@@ -25,8 +25,13 @@ if __name__ == '__main__':
         sys.exit(1)
 
     projName = sys.argv[1]
+
     if( dbConn.setProject( projName ) ):
+        header = ['timestamp']
+        for prb in dbConn.getProbes():
+            header.append( prb.replace(' ', '') )
+        print( ','.join(header) )
         for data in dbConn.fetchTemperatures():
-            print( 'data' )
+            print( ','.join(data) )
 
     dbConn.close()
