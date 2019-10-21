@@ -124,8 +124,8 @@ for file in beermon-persist.service beermon-datacollect.service; do
 		systemctl stop $file
         	echo "systemctl disable $file"
         	systemctl disable $file
-        	echo "rm/lib/systemd/system/$file"
-        	rm/lib/systemd/system/$file
+        	echo "rm /lib/systemd/system/$file"
+        	rm /lib/systemd/system/$file
         	echo "systemctl daemon-reload" 
         	systemctl daemon-reload 
 	fi
