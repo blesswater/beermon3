@@ -37,7 +37,8 @@ class beerChipI2C( beerChip ):
             product = self.bus.read_byte_data( self.i2cAddr,
                                                i2cInfo.beerChipI2CCmdAddr['BEERCHIP_I2C_PROD_INDEX'])
             if( product == i2cInfo.beerChipI2CConstants['BEERCHIP_PRODUCT_ID'] ):
-                print( 'INFO: Connected to beerChip!' )
+                # print( 'INFO: Connected to beerChip!' )
+                pass
             else:
                 print( 'ERROR: Could not connect to beerChip product')
 

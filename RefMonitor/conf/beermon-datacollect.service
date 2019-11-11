@@ -6,7 +6,7 @@ Description=Beermon
 Type=simple
 Restart=always
 RestartSec=10
-ExecStart=/opt/beermon/bin/logTemp.py "All Chan"
+ExecStart=/opt/beermon/bin/logTemp.py "Test0"
 
 [Install]
 WantedBy=multi-user.target

@@ -6,7 +6,7 @@ Description=Beermon
 Type=simple
 Restart=always
 RestartSec=10
-ExecStart=/opt/beermon/bin/beerChipBePersistant.py 20
+ExecStart=/opt/beermon/bin/beerChipBePersistant.py 120
 
 [Install]
 WantedBy=multi-user.target

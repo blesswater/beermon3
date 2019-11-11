@@ -6,6 +6,9 @@ from datetime import datetime, timedelta
 from beerChipI2C import beerChipI2C as beerChip
 from beerChipDB import beerChipSQLiteDB as beerDB
 
+recordInterval = 60  # seconds
+sleepTime = 2 # seconds
+
 def usage():
     print( '' )
     print( 'Usage:')
@@ -66,9 +69,10 @@ if __name__ == '__main__':
 
     while( True ):
         if( datetime.now() >= nextTime ):
+            # print( "Checking Temperature" )
             for prb in probes:
                 prb['data'] = bc.getTemperature(prb['chan'], prb['type'])
-                print('%s: %fF' % (prb['probe_name'], prb['data']))
+                # print('%s: %fF' % (prb['probe_name'], prb['data']))
 
                 sql =  "INSERT INTO Temperature (proj_id, probe_id, temp_time, temp) VALUES ( "
                 sql += "%d, " % (id)
@@ -79,10 +83,12 @@ if __name__ == '__main__':
 
                 dbConn.execute( sql )
 
-            nextTime = datetime.now() + timedelta( seconds=5 )
+            nextTime = datetime.now() + timedelta( seconds=recordInterval )
+        else:
+            if( bc.isBloopDet() ):
+                # print( "Got BLOOP" )
+                dbConn.execute( bloopSql )
+                bc.ackBloopDet()
 
-        if( bc.isBloopDet() ):
-            dbConn.execute( bloopSql )
-            bc.ackBloopDet()
-
-
+        # print( "Sleeping" )
+        time.sleep( sleepTime )
