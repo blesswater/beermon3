@@ -120,6 +120,16 @@ CREATE TABLE Session (
     last_time INTEGER
 );
 
+#
+# Create a Project
+#
+INSERT INTO Project (proj_name) VALUES ('projName');
+INSERT INTO Probes (proj_id, probe_name, probe_chan, type, min_range, max_range, control_probe)
+VALUES (projId,'probeName,ch,'NTC_00',30.0, 90.0,cntl); 
+INSERT INTO Probes (proj_id, probe_name, probe_chan, type, min_range, max_range, control_probe)
+VALUES (projId,'probeName,0,'setpoint',30.0, 90.0,0);
+
+
 # PW: blabla
 INSERT INTO User (username, pwhash, priv)
 VALUES ('kiosk', 
@@ -179,6 +189,12 @@ wget https://use.fontawesome.com/releases/v5.6.3/css/all.css
 # jQuery-knob
 #
 git clone https://github.com/aterrien/jQuery-Knob.git
+
+#
+# Turn off Beer Services
+#
+systemctl stop beermon-datacollect.service
+systemctl stop beermon-persist.service
 
 #
 # Data Collection experiments

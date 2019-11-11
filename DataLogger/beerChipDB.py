@@ -185,7 +185,7 @@ class beerChipSQLiteDB( beerChipDB ):
             probeUnion.append( prbSql )
         sql  = "SELECT "
         sql += "DATETIME(AVG(STRFTIME('%%s',x.centerTime)),'unixepoch'), "
-        sql += ', '.join([str('MAX(x.' + x[1] + ')') for x in probes]) + ' '
+        sql += ', '.join([str('MAX(x.' + x[1]+ ')') for x in probes]) + ' '
         sql += "FROM ( "
         sql += " UNION ".join(probeUnion)
         sql += ") x "
