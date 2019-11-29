@@ -82,8 +82,6 @@ class beerChipPersistant( beerChip ):
             if( dbConn != None ):
                 dbConn.close()
 
-
-
     def getVersion(self):
         return self.bc.getVersion()
 
@@ -127,6 +125,20 @@ class beerChipPersistant( beerChip ):
         self.dirty = True
         self.bc.setSetpoint( temp )
         self._writeConfigToDb()
+
+    def setProject(self, projName ):
+        self.cfg['project'] = projName
+        self.dirty = True
+        self._writeConfigToDb()
+
+    def getProject(self):
+        proj = None
+        cfg = self._readConfigFromDb()
+        if( cfg != None ):
+            self.cfg = cfg
+            if( 'project' in self.cfg ):
+                proj = self.cfg['project']
+        return proj
 
     def verifyConfig(self ):
         cfg = self._readConfigFromDb()
