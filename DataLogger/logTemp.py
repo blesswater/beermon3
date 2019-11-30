@@ -8,7 +8,7 @@ from beerChipDB import beerChipSQLiteDB as beerDB
 from beerChipPersistant import beerChipPersistant
 
 recordInterval = 60  # seconds
-sleepTime = 0.5 # seconds
+sleepTime = 0.125 # seconds
 
 def usage():
     print( '' )
