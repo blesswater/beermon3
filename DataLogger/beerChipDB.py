@@ -155,6 +155,42 @@ class beerChipSQLiteDB( beerChipDB ):
             print( "ERROR: Cannot find project %s" % (projName) )
         return result
 
+    def createProject( self, projName, probes ):
+        # probes = { 'name' :
+        #            'chan' :
+        #            'type' : ['MANUAL', 'NTC_00', 'Setpoint']
+        #             min_range :
+        #             max_range
+        sql  = "INSERT INTO Project ( proj_name, activity ) "
+        sql += "VALUES ('%s', 1) " % (projName)
+        try:
+            projId = self.execute( sql )
+            for prb in probes:
+                prbInfo = {}
+                prbInfo['proj_id'] = projId
+                prbInfo['probe_name'] = "'%s'" % (prb[name])
+                if( 'type' not in prb ):
+                    prbInfo['type'] = "'%s'" % ('NTC_00')
+                else:
+                    prbInfo['type'] = "'%s'" % (prb['name'])
+                if( 'min_range' not in prb ):
+                    prbInfo['min_range'] = "%f" % (20.0)
+                else:
+                    prbInfo ['min_range'] = "%f" % (prb['min_range'])
+                if( 'max_range' not in prb ):
+                    prbInfo['max_range'] = "%f" % (90.0)
+                else:
+                    prbInfo ['max_range'] = "%f" % (prb['max_range'])
+
+                sql  = "INSERT INTO Probes (%s) " % (','.join([str(val) for val in prbInfo.keys()]))
+                sql += "VALUES (%s)" % (','.join([val for val in prbInfo.values()]))
+                self.execute( sql )
+
+                self.projId = projId
+                self.projName = projName
+        except:
+            print( "ERROR: Cannot create project %s" % (projName))
+
     def getProbes( self ):
         result = []
         if( self.projId == None ):
