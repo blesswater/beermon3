@@ -1,4 +1,5 @@
 #!/usr/bin/python
+
 import sys
 import time
 from datetime import datetime, timedelta
@@ -31,7 +32,7 @@ if __name__ == '__main__':
         for prb in dbConn.getProbes():
             header.append( prb[1].replace(' ', '') )
         print( ','.join(header) )
-        for data in dbConn.fetchTemperatures():
+        for data in dbConn.fetchTemperatures( interval = 60):
             print( ','.join( [str(s) for s in data] ) )
 
     dbConn.close()

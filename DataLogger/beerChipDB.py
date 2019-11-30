@@ -220,13 +220,17 @@ class beerChipSQLiteDB( beerChipDB ):
             prbSql += "GROUP BY strftime('%%s', temp_time) / %d " % interval
             probeUnion.append( prbSql )
         # sql  = "SELECT x.time_group, "
-        sql  = "SELECT "
-        sql += "DATETIME(AVG(STRFTIME('%s',x.centerTime)),'unixepoch'), "
-        sql += ', '.join([str('MAX(x.' + x[1].replace(' ', '') + ')') for x in probes]) + ' '
+        sql  = "SELECT y.timestamp, " + ', '.join(['y.' + x[1].replace(' ', '') for x in probes]) + ' '
         sql += "FROM ( "
-        sql += " UNION ".join(probeUnion)
-        sql += ") x "
-        sql += "GROUP BY x.time_group"
+        sql +=     "SELECT "
+        sql +=     "DATETIME(AVG(STRFTIME('%s',x.centerTime)),'unixepoch') AS timestamp, "
+        sql +=     ', '.join([str('MAX(x.' + x[1].replace(' ', '') + ') AS ' + x[1].replace(' ', '')) for x in probes]) + ' '
+        sql +=     "FROM ( "
+        sql +=         " UNION ".join(probeUnion)
+        sql +=     ") x "
+        sql +=     "GROUP BY x.time_group"
+        sql += ") y "
+        sql += "WHERE " + ' AND '.join( ['y.' + x[1].replace(' ','') + " != 0.0 " for x in probes] ) + ' '
 
         for row in self.query( sql ):
             yield row

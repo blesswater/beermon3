@@ -6,7 +6,7 @@ Description=Beermon
 Type=simple
 Restart=always
 RestartSec=10
-ExecStart=/opt/beermon/bin/logTemp.py "Test0"
+ExecStart=/opt/beermon/bin/beermonStartup.sh
 
 [Install]
 WantedBy=multi-user.target

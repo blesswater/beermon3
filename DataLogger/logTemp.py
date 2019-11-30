@@ -5,9 +5,10 @@ from datetime import datetime, timedelta
 
 from beerChipI2C import beerChipI2C as beerChip
 from beerChipDB import beerChipSQLiteDB as beerDB
+from beerChipPersistant import beerChipPersistant
 
 recordInterval = 60  # seconds
-sleepTime = 2 # seconds
+sleepTime = 0.125 # seconds
 
 def usage():
     print( '' )
@@ -20,11 +21,16 @@ if __name__ == '__main__':
     dbConn = beerDB()
     dbConn.connect( '/opt/beermon/data/beermonSQLite3DB.db' )
 
+    bcPersist = beerChipPersistant( bc )
+
+    defaultProj = bcPersist.getProject()
+
     if( len(sys.argv) != 2 ):
         print( 'ERROR: Usage' )
         usage()
         sql = "SELECT proj_name FROM Project"
         print( 'Datasets:')
+        print( '\tdefault - %s' % (defaultProj) )
         for proj in dbConn.query( sql ):
             print( '\t%s' % proj[0] )
 
@@ -32,6 +38,8 @@ if __name__ == '__main__':
         sys.exit(1)
 
     projName = sys.argv[1]
+    if( projName.lower() == 'default' ):
+        projName = defaultProj
     sql = "SELECT id FROM Project WHERE upper(proj_name) = '%s'" % (projName.upper())
     id = None
     for row in dbConn.query( sql ):
@@ -66,6 +74,11 @@ if __name__ == '__main__':
     # bloopSql += "VALUES( %d, 'bloop', datetime( 'now' ) ) " % (id)
     bloopSql += "VALUES( %d, 'bloop', strftime('%%Y-%%m-%%d %%H:%%M:%%f', 'now')) " % (id)
     bc.resetBloopDet()
+
+    # Set Project as collecting
+    sql  = "UPDATE Project SET collection_state = 'collecting' "
+    sql += "WHERE id = %d" % (id)
+    dbConn.execute( sql )
 
     while( True ):
         if( datetime.now() >= nextTime ):

@@ -109,13 +109,22 @@ for file in beerChipBePersistant.py logTemp.py; do
 	cp ./DataLogger/$file $BEERMON_DATA_DIR/bin/$file
 	echo "chmod 744 $BEERMON_DATA_DIR/bin/$file"
 	chmod 744 $BEERMON_DATA_DIR/bin/$file
-	echo "chmod root:root $BEERMON_DATA_DIR/bin/$file"
-	chmod root:root $BEERMON_DATA_DIR/bin/$file
+	echo "chown root:root $BEERMON_DATA_DIR/bin/$file"
+	chown root:root $BEERMON_DATA_DIR/bin/$file
 done
 
 echo "#"
 echo "# Adding services"
 echo "#"
+
+echo "# Add beermon startup script"
+echo "cp $PROJECT/conf/beermonStartup.sh $BEERMON_DATA_DIR/bin/beermonStartup.sh"
+cp $PROJECT/conf/beermonStartup.sh $BEERMON_DATA_DIR/bin/beermonStartup.sh
+echo "chmod 744 $BEERMON_DATA_DIR/bin/beermonStartup.sh"
+chmod 744 $BEERMON_DATA_DIR/bin/beermonStartup.sh
+echo "chown root:root $BEERMON_DATA_DIR/bin/beermonStartup.sh"
+chown root:root $BEERMON_DATA_DIR/bin/beermonStartup.sh
+
 for file in beermon-persist.service beermon-datacollect.service; do
 	echo "# Adding $file service"
 	if [ -f /lib/systemd/system/$file ]; then
