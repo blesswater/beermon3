@@ -212,6 +212,8 @@ done
 echo "# Set i2c devices priveledge"
 echo "chmod 666 /dev/i2c-1"
 chmod 666 /dev/i2c-1
+echo "usermod -a -G i2c $WWW_GROUP"
+usermod -a -G i2c $WWW_GROUP
 
 
 echo "#"
