@@ -128,6 +128,8 @@ setStr="s/\\\$KIOSK_USER\\\$/$KIOSK_USER/g"
 echo $setStr
 # cat ./Kiosk/kiosk.sh | sed 's/\\\$KIOSK_USER\\\$/$KIOSK_USER/g'
 cat ./Kiosk/kiosk.sh | sed $setStr > /home/$KIOSK_USER/kiosk.sh
+echo "chmod a+x /home/$KIOSK_USER/kiosk.sh"
+chmod a+x /home/$KIOSK_USER/kiosk.sh
 
 #
 # Add beermon startup processes
@@ -228,7 +230,7 @@ chmod 744 $BEERMON_DATA_DIR/bin/beermonStartup.sh
 echo "chown root:root $BEERMON_DATA_DIR/bin/beermonStartup.sh"
 chown root:root $BEERMON_DATA_DIR/bin/beermonStartup.sh
 
-for file in beermon-persist.service beermon-datacollect.service; do
+for file in beermon-persist.service beermon-datacollect.service kiosk.service; do
 	echo "# Adding $file service"
 	if [ -f /lib/systemd/system/$file ]; then
 		echo "# Disabling service $file"
