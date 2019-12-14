@@ -9,31 +9,77 @@ if [ `id -u` != 0 ]; then
 fi
 
 
-echo "cp ./$PROJECT/www/index.html $WEB_LOCATION"
-cp ./$PROJECT/www/index.html $WEB_LOCATION
-echo "chown $MGMT_USER:$WWW_GROUP $WEB_LOCATION/index.html"
-chown $MGMT_USER:$WWW_GROUP $WEB_LOCATION/index.html
-echo "chmod 640 $WEB_LOCATION/index.html"
-chmod 640 $WEB_LOCATION/index.html
+echo "cp ./$PROJECT/index.html $WWW_LOCATION"
+cp ./$PROJECT/index.html $WWW_LOCATION
+echo "chown $MGMT_USER:$WWW_GROUP $WWW_LOCATION/index.html"
+chown $MGMT_USER:$WWW_GROUP $WWW_LOCATION/index.html
+echo "chmod 640 $WWW_LOCATION/index.html"
+chmod 640 $WWW_LOCATION/index.html
 
-if [ ! -d "$WEB_LOCATION/cgi" ]; then
+if [ ! -d "$WWW_LOCATION/cgi" ]; then
 	echo "#"
 	echo "# Creating CGI directory"
 	echo "#"
-	echo "mkdir $WEB_LOCATION/cgi"
-	mkdir $WEB_LOCATION/cgi
-	echo "chown -R $MGMT_USER:$WWW_GROUP $WEB_LOCATION/cgi"
-	chown -R $MGMT_USER:$WWW_GROUP $WEB_LOCATION/cgi
-	echo "chmod 750 $WEB_LOCATION/cgi"
-	chmod 750 $WEB_LOCATION/cgi
+	echo "mkdir $WWW_LOCATION/cgi"
+	mkdir $WWW_LOCATION/cgi
+	echo "chown -R $MGMT_USER:$WWW_GROUP $WWW_LOCATION/cgi"
+	chown -R $MGMT_USER:$WWW_GROUP $WWW_LOCATION/cgi
+	echo "chmod 750 $_LOCATION/cgi"
+	chmod 750 $WWW_LOCATION/cgi
 fi
 
-echo "cp ./$PROJECT/www/cgi/*.py $WEB_LOCATION/cgi"
-cp ./$PROJECT/www/cgi/*.py $WEB_LOCATION/cgi
-echo "chown -R $MGMT_USER:$WWW_GROUP $WEB_LOCATION/cgi"
-chown -R $MGMT_USER:$WWW_GROUP $WEB_LOCATION/cgi
-echo "chmod 640 $WEB_LOCATION/cgi"
-chmod 640 $WEB_LOCATION/cgi/*
+echo "cp ./$PROJECT/www/cgi/*.py $WWW_LOCATION/cgi"
+cp ./$PROJECT/www/cgi/*.py $WWW_LOCATION/cgi
+echo "chown -R $MGMT_USER:$WWW_GROUP $WWW_LOCATION/cgi"
+chown -R $MGMT_USER:$WWW_GROUP $WWW_LOCATION/cgi
+echo "chmod 640 $WWW_LOCATION/cgi"
+chmod 640 $WWW_LOCATION/cgi/*
+
+echo "cp ./$PROJECT/cgi/*.py $WWW_LOCATION/cgi"
+cp ./$PROJECT/cgi/*.py $WWW_LOCATION/cgi
+echo "chown -R $MGMT_USER:$WWW_GROUP $WWW_LOCATION/cgi"
+chown -R $MGMT_USER:$WWW_GROUP $WWW_LOCATION/cgi
+echo "chmod 640 $WWW_LOCATION/cgi"
+chmod 640 $WWW_LOCATION/cgi/*
+
+if [ ! -d "$WWW_LOCATION/js" ]; then
+	echo "#"
+	echo "# Creating Javascript(js) directory"
+	echo "#"
+	echo "mkdir $WWW_LOCATION/js"
+	mkdir $WWW_LOCATION/js
+	echo "chown -R $MGMT_USER:$WWW_GROUP $WWW_LOCATION/js"
+	chown -R $MGMT_USER:$WWW_GROUP $WWW_LOCATION/js
+	echo "chmod 750 $_LOCATION/js"
+	chmod 750 $WWW_LOCATION/js
+fi
+
+echo "cp ./$PROJECT/www/js/*.js $WWW_LOCATION/js"
+cp ./$PROJECT/www/js/*.js $WWW_LOCATION/js
+echo "cp ./$PROJECT/js/*.js $WWW_LOCATION/js"
+cp ./$PROJECT/js/*.js $WWW_LOCATION/js
+
+if [ ! -d "$WWW_LOCATION/css" ]; then
+	echo "#"
+	echo "# Creating css directory"
+	echo "#"
+	echo "mkdir $WWW_LOCATION/css"
+	mkdir $WWW_LOCATION/css
+	echo "chown -R $MGMT_USER:$WWW_GROUP $WWW_LOCATION/css"
+	chown -R $MGMT_USER:$WWW_GROUP $WWW_LOCATION/css
+	echo "chmod 750 $_LOCATION/css"
+	chmod 750 $WWW_LOCATION/css
+fi
+
+echo "cp ./$PROJECT/www/css/*.css $WWW_LOCATION/css"
+cp ./$PROJECT/www/css/*.css $WWW_LOCATION/css
+# echo "cp ./$PROJECT/css/*.css $WWW_LOCATION/css"
+# cp ./$PROJECT/css/*.css $WWW_LOCATION/css
+
+# echo "cp ./$PROJECT/www/css/*.css $WWW_LOCATION/css"
+# cp ./$PROJECT/www/css/*.css $WWW_LOCATION/css
+echo "cp ./$PROJECT/css/*.css $WWW_LOCATION/css"
+cp ./$PROJECT/css/*.css $WWW_LOCATION/css
 
 echo "#"
 echo "# Installing Config Files"
@@ -86,8 +132,58 @@ cat ./Kiosk/kiosk.sh | sed $setStr > /home/$KIOSK_USER/kiosk.sh
 #
 # Add beermon startup processes
 #
+if [ ! -d $BEERMON_DATA_DIR ]; then
+	echo "mkdir $BEERMON_DATA_DIR"
+	mkdir $BEERMON_DATA_DIR
+	echo "chown root:$WWW_GROUP $BEERMON_DATA_DIR"
+	chown root:$WWW_GROUP $BEERMON_DATA_DIR
+	echo "chmod 775 $BEERMON_DATA_DIR"
+	chmod 775 $BEERMON_DATA_DIR
+fi
+
+# Install DB
+if [ ! -d "$BEERMON_DATA_DIR/data" ]; then
+	echo "#"
+	echo "# Creating Data directory"
+	echo "#"
+	echo "mkdir $BEERMON_DATA_DIR/data"
+	mkdir $BEERMON_DATA_DIR/data
+	echo "chown $MGMT_USER:$WWW_GROUP $BEERMON_DATA_DIR/data"
+	chown $MGMT_USER:$WWW_GROUP $BEERMON_DATA_DIR/data
+	echo "chmod 770 $BEERMON_DATA_DIR/data"
+	chmod 774 $BEERMON_DATA_DIR/data
+fi
+if [ ! -f $BEERMON_DATA_DIR/data/$BEERMON_DB ]; then
+	echo "#"
+	echo "# Copying new database"
+	echo "#"
+	echo "cp ./Data/$BEERMON_DB $BEERMON_DATA_DIR/data/$BEERMON_DB"
+	cp ./Data/$BEERMON_DB $BEERMON_DATA_DIR/data/$BEERMON_DB
+	echo "chown $WWW_USER:$WWW_GROUP $BEERMON_DATA_DIR/data/$BEERMON_DB"
+	chown $WWW_USER:$WWW_GROUP $BEERMON_DATA_DIR/data/$BEERMON_DB
+	echo "chmod 774  $BEERMON_DATA_DIR/data/$BEERMON_DB"
+	chmod 774  $BEERMON_DATA_DIR/data/$BEERMON_DB
+fi
+
+if [ ! -f $BEERMON_DATA_DIR/data/beermonSession.db ]; then
+	echo "#"
+	echo "# Copying new user database"
+	echo "#"
+	echo "cp ./Data/beermonSession.db $BEERMON_DATA_DIR/data/beermonSession.db"
+	cp ./Data/beermonSession.db $BEERMON_DATA_DIR/data/beermonSession.db
+	echo "chown $WWW_USER:$WWW_GROUP $BEERMON_DATA_DIR/data/beermonSession.db"
+	chown $WWW_USER:$WWW_GROUP $BEERMON_DATA_DIR/data/beermonSession.db
+	echo "chmod 774  $BEERMON_DATA_DIR/data/beermonSession.db"
+	chmod 774  $BEERMON_DATA_DIR/data/beermonSession.db
+fi
+
+# Create bin directories
 if [ ! -d $BEERMON_DATA_DIR/bin ]; then
 	mkdir $BEERMON_DATA_DIR/bin
+	echo "chown root:root $BEERMON_DATA_DIR/bin"
+	chown root:root $BEERMON_DATA_DIR/bin
+	echo "chmod 744 $BEERMON_DATA_DIR/bin"
+	chmod 744 $BEERMON_DATA_DIR/bin
 fi
 
 echo "#"
@@ -112,6 +208,11 @@ for file in beerChipBePersistant.py logTemp.py; do
 	echo "chown root:root $BEERMON_DATA_DIR/bin/$file"
 	chown root:root $BEERMON_DATA_DIR/bin/$file
 done
+
+echo "# Set i2c devices priveledge"
+echo "chmod 666 /dev/i2c-1"
+chmod 666 /dev/i2c-1
+
 
 echo "#"
 echo "# Adding services"

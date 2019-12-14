@@ -13,7 +13,7 @@ def application( env, start_response ):
         sess = sessMgr.getSession(None, env['REMOTE_ADDR'])
         
     headers = [('Content-Type', 'application/json'),
-               ('Set-Cookie', sess.sessId)]
+               ('Set-Cookie', str(sess.sessId))]
     start_response( '200 OK', headers )
 
     result = {}
