@@ -26,6 +26,9 @@ class beerChipI2C( beerChip ):
     bloopCnt = 0
     bloopAckCnt = 0
 
+    maxTempRange = 114.0
+    minTempRange = -20.0
+
     def __init__(self, i2cDev, i2cAddr):
         self.i2cAddr = i2cAddr
         self.i2cDev = i2cDev
@@ -62,14 +65,18 @@ class beerChipI2C( beerChip ):
                 self.bus.write_byte_data(self.i2cAddr,
                                          i2cInfo.beerChipTemperatureProbe[probeId]['Trigger'],
                                          0x01)
-                tempWord = self.bus.read_word_data( self.i2cAddr,
-                                                    i2cInfo.beerChipTemperatureProbe[probeId]['TempIndex'] )
-                if( tempWord & 0x8000 ):
-                    # Temperature is negative
-                    tempWord = (~tempWord + 1) & 0xFFFF
-                    temp = -1.0 * float(tempWord) / 256.0
-                else:
-                    temp = float(tempWord) / 256.0
+                temp = None
+                cnt = 0
+                while ((temp == None) or (temp < self.minTempRange) or (temp > self.maxTempRange)) and  (cnt < 3):
+                    tempWord = self.bus.read_word_data( self.i2cAddr,
+                                                        i2cInfo.beerChipTemperatureProbe[probeId]['TempIndex'] )
+                    if( tempWord & 0x8000 ):
+                        # Temperature is negative
+                        tempWord = (~tempWord + 1) & 0xFFFF
+                        temp = -1.0 * float(tempWord) / 256.0
+                    else:
+                        temp = float(tempWord) / 256.0
+                    cnt += 1
             else:
                 print( 'ERROR: Bad probe Id: %d' % (probeId) )
 
