@@ -69,6 +69,7 @@ void a2d_StartReading( a2d_Reading_t *reading )
 bool a2d_PollReading( a2d_Reading_t *reading )
 {
     bool result = 0;
+    int32_t temp;
     
     if( !(ADCON0 & (0x1 << _ADCON0_GO_nDONE_POSN)) )
     {
@@ -76,7 +77,11 @@ bool a2d_PollReading( a2d_Reading_t *reading )
         reading->reading = ADRESH;
         reading->reading = (reading->reading << 8) | ADRESL;
         reading->count++;
-        reading->temp = tempLookup( reading->reading );
+        temp = ((int32_t)reading->temp << 6);
+        temp -= (int32_t)reading->temp;
+        temp += (int32_t)tempLookup( reading->reading );
+        reading->temp = (int16_t)(temp >> 6);
+        // reading->temp = tempLookup( reading->reading );
         // reading->reading = 0x1234;
         // reading->count = 0x5678;
         lock_Release( &reading->lock );
