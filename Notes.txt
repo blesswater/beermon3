@@ -54,7 +54,8 @@ sudo apt-get install sqlite3
 CREATE TABLE Project (
     id INTEGER PRIMARY KEY AUTOINCREMENT, 
     proj_name TEXT,
-    activity int);
+    activity int,
+    collection_state TEXT);
 # activity: 0 -> inactive (stale) not recording; 
 #           1 -> active data is being collected
 
@@ -67,7 +68,8 @@ CREATE TABLE Probes (
     type VARCHAR(8),
     min_range FLOAT,
     max_range FLOAT,
-    control_probe INTEGER);
+    control_probe INTEGER );
+
 # Types:
 #    NTC_00 -> Thermistor
 #    Setpoint -> Control setpoint
@@ -93,7 +95,13 @@ CREATE TABLE Scalar (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     type varchar(64),
     value varchar(512) );
-    
+or
+CREATE TABLE Scalar (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    type TEXT,
+    value TEXT );
+
+
 
 # Dealing w/ timestamps
 select date(temp_time, 'localtime'), 
@@ -117,9 +125,10 @@ CREATE TABLE User (
 CREATE TABLE Session (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     sessId TEXT,
-    userId INTEGER,
     ipAddr TEXT,
-    last_time INTEGER
+    begin_time INTEGER,
+    last_time INTEGER,
+    privledge INTEGER
 );
 
 #
@@ -174,7 +183,12 @@ sudo apt-get install xdotool unclutter sed
 sudo raspi-config
     3 Boot Options -> B1 Desktop / CLI -> B4 Desktop Autologin
 
+# Enable kiosk service
+systemctl enable kiosk.service
+
 # uWSGI commands
+sudo apt-get install uwsgi-plugin-python
+
 systemctl stop uwsgi.service
 uwsgi /etc/uwsgi/uwsgi.ini --honour-stdin
 

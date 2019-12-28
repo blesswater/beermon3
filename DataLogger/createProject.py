@@ -5,10 +5,31 @@ from beerChipI2C import beerChipI2C as beerChip
 from beerChipDB import beerChipSQLiteDB as beerDB
 
 projDescr = {
-                'name' : 'Test1',
+                'name' : 'Test0',
                 'probes' : [
-                    { 'name' : 'Refrig Temp',
+                    { 'name' : 'Chan0',
                       'chan' : 0,
+                      'type' : 'NTC_00',
+                      'control' : True,
+                      'min_range' : 20.0,
+                      'max_range' : 80.0
+                    },
+                    { 'name' : 'Chan1',
+                      'chan' : 1,
+                      'type' : 'NTC_00',
+                      'control' : True,
+                      'min_range' : 20.0,
+                      'max_range' : 80.0
+                    },
+                    { 'name' : 'Chan2',
+                      'chan' : 2,
+                      'type' : 'NTC_00',
+                      'control' : True,
+                      'min_range' : 20.0,
+                      'max_range' : 80.0
+                    },
+                    { 'name' : 'Chan3',
+                      'chan' : 3,
                       'type' : 'NTC_00',
                       'control' : True,
                       'min_range' : 20.0,
@@ -16,8 +37,6 @@ projDescr = {
                     },
                     { 'name' : 'Setpoint',
                       'type' : 'setpoint',
-                      'min_range' : 20.0,
-                      'max_range' : 80.0
                     },
                 ]
            }

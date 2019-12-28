@@ -3,7 +3,7 @@ Description=uWSGI Service
 
 [Service]
 ExecStartPre=/bin/bash -c 'mkdir -p /run/uwsgi; chown www-data:www-data /run/uwsgi'
-ExecStart=/usr/local/bin/uwsgi --ini /etc/uwsgi/uwsgi.ini
+ExecStart=/usr/bin/uwsgi --ini /etc/uwsgi/uwsgi.ini
 Restart=always
 KillSignal=SIGQUIT
 Type=notify
