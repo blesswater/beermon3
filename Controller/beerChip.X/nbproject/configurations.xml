@@ -16,6 +16,7 @@
       <itemPath>beerChipUserTimer.h</itemPath>
       <itemPath>beerLock.h</itemPath>
       <itemPath>beerChipBloopDet.h</itemPath>
+      <itemPath>beerChipSerial.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -36,6 +37,7 @@
       <itemPath>beerLock.c</itemPath>
       <itemPath>beerchipRelay.c</itemPath>
       <itemPath>beerChipBloopDet.c</itemPath>
+      <itemPath>beerChipSerial.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"

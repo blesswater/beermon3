@@ -43,6 +43,7 @@
 #include "beerChipRelay.h"
 #include "beerChipBeermon.h"
 #include "beerChipBloopDet.h"
+#include "beerChipSerial.h"
 
 /*
 ** Globals
@@ -65,6 +66,7 @@ uint8_t beermonStateControlMsg;
 
 bloopDetState_t bloopDetState;
 
+serialTxState txSerial;
 
 void blnk_Delay(void)
 {
@@ -186,11 +188,18 @@ int main(int argc, char** argv)
     
     bloopDet_Init( &bloopDetState );
     
+    initSerial( &txSerial );
+    uint8_t txCnt = 0x00;
+    
     GIE = 1; /* GO! */
     
     /* Dispatch Loop */
     while( 1 )
     {
+        if( (TXIF == 1) && (TXSTA & _TXSTA_TRMT_MASK) )
+        {
+            TXREG = (txCnt++ & 0x01) ? 'A' : 'Z';
+        }
         
         switch( beermonStateControlMsg ) 
         {
