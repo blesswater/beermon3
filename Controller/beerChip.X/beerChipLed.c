@@ -91,6 +91,7 @@ void beerChip_SetLEDMode( uint8_t mode, uint8_t cnt, uint8_t offCnt )
     }
 }
 
+#if 0
 void beerChip_ToggleLED( void )
 {
     if( (ledState.mode == ledMode_On) )
@@ -104,6 +105,7 @@ void beerChip_ToggleLED( void )
         BEERCHIP_LED_PORT = BEERCHIP_LED_PORT | BEERCHIP_LED_PIN;
     }
 }
+#endif
 
 void beerChip_BloopEvent( uint8_t event )
 {

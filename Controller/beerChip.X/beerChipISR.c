@@ -90,7 +90,8 @@ void __interrupt () ISR( void )
         TMR1IF = 0x00;
     }
 
-
+#ifdef BEERCHIP_USE_I2C
+    
     if( SSP1IF )
     {
         do {
@@ -667,6 +668,7 @@ void __interrupt () ISR( void )
         } while( BCL1IF );
 
     }
+#endif /* BEERCHIP_USE_I2C */
  
 }
 

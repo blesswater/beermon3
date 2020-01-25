@@ -68,12 +68,7 @@ bloopDetState_t bloopDetState;
 
 serialTxState txSerial;
 
-void blnk_Delay(void)
-{
-    long i = 524280;
-    // long i = 5556;
-    while(i--);
-}
+
 
 void beerchip_InitPIC( void )
 {
@@ -148,6 +143,8 @@ int main(int argc, char** argv)
     uint8_t thisChan; 
     int16_t thisTemp;
     
+    userTmr_t serialDataTmr;
+    
     beerchip_InitPIC();
 
     beerChip_InitLED();
@@ -188,18 +185,40 @@ int main(int argc, char** argv)
     
     bloopDet_Init( &bloopDetState );
     
-    initSerial( &txSerial );
-    uint8_t txCnt = 0x00;
+    initSerial();
+       
+    char serialMessage[] = "\n\rHello World\n\r";
+    
+    initTxState( &txSerial );
+    txSerial.frmLen = 15;
+    txSerial.frmType = 'M';
+    txSerial.buffer = (uint8_t *)serialMessage;
+    
+    /*
+    char serialMessage[] = {BEERCHIP_PRODUCT_ID, BEERCHIP_MAJOR_VERSION, 
+                            BEERCHIP_MINOR_VERSION, BEERCHIP_BUILD, 0x02, 0x03, 0x10};
+    initTxState( &txSerial );
+    txSerial.frmLen = 7;
+    txSerial.frmType = 'V';
+    txSerial.buffer = (uint8_t *)serialMessage;
+    txStart( &txSerial );
+    */
+    
+    usrTmr_Init( &serialDataTmr );
+    usrTmr_Start( &serialDataTmr, BEERCHIP_SERIAL_DATA_SEND );
+    
     
     GIE = 1; /* GO! */
     
     /* Dispatch Loop */
     while( 1 )
     {
-        if( (TXIF == 1) && (TXSTA & _TXSTA_TRMT_MASK) )
+        if( usrTmr_Check( &serialDataTmr ) && isTxReady( &txSerial ) )
         {
-            TXREG = (txCnt++ & 0x01) ? 'A' : 'Z';
+            txStart( &txSerial );
+            usrTmr_Start( &serialDataTmr, BEERCHIP_SERIAL_DATA_SEND );
         }
+        txProcess( &txSerial );
         
         switch( beermonStateControlMsg ) 
         {

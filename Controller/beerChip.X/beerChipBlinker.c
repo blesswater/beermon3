@@ -7,6 +7,7 @@
 
 blnk_blinker_t blnk_state;
 
+#if 0
 void blnk_InitLED( uint8_t portMask, blnk_mode_t mode )
 {
     PORTA = PORTA & ~portMask;
@@ -33,4 +34,5 @@ void blnk_ForceBlink( void )
         }
     }
 }
+#endif /* 0 */
 
