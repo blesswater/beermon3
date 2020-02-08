@@ -200,6 +200,19 @@ for file in ${BASE_PY_FILES[@]}; do
 	echo "chown root:root $BEERMON_DATA_DIR/bin/$file"
 	chown root:root $BEERMON_DATA_DIR/bin/$file
 done
+
+
+echo "# Copy base files to web"
+for file in ${BASE_PY_FILES[@]}; do
+	echo "# Copying file $file"
+	echo "cp ./DataLogger/$file $WWW_LOCATION/cgi/$file"
+	cp ./DataLogger/$file $WWW_LOCATION/cgi/$file
+	echo "chmod 640 $WWW_LOCATION/cgi/$file"
+	chmod 640 $WWW_LOCATION/cgi/$file
+	echo "chown $MGMT_USER:$WWW_GROUP $WWW_LOCATION/cgi/$file"
+	chown $MGMT_USER:$WWW_GROUP $WWW_LOCATION/cgi/$file
+done
+
 echo "# Copying Apps to bin"
 for file in beerChipBePersistant.py logTemp.py; do
 	echo "# App file $file"
