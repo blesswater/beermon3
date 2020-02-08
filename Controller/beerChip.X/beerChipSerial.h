@@ -12,7 +12,7 @@
 extern "C" {
 #endif
 
-#define BEERMON_TX_BUFSIZE 8
+#define BEERMON_TX_BUFSIZE 32
     
 typedef struct {
     uint8_t txByte : 5;

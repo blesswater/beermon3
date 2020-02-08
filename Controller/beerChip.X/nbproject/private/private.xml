@@ -1,16 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
-    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="5">
+        <file>
+            <url>beerChipMain.c</url>
+            <bookmark id="4">
+                <name/>
+                <line>54</line>
+                <key/>
+            </bookmark>
+            <bookmark id="3">
+                <name/>
+                <line>142</line>
+                <key/>
+            </bookmark>
+            <bookmark id="5">
+                <name/>
+                <line>197</line>
+                <key/>
+            </bookmark>
+            <bookmark id="2">
+                <name/>
+                <line>291</line>
+                <key/>
+            </bookmark>
+        </file>
+    </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/R:/HomeProjects/beermon3/Controller/beerChip.X/beerChipConfig.h</file>
+            <file>file:/R:/HomeProjects/beermon3/Controller/beerChip.X/beerChipA2D.h</file>
             <file>file:/R:/HomeProjects/beermon3/Controller/beerChip.X/beerChipMain.c</file>
-            <file>file:/R:/HomeProjects/beermon3/Controller/beerChip.X/beerChipUserTimer.c</file>
-            <file>file:/R:/HomeProjects/beermon3/Controller/beerChip.X/beerChipBeermon.c</file>
-            <file>file:/R:/HomeProjects/beermon3/Controller/beerChip.X/beerChipSerial.c</file>
+            <file>file:/C:/Program%20Files%20(x86)/Microchip/xc8/v2.05/pic/sources/c99/common/awmod.c</file>
             <file>file:/R:/HomeProjects/beermon3/Controller/beerChip.X/beerChipBeermon.h</file>
             <file>file:/R:/HomeProjects/beermon3/Controller/beerChip.X/beerChipA2D.c</file>
-            <file>file:/R:/HomeProjects/beermon3/Controller/beerChip.X/beerChipUserTimer.h</file>
+            <file>file:/C:/Program%20Files%20(x86)/Microchip/xc8/v2.05/pic/include/pic16f1509.h</file>
             <file>file:/R:/HomeProjects/beermon3/Controller/beerChip.X/beerChipSerial.h</file>
         </group>
     </open-files>

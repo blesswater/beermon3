@@ -50,6 +50,13 @@ extern "C" {
 #define BEERCHIP_TICKS_PER_SECOND  10
 
 #define BEERCHIP_SERIAL_DATA_SEND  (10)
+    
+#if defined(BEERCHIP_USE_I2C) && defined(BEERCHIP_USE_SERIAL)
+    #warning "I2C and Serial is defined! May not have enough codespace for both"
+#endif
+#if !defined(BEERCHIP_USE_I2C) && !defined(BEERCHIP_USE_SERIAL)
+    #warning "Neither I2C and Serial is defined! One of these should be used for Comms"
+#endif
 /*
 ** Typedefs
 */

@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
+#include <string.h>  /* For memcpy */
 
 #include <xc.h>
 
@@ -134,6 +135,73 @@ uint8_t i2c_ReadI2CSelect()
 #endif
 
 }
+
+#ifdef BEERCHIP_USE_SERIAL
+
+extern uint32_t uptime;
+
+void buildSerialMessage( uint8_t msgId, serialTxState *txSerial )
+{
+    switch( msgId % 7 )
+    {
+        case 0:
+            /* Version */
+            txSerial->buffer[0] = BEERCHIP_PRODUCT_ID;
+            txSerial->buffer[1] = BEERCHIP_MAJOR_VERSION; 
+            txSerial->buffer[2] = BEERCHIP_MINOR_VERSION; 
+            txSerial->buffer[3] = BEERCHIP_BUILD;
+            txSerial->frmType = 'V';
+            txSerial->frmLen = 4;
+        break;
+        
+        case 1:
+            /* Time */
+            memcpy( &(txSerial->buffer[0]), &uptime, sizeof( uptime ) );
+            txSerial->frmType = 't';
+            txSerial->frmLen = sizeof( uptime );
+        break;
+        
+        case 2:
+            /* Temperature chan 0 */
+            txSerial->buffer[0] = 0;
+            *((uint16_t *)&(txSerial->buffer[1])) = a2dProbe[0].temp;
+            txSerial->frmType = 'T';
+            txSerial->frmLen = sizeof(a2dProbe[0].temp) + 1;
+        break;
+        
+        case 3:
+            /* Temperature chan 1 */
+            txSerial->buffer[0] = 1;
+            *((uint16_t *)&(txSerial->buffer[1])) = a2dProbe[1].temp;
+            txSerial->frmType = 'T';
+            txSerial->frmLen = sizeof(a2dProbe[1].temp) + 1;
+        break;
+        
+        case 4:
+            /* Temperature chan 2 */
+            txSerial->buffer[0] = 2;
+            *((uint16_t *)&(txSerial->buffer[1])) = a2dProbe[2].temp;
+            txSerial->frmType = 'T';
+            txSerial->frmLen = sizeof(a2dProbe[2].temp) + 1;
+        break;
+        
+        case 5:
+            /* Temperature chan 3 */
+            txSerial->buffer[0] = 3;
+            *((uint16_t *)&(txSerial->buffer[1])) = a2dProbe[3].temp;
+            txSerial->frmType = 'T';
+            txSerial->frmLen = sizeof(a2dProbe[3].temp) + 1;
+        break;
+        
+        case 6:
+            /* Configuration */
+            *(( beermonConfig_t *)&(txSerial->buffer[0])) = workingBeermonCfg;
+            txSerial->frmType = 'C';
+            txSerial->frmLen = sizeof(beermonConfig_t);
+        break;
+    }
+}
+#endif /* BEERCHIP_USE_SERIAL */
 /*
 ** main
 */
@@ -184,15 +252,23 @@ int main(int argc, char** argv)
                   &enableRelay, &controlRelay );
     
     bloopDet_Init( &bloopDetState );
-    
+  
+#ifdef BEERCHIP_USE_SERIAL
     initSerial();
-       
-    char serialMessage[] = "\n\rHello World\n\r";
+#endif
+
+#ifdef BEERCHIP_USE_SERIAL
+    uint8_t  serialMessage[BEERMON_TX_BUFSIZE];
     
     initTxState( &txSerial );
+    txSerial.buffer = &(serialMessage[0]);
     txSerial.frmLen = 15;
     txSerial.frmType = 'M';
     txSerial.buffer = (uint8_t *)serialMessage;
+    uint8_t serialMsgCnt = 0;
+    usrTmr_Init( &serialDataTmr );
+    usrTmr_Start( &serialDataTmr, BEERCHIP_SERIAL_DATA_SEND );
+#endif /* BEERCHIP_USE_SERIAL */
     
     /*
     char serialMessage[] = {BEERCHIP_PRODUCT_ID, BEERCHIP_MAJOR_VERSION, 
@@ -204,21 +280,22 @@ int main(int argc, char** argv)
     txStart( &txSerial );
     */
     
-    usrTmr_Init( &serialDataTmr );
-    usrTmr_Start( &serialDataTmr, BEERCHIP_SERIAL_DATA_SEND );
-    
     
     GIE = 1; /* GO! */
     
     /* Dispatch Loop */
     while( 1 )
     {
+#ifdef BEERCHIP_USE_SERIAL
         if( usrTmr_Check( &serialDataTmr ) && isTxReady( &txSerial ) )
         {
+            buildSerialMessage( serialMsgCnt++, &txSerial );
             txStart( &txSerial );
             usrTmr_Start( &serialDataTmr, BEERCHIP_SERIAL_DATA_SEND );
+            
         }
         txProcess( &txSerial );
+#endif /* BEERCHIP_USE_SERIAL */
         
         switch( beermonStateControlMsg ) 
         {

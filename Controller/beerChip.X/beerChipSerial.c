@@ -6,6 +6,8 @@
 #include "beerChipConfig.h"
 #include "beerChipSerial.h"
 
+#ifdef BEERCHIP_USE_SERIAL
+
 void initSerial( void )
 {
  
@@ -147,4 +149,4 @@ void procTxSerialState( serialTxState *txState, uint8_t event )
     serialPortStateTbl[txState->txState][event]( txState );
 }
 
-
+#endif /* BEERCHIP_USE_SERIAL */
