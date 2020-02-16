@@ -136,7 +136,7 @@ serialPortAction_ptr_t serialPortStateTbl[][4] = {
 /*                   Start           ctlChar           last            TxCmpl */
 /* READY    */ {startSerial,     doNothingSerial, doNothingSerial, doNothingSerial},
 /* START    */ {doNothingSerial, startFrmSerial, startFrmSerial, startFrmSerial },
-/* FRMTYPE  */ {doNothingSerial, frameTypeSerial_Ctl, doNothingSerial, frameTypeSerial_Send},
+/* FRMTYPE  */ {doNothingSerial, frameTypeSerial_Send, doNothingSerial, frameTypeSerial_Send},
 /* SEND     */ {doNothingSerial, frameTypeSerial_Ctl, sendSerial_Last, sendSerial_Send},
 /* SEND_ESC */ {doNothingSerial, escSerial_Send, escSerial_SendLast, escSerial_Send},
 /* END      */ {doNothingSerial, endSerial_Cmpl, endSerial_Cmpl, endSerial_Cmpl}

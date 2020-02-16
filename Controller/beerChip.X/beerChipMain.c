@@ -46,6 +46,8 @@
 #include "beerChipBloopDet.h"
 #include "beerChipSerial.h"
 
+#define BEERCHIP_USE_SERIAL
+
 /*
 ** Globals
 */
