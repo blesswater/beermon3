@@ -236,3 +236,23 @@ FROM (
         FROM Temperature WHERE probe_id=11
         GROUP BY strftime('%s', temp_time) / 20
 ) x GROUP BY x.time_group
+
+#
+# Redis
+#
+apt-get install redis-server
+
+systemctl list-unit-files | grep redis
+
+redis-cli
+> set testKey0 testValue0
+> get testKey0
+> keys *
+> flushall
+
+# Hashes
+> hset Temp 0 45.6
+> hset Temp 1 66.5
+> hget Temp 1
+> hkeys Temp
+
