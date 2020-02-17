@@ -70,7 +70,7 @@ class serialPortStateMachine:
         while self.running:
             c = self.serialPort.read(1)
             if( c ):
-                if( c == serialPortMachine.STX ):
+                if( c == serialPortStateMachine.STX ):
                     # print( 'STX' )
                     self.stateMachine[self.state][0]( c )
                 elif( c == serialPortStateMachine.ETX ):
@@ -88,11 +88,12 @@ class serialPortStateMachine:
             self.serialPort = None
 
     def txFrame( self, frm ):
-        txFrame = bytearray( [serialPortMachine.STX])
+        txFrame = bytearray( [serialPortStateMachine.STX])
         for byt in frm:
-            if( byt == serialPortMachine.STX or
-                byt == serialPortStateMachine.ETX or
-                byt == serialPortStateMachine.DLE ):
+            bytVal = chr(byt)
+            if( bytVal == serialPortStateMachine.STX or
+                bytVal == serialPortStateMachine.ETX or
+                bytVal == serialPortStateMachine.DLE ):
                 txFrame += bytearray([serialPortStateMachine.DLE])
                 txFrame += bytearray([byt | 0x80])
             else:

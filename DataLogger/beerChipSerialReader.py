@@ -11,7 +11,7 @@ if( __name__ == '__main__' ):
     red = redis.Redis()
 
     while True:
-        frm = link.getFrame()
+        frm = link.rxFrame()
         if( frm ):
             print( "INFO: Received frame %s len: %d" % (frm[0], len(frm)) )
             print( 'INFO: Frame %s' % (binascii.hexlify(frm)) )
