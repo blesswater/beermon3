@@ -6,7 +6,7 @@ import serial
 
 import binascii
 
-class serialPortRxStateMachine:
+class serialPortStateMachine:
     STX = '\x02'
     ETX = '\x03'
     DLE = '\x10'
@@ -18,6 +18,13 @@ class serialPortRxStateMachine:
         self.running = False
         self.frame = bytearray(b'')
         self.workQ = workQ
+
+        self.serialPort = None
+        self.running = False
+        try:
+            self.serialPort = serial.Serial(self.port, self.baud, timeout=2)
+        except:
+            print("ERROR: Cannot open serial Port %s for Rx" % (self.port) )
 
         self.stateMachine = [
         # Events         RxSTX             RxChar         RxDLE          RxETX
@@ -59,39 +66,45 @@ class serialPortRxStateMachine:
         self.state = 0
 
     def run( self ):
-        self.rxPort = None
-        try:
-            self.rxPort = serial.Serial( self.port, self.baud, timeout = 2 )
-            self.running = True
-            while self.running:
-                c = self.rxPort.read(1)
-                if( c ):
-                    if( c == serialPortRxStateMachine.STX ):
-                        # print( 'STX' )
-                        self.stateMachine[self.state][0]( c )
-                    elif( c == serialPortRxStateMachine.ETX ):
-                        # print( 'ETX' )
-                        self.stateMachine[self.state][3]( c )
-                    elif( c == serialPortRxStateMachine.DLE ):
-                        # print( 'DLE' )
-                        self.stateMachine[self.state][2]( c )
-                    else:
-                        # print( c )
-                        self.stateMachine[self.state][1]( c )
+        self.running = True
+        while self.running:
+            c = self.serialPort.read(1)
+            if( c ):
+                if( c == serialPortMachine.STX ):
+                    # print( 'STX' )
+                    self.stateMachine[self.state][0]( c )
+                elif( c == serialPortStateMachine.ETX ):
+                    # print( 'ETX' )
+                    self.stateMachine[self.state][3]( c )
+                elif( c == serialPortStateMachine.DLE ):
+                    # print( 'DLE' )
+                    self.stateMachine[self.state][2]( c )
+                else:
+                    # print( c )
+                    self.stateMachine[self.state][1]( c )
 
-        except:
-            print( "ERROR: Cannot open serial Port %s for Rx" % (self.port) )
-            self.rxPort = None
-            self.running = False
-        finally:
-            if( self.rxPort != None ):
-                self.rxPort.close()
-                self.rxPort = None
+        if (self.serialPort != None):
+            self.serialPort.close()
+            self.serialPort = None
+
+    def txFrame( self, frm ):
+        txFrame = bytearray( [serialPortMachine.STX])
+        for byt in frm:
+            if( byt == serialPortMachine.STX or
+                byt == serialPortStateMachine.ETX or
+                byt == serialPortStateMachine.DLE ):
+                txFrame += bytearray([serialPortStateMachine.DLE])
+                txFrame += bytearray([byt | 0x80])
+            else:
+                txFrame += bytearray( [byt])
+        txFrame += bytearray( [serialPortStateMachine.ETX] )
+        if( self.serialPort ):
+            self.serialPort.write( txFrame )
 
     def stop( self ):
         self.running = False
 
-class serialRxLink:
+class serialLink:
 
     def __init__( self, port, baud ):
         self.port = port
@@ -104,7 +117,7 @@ class serialRxLink:
     def start( self ):
         try:
             self.rxQ = Queue()
-            self.rxSm = serialPortRxStateMachine( self.rxQ, self.port, self.baud )
+            self.rxSm = serialPortStateMachine( self.rxQ, self.port, self.baud )
             self.rxThread = Thread( target=self.rxSm.run )
             self.rxThread.start()
         except:
@@ -115,7 +128,7 @@ class serialRxLink:
         self.rxSm.stop()
         self.rxThread.join()
 
-    def getFrame( self ):
+    def rxFrame( self ):
         try:
             frm = self.rxQ.get( False )
         except:
@@ -123,13 +136,16 @@ class serialRxLink:
             frm = None
         return frm
 
+    def txFrame( self, frm ):
+        self.rxSm.txFrame( frm )
+
 
 if( __name__ == '__main__' ):
-    rxLink = serialRxLink( '/dev/ttyUSB0', 9600 )
+    rxLink = serialLink( '/dev/ttyUSB0', 9600 )
     rxLink.start()
 
     while True:
-        frm = rxLink.getFrame()
+        frm = rxLink.rxFrame()
         if( frm ):
             print( "INFO: Received frame %s len: %d" % (chr(frm[0]), len(frm)) )
 
@@ -137,7 +153,7 @@ if( __name__ == '__main__' ):
 
     """
     rxQueue = Queue()
-    sm = serialPortRxStateMachine( rxQueue, '/dev/ttyUSB0', 9600 );
+    sm = serialPortStateMachine( rxQueue, '/dev/ttyUSB0', 9600 );
     sm.run()
     """
             

@@ -3,15 +3,15 @@
 import binascii
 
 import redis
-from beerChipSerialLink import serialRxLink
+from beerChipSerialLink import serialLink
 
 if( __name__ == '__main__' ):
-    rxLink = serialRxLink( '/dev/ttyUSB0', 9600 )
-    rxLink.start()
+    link = serialLink( '/dev/ttyUSB0', 9600 )
+    link.start()
     red = redis.Redis()
 
     while True:
-        frm = rxLink.getFrame()
+        frm = link.getFrame()
         if( frm ):
             print( "INFO: Received frame %s len: %d" % (frm[0], len(frm)) )
             print( 'INFO: Frame %s' % (binascii.hexlify(frm)) )
@@ -40,7 +40,9 @@ if( __name__ == '__main__' ):
             else:
                 print( 'INFO: Unknown Frame %s' % (chr(frm[0])) )
 
+            link.txFrame( frm )
 
-    rxLink.stop()
+
+    link.stop()
 
 
