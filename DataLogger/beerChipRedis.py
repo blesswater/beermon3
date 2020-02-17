@@ -28,11 +28,11 @@ class beerChipRedis( beerChip ):
     maxTempRange = 114.0
     minTempRange = -20.0
 
-    def __init__(self, i2cDev, i2cAddr):
+    def __init__(self, notUsed0 = None, notUsed1 = None):
         # Try to communicate
         self.red = None
         try:
-            self.red = reids.Redis()
+            self.red = redis.Redis()
         except:
             print( 'ERROR: Could not connect to Redis Server')
 
@@ -49,10 +49,10 @@ class beerChipRedis( beerChip ):
         if( type == 'NTC_00'):
             temp = self.red.hget( 'beermonTemp', str(probeId) )
         elif( type == 'setpoint' ):
-            temp - self.red.get( 'beermonSetpoint', 'temp' )
+            temp = self.red.hget( 'beermonSetpoint', 'temp' )
         else:
             print( 'ERROR: Invalid probe type %s' % (type) )
-        return temp
+        return float(temp)
 
     def getControlProbeChan(self ):
         cntlChan = self.red.hget( 'beermonSetpoint', 'chan')
