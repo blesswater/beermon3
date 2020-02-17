@@ -116,7 +116,11 @@ class serialRxLink:
         self.rxThread.join()
 
     def getFrame( self ):
-        frm = self.rxQ.get()
+        try:
+            frm = self.rxQ.get( False )
+        except:
+            # Empty Q
+            frm = None
         return frm
 
 
