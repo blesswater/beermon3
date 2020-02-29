@@ -13,22 +13,44 @@
 #include "beerChipRelay.h"
 #include "beerChipBeermon.h"
 #include "beerChipBloopDet.h"
+#include "beerChipSerial.h"
 
 uint32_t uptime = BEERMON_USRTIMER_START_CNT;
 static uint8_t  secTickCnt = 0x00;
 
 extern a2d_Reading_t a2dProbe[BEERMON_NUM_TEMP_PROBES];
+
+#ifdef BEERCHIP_USE_I2C
 static int16_t tempChan0; 
 static int16_t tempChan1;
 static int16_t tempChan2;
 static int16_t tempChan3;
 static uint8_t tempReadingCnt;
 
+beermonConfig_t workingBeermonCfg;
+
+struct {
+    uint16_t onCnt;
+    uint16_t offCnt;
+    uint32_t onTime;
+    uint32_t offTime;
+} nowStats;
+
+static uint8_t statReadCnt;
+
+#endif
+
+#ifdef BEERCHIP_USE_SERIAL
+
+extern serialRxState rxSerial;
+
+#endif
+
 extern beerchip_relay_t enableRelay;
 extern beerchip_relay_t controlRelay;
 
 extern beermonConfig_t beermonCfg;
-beermonConfig_t workingBeermonCfg;
+
 /* beer cfg states */
 #define beerCfgClean 0x00  /* No changes */
 #define beerCfgDirty 0x01  /* Changes Pending */
@@ -37,13 +59,8 @@ beermonConfig_t workingBeermonCfg;
 extern uint8_t beermonStateControlMsg;
 
 extern beermonStats_t beermonStats;
-struct {
-    uint16_t onCnt;
-    uint16_t offCnt;
-    uint32_t onTime;
-    uint32_t offTime;
-} nowStats;
-static uint8_t statReadCnt;
+
+
 
 extern beermonState_t beermonState;
 
@@ -52,6 +69,7 @@ extern bloopDetState_t bloopDetState;
 void __interrupt () ISR( void )
 // void interrupt ISR( void )
 {
+#ifdef BEERCHIP_USE_I2C
     uint8_t i2cIndex;
     uint8_t i2cValue;
     i2c_i2cStatus i2cStatus;
@@ -60,10 +78,12 @@ void __interrupt () ISR( void )
     
     static uint8_t beerCfgState = beerCfgClean;
     
+
     static struct {
         uint16_t reading;
         uint16_t count;
     } a2dChan0Snapshot, a2dChan1Snapshot, a2dChan2Snapshot, a2dChan3Snapshot;
+#endif
     
     // a2dChan0Snapshot.count = 0x89ab;
     // a2dChan0Snapshot.reading = 0xcdef;
@@ -669,6 +689,28 @@ void __interrupt () ISR( void )
 
     }
 #endif /* BEERCHIP_USE_I2C */
+    
+#ifdef BEERCHIP_USE_SERIAL
+    if( RCIF )
+    {
+        procRxSerial( &rxSerial, RCREG );
+        if( rxSerial.rxState == BM_RX_SERIAL_END )
+        {
+            switch(rxSerial.buffer[0] )
+            {
+                case 's':
+                    beermonCfg.setTemp = *(uint16_t*)&rxSerial.buffer[1];
+                break;
+                
+                case 'p':
+                    beermonCfg.probe = *(uint8_t *)&rxSerial.buffer[1];
+                break;
+            }
+            doneRxSerial( &rxSerial );
+        }
+        RCIF = 0;
+    }
+#endif /* BEERCHIP_USE_SERIAL */
  
 }
 

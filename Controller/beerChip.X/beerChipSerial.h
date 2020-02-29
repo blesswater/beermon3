@@ -13,6 +13,7 @@ extern "C" {
 #endif
 
 #define BEERMON_TX_BUFSIZE 32
+#define BEERMON_RX_BUFSIZE (16)
     
 typedef struct {
     uint8_t txByte : 5;
@@ -51,6 +52,34 @@ void txProcess( serialTxState *txState );
 #define BM_SERIAL_EVT_TXCMPL      0x03 /* Tx Complete */
 
 void procTxSerialState( serialTxState *txState, uint8_t event );
+
+/*
+** Serial Port Rx State
+*/
+
+/* Rx States */
+#define BM_RX_SERIAL_WAIT  0
+#define BM_RX_SERIAL_READ  1
+#define BM_RX_SERIAL_DLE   2
+#define BM_RX_SERIAL_END   3
+
+/* Rx Events */
+#define BM_RX_SERIAL_EVT_STX     0
+#define BM_RX_SERIAL_EVT_RXCHAR  1
+#define BM_RX_SERIAL_EVT_DLE     2
+#define BM_RX_SERIAL_EVT_ETX     3
+#define BM_RX_SERIAL_EVT_PROCFRM 4
+
+typedef struct {
+    uint8_t rxByte : 5;
+    uint8_t rxState : 3;
+    uint8_t buffer[BEERMON_RX_BUFSIZE];   
+} serialRxState;
+
+void initRxState( serialRxState *rxState );
+void procRxSerial( serialRxState *rxState, uint8_t byt );
+void procRxSerialState( serialRxState *rxState, uint8_t event, uint8_t byt );
+void doneRxSerial( serialRxState *rxState );
 
 
 

@@ -73,7 +73,7 @@ bool a2d_PollReading( a2d_Reading_t *reading )
     
     if( !(ADCON0 & (0x1 << _ADCON0_GO_nDONE_POSN)) )
     {
-        lock_Take( &reading->lock ); /* Should always get the lock */
+        // lock_Take( &reading->lock ); /* Should always get the lock */
         reading->reading = ADRESH;
         reading->reading = (reading->reading << 8) | ADRESL;
         reading->count++;

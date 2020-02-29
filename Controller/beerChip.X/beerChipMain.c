@@ -46,7 +46,7 @@
 #include "beerChipBloopDet.h"
 #include "beerChipSerial.h"
 
-#define BEERCHIP_USE_SERIAL
+// #define BEERCHIP_USE_SERIAL
 
 /*
 ** Globals
@@ -70,6 +70,7 @@ uint8_t beermonStateControlMsg;
 bloopDetState_t bloopDetState;
 
 serialTxState txSerial;
+serialRxState rxSerial;
 
 
 
@@ -197,7 +198,7 @@ void buildSerialMessage( uint8_t msgId, serialTxState *txSerial )
         
         case 6:
             /* Configuration */
-            *(( beermonConfig_t *)&(txSerial->buffer[0])) = workingBeermonCfg;
+            *(( beermonConfig_t *)&(txSerial->buffer[0])) = beermonCfg;
             txSerial->frmType = 'C';
             txSerial->frmLen = sizeof(beermonConfig_t);
         break;
@@ -249,7 +250,11 @@ int main(int argc, char** argv)
     
     /* Beermon */
     beermonConfig_Init( &beermonCfg );
+    
+#ifdef BEERCHIP_USE_I2C
     beermonConfig_Init( &workingBeermonCfg );
+#endif
+    
     beermon_Init( &beermonCfg, &beermonState, &beermonStats, 
                   &enableRelay, &controlRelay );
     
@@ -257,9 +262,7 @@ int main(int argc, char** argv)
   
 #ifdef BEERCHIP_USE_SERIAL
     initSerial();
-#endif
 
-#ifdef BEERCHIP_USE_SERIAL
     uint8_t  serialMessage[BEERMON_TX_BUFSIZE];
     
     initTxState( &txSerial );
@@ -270,17 +273,10 @@ int main(int argc, char** argv)
     uint8_t serialMsgCnt = 0;
     usrTmr_Init( &serialDataTmr );
     usrTmr_Start( &serialDataTmr, BEERCHIP_SERIAL_DATA_SEND );
+    
+    initRxState( &rxSerial );
 #endif /* BEERCHIP_USE_SERIAL */
     
-    /*
-    char serialMessage[] = {BEERCHIP_PRODUCT_ID, BEERCHIP_MAJOR_VERSION, 
-                            BEERCHIP_MINOR_VERSION, BEERCHIP_BUILD, 0x02, 0x03, 0x10};
-    initTxState( &txSerial );
-    txSerial.frmLen = 7;
-    txSerial.frmType = 'V';
-    txSerial.buffer = (uint8_t *)serialMessage;
-    txStart( &txSerial );
-    */
     
     
     GIE = 1; /* GO! */

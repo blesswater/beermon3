@@ -19,6 +19,7 @@ void initSerial( void )
     
     TRISB = TRISB & ~(_TRISB_TRISB7_MASK); /* Set RB7 (pin10) to output */
     TRISB = TRISB |  (_TRISB_TRISB5_MASK); /* Set RB5 to input */
+    ANSELB = ANSELB & (~_ANSELB_ANSB5_MASK);
     
     TXSTA = (1 << _TXSTA_TXEN_POSN) |   /* Transmit enabled */
             (0 << _TXSTA_SYNC_POSN) |
@@ -31,7 +32,8 @@ void initSerial( void )
     
     /* Interrupts */
     // PIR1 = PIR1 | (1 << _PIR1_TXIF_POSN);
-    PIE1 = PIE1 | (0 << _PIE1_TXIE_POSN);
+    PIE1 = PIE1 | (0 << _PIE1_TXIE_POSN) |
+                  (1 << _PIE1_RCIE_POSN);
 }
 
 void initTxState( serialTxState *txState )
@@ -142,11 +144,125 @@ serialPortAction_ptr_t serialPortStateTbl[][4] = {
 /* END      */ {doNothingSerial, endSerial_Cmpl, endSerial_Cmpl, endSerial_Cmpl}
 };
 
-
-
 void procTxSerialState( serialTxState *txState, uint8_t event )
 {
     serialPortStateTbl[txState->txState][event]( txState );
+}
+
+/*
+** Rx Serial Port
+*/
+
+/*
+** Serial Rx Action Functions
+*/
+
+typedef void (*serialRxPortAction_ptr_t)( serialRxState *rxState, uint8_t byt );
+
+void doNothingRxSerial( serialRxState *rxState, uint8_t byt )
+{
+    /* Do nothing */
+}
+
+/* Rx WAIT State */
+void startRxSerial( serialRxState *rxState, uint8_t byt )
+{
+    rxState->rxByte = 0;
+    rxState->rxState = BM_RX_SERIAL_READ;
+}
+
+/* Rx READ State */
+void readSTXRxSerial( serialRxState *rxState, uint8_t byt )
+{
+    /* This is an error */
+    rxState->rxState = BM_RX_SERIAL_WAIT;
+}
+
+void readCharRxSerial( serialRxState *rxState, uint8_t byt )
+{
+    if( rxState->rxByte < BEERMON_RX_BUFSIZE )
+    {
+        rxState->buffer[rxState->rxByte++] = byt;
+    }
+    else
+    {
+        /* Buffer overflow */
+        rxState->rxState = BM_RX_SERIAL_WAIT;
+    }
+}
+
+void readDLERxSerial( serialRxState *rxState, uint8_t byt )
+{
+    rxState->rxState = BM_RX_SERIAL_DLE;
+}
+
+void readETXRxSerial( serialRxState *rxState, uint8_t byt )
+{
+    rxState->rxState = BM_RX_SERIAL_END;
+}
+
+/* Rx DLE State */
+void dleCharRxSerial( serialRxState *rxState, uint8_t byt )
+{
+    if( rxState->rxByte < BEERMON_RX_BUFSIZE )
+    {
+        rxState->buffer[rxState->rxByte++] = (byt & 0x7F);
+        rxState->rxState = BM_RX_SERIAL_READ;
+    }
+    else
+    {
+        /* Buffer overflow */
+        rxState->rxState = BM_RX_SERIAL_WAIT;
+    }
+}
+
+/* Rx END State */
+void endProcFrmRxSerial( serialRxState *rxState, uint8_t byt )
+{
+    rxState->rxState = BM_RX_SERIAL_WAIT;
+}
+
+serialRxPortAction_ptr_t serialPortRxStateTbl[][5] = {
+    /*                STX            RxChar           DLE                ETX        ProcFrm*/
+    /* WAIT */ {startRxSerial, doNothingRxSerial, doNothingRxSerial ,doNothingRxSerial, doNothingRxSerial},
+    /* READ */ {readSTXRxSerial, readCharRxSerial, readDLERxSerial ,readETXRxSerial, doNothingRxSerial},
+    /* DLE  */ {readSTXRxSerial, dleCharRxSerial, readSTXRxSerial ,readSTXRxSerial, doNothingRxSerial},
+    /* END  */ {doNothingRxSerial, doNothingRxSerial, doNothingRxSerial ,doNothingRxSerial, endProcFrmRxSerial}
+};
+
+void initRxState( serialRxState *rxState )
+{
+    memset( rxState, 0x00, sizeof(serialRxState) );
+}
+
+void procRxSerialState( serialRxState *rxState, uint8_t event, uint8_t byt )
+{
+    serialPortRxStateTbl[rxState->rxState][event]( rxState, byt );
+}
+
+void procRxSerial( serialRxState *rxState, uint8_t byt )
+{
+    if( byt == BM_SERIAL_STX )
+    {
+        procRxSerialState( rxState, BM_RX_SERIAL_EVT_STX, byt );
+    }
+    else if(byt == BM_SERIAL_ETX )
+    {
+        procRxSerialState( rxState, BM_RX_SERIAL_EVT_ETX, byt );
+    }
+    else if( byt == BM_SERIAL_DLE )
+    {
+        procRxSerialState( rxState, BM_RX_SERIAL_EVT_DLE, byt );
+    }
+    else
+    {
+        procRxSerialState( rxState, BM_RX_SERIAL_EVT_RXCHAR, byt );
+    }
+}
+
+void doneRxSerial( serialRxState *rxState )
+{
+    procRxSerialState( rxState, BM_RX_SERIAL_EVT_PROCFRM, 0x00 );
 }
 
 #endif /* BEERCHIP_USE_SERIAL */
