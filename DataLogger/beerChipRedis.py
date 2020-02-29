@@ -1,4 +1,4 @@
-from time import sleep
+"from time import sleep
 
 import redis
 
@@ -63,18 +63,20 @@ class beerChipRedis( beerChip ):
         return uptime
 
     def setControlProbeChan(self, chan ):
-        return False
+        self.red.set( 'beermonSetProbe', chan )
+        return True
 
     def switchIn( self ):
-        pass
+        self.red.set( 'beermonSetState', 'Switch In' )
 
     def switchOut( self ):
-        pass
+        self.red.set('beermonSetState', 'Switch Out')
 
     def extCntl(self):
-        pass
+        self.red.set('beermonSetState', 'Ext Control')
 
     def getState( self ):
+        state = self.red.get( 'beermonState' )
         return 'Error'
 
     def getSetpoint( self, chan = 0 ):
@@ -82,7 +84,7 @@ class beerChipRedis( beerChip ):
         return float(temp)
 
     def setSetpoint( self, temp ):
-        pass
+        self.red.set( 'beermonSetSetpoint', temp )
 
     def ackBloopDet(self):
         pass
@@ -116,3 +118,4 @@ if( __name__ == '__main__'):
 
         # print( '%fF' % (bc.getTemperature(1) ) )
 
+"

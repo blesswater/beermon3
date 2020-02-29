@@ -145,7 +145,7 @@ extern uint32_t uptime;
 
 void buildSerialMessage( uint8_t msgId, serialTxState *txSerial )
 {
-    switch( msgId % 7 )
+    switch( msgId % 8 )
     {
         case 0:
             /* Version */
@@ -202,6 +202,14 @@ void buildSerialMessage( uint8_t msgId, serialTxState *txSerial )
             txSerial->frmType = 'C';
             txSerial->frmLen = sizeof(beermonConfig_t);
         break;
+        
+        case 7:
+            /* State */
+            txSerial->buffer[0] = beermonState.state;
+            txSerial->frmType = 'S';
+            txSerial->frmLen = 1;
+        break;
+        
     }
 }
 #endif /* BEERCHIP_USE_SERIAL */

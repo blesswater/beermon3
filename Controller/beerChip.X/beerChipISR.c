@@ -705,6 +705,24 @@ void __interrupt () ISR( void )
                 case 'p':
                     beermonCfg.probe = *(uint8_t *)&rxSerial.buffer[1];
                 break;
+                
+                case 'm':
+                    beermonStateControlMsg = (uint8_t)rxSerial.buffer[1];
+                break;
+                
+                case 'r':
+                    if( beermonState.state == beermon_state_extern_cntl )
+                    {
+                        if( rxSerial.buffer[1] & 0x01 )
+                        {
+                            relay_Switch( &enableRelay, (rxSerial.buffer[2] & 0x01) ? BEERCHIP_RELAY_ON : BEERCHIP_RELAY_OFF );
+                        }
+                        if( rxSerial.buffer[1] & 0x02 )
+                        {
+                            relay_Switch( &controlRelay, (rxSerial.buffer[2] & 0x02) ? BEERCHIP_RELAY_ON : BEERCHIP_RELAY_OFF );
+                        }
+                    }
+                break;
             }
             doneRxSerial( &rxSerial );
         }
