@@ -34,6 +34,9 @@ class beerChip:
     def setSetpoint(self, temp):
         raise NotImplementedError("Should have implemented this")
 
+    def setRelay( self, relayName, relayState ):
+        raise NotImplementedError("Should have implemented this")
+
     def resetBloopDet(self):
         raise NotImplementedError("Should have implemented this")
 

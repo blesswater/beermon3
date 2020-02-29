@@ -86,6 +86,18 @@ class beerChipRedis( beerChip ):
     def setSetpoint( self, temp ):
         self.red.set( 'beermonSetSetpoint', temp )
 
+    def setRelay( self, relayName, relayState ):
+        rState = None
+        if( 'on' in relayState.lower() ):
+            rState = 'on'
+        elif( 'off' in relayState.lower() ):
+            rState = 'off'
+        if( rState ):
+            if( 'enable' in relayName ):
+                bc.setRelay( 'enable', rState )
+            elif( 'control' in relayName.lower() ):
+                bc.setRelay( 'control' rState )
+
     def ackBloopDet(self):
         pass
 
