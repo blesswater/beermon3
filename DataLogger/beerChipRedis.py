@@ -1,4 +1,4 @@
-"from time import sleep
+from time import sleep
 
 import redis
 
@@ -94,9 +94,9 @@ class beerChipRedis( beerChip ):
             rState = 'off'
         if( rState ):
             if( 'enable' in relayName ):
-                bc.setRelay( 'enable', rState )
+                self.red.hset( 'beermonSetRelay', 'enable', rState )
             elif( 'control' in relayName.lower() ):
-                bc.setRelay( 'control' rState )
+                self.red.hset( 'beermonSetRelay', 'control', rState )
 
     def ackBloopDet(self):
         pass
@@ -130,4 +130,3 @@ if( __name__ == '__main__'):
 
         # print( '%fF' % (bc.getTemperature(1) ) )
 
-"
