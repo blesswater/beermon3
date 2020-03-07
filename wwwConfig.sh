@@ -12,7 +12,7 @@ KIOSK_USER=pi
 BEERMON_DATA_DIR=/opt/beermon
 BEERMON_DB=beermonSQLite3DB.db
 
-BASE_PY_FILES=(beerChipDB.py beerChipI2CAddresses.py beerChipI2C.py beerChip.py beermonConfig.py beerChipPersistant.py)
+BASE_PY_FILES=(beerChipDB.py beerChipI2CAddresses.py beerChipI2C.py beerChip.py beermonConfig.py beerChipPersistant.py beerChipSerialLink.py beerChipRedis.py)
 APPL_PY_FILES=(wsgi.py configInfo.py temperatureData.py beerSession.py)
 
 

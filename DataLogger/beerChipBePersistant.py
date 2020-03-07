@@ -4,7 +4,8 @@ import sys
 import time
 
 from beermonConfig import beermonConfig
-from beerChipI2C import beerChipI2C as beerChip
+# from beerChipI2C import beerChipI2C as beerChip
+from beerChipRedis import beerChipRedis as beerChip
 from beerChipPersistant import beerChipPersistant
 
 def usage():
