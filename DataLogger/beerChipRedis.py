@@ -77,7 +77,7 @@ class beerChipRedis( beerChip ):
 
     def getState( self ):
         state = self.red.get( 'beermonState' )
-        return 'Error'
+        return state
 
     def getSetpoint( self, chan = 0 ):
         temp = self.red.hget( 'beermonSetpoint', 'temp' )

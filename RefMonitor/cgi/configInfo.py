@@ -1,6 +1,7 @@
 
 from beermonConfig import beermonConfig
-from beerChipI2C import beerChipI2C as beerChip
+# from beerChipI2C import beerChipI2C as beerChip
+from beerChipRedis import beerChipRedis as beerChip
 from beerChipDB import beerChipSQLiteDB as beerDB
 from beerChipPersistant import beerChipPersistant
 

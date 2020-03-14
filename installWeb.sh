@@ -214,7 +214,7 @@ for file in ${BASE_PY_FILES[@]}; do
 done
 
 echo "# Copying Apps to bin"
-for file in beerChipBePersistant.py logTemp.py; do
+for file in beerChipBePersistant.py logTemp.py beerChipSerialReader.py; do
 	echo "# App file $file"
 	echo "cp ./DataLogger/$file $BEERMON_DATA_DIR/bin/$file"
 	cp ./DataLogger/$file $BEERMON_DATA_DIR/bin/$file
@@ -243,7 +243,7 @@ chmod 744 $BEERMON_DATA_DIR/bin/beermonStartup.sh
 echo "chown root:root $BEERMON_DATA_DIR/bin/beermonStartup.sh"
 chown root:root $BEERMON_DATA_DIR/bin/beermonStartup.sh
 
-for file in beermon-persist.service beermon-datacollect.service kiosk.service; do
+for file in beermon-persist.service beermon-datacollect.service kiosk.service beermon-serial.service; do
 	echo "# Adding $file service"
 	if [ -f /lib/systemd/system/$file ]; then
 		echo "# Disabling service $file"
