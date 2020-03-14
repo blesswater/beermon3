@@ -24,7 +24,7 @@ library(ggplot2)
 library(scales)
 library(quantmod)
 
-dat <- read.csv("R:\\HomeProjects\\beermon3\\Data\\Test1.csv", header=T)
+dat <- read.csv("R:\\HomeProjects\\beermon3\\Data\\RefrigRun00.csv", header=T)
 dat$timestamp = as.POSIXct(dat$timestamp, tz='EST')
 
 g1 <- ggplot(data=dat, aes(x=timestamp, y=Chan0, group=1)) +
@@ -50,5 +50,13 @@ g3 <- ggplot(data=dat, aes(x=timestamp)) +
     scale_x_datetime( labels=date_format('%m-%d'), breaks='1 hours' ) +
     xlab( 'Time' ) +
     ylab('Temp (F)')
+
+g4 <-  ggplot(data=dat, aes(x=timestamp)) +
+    geom_line( aes(y=Setpoint), color='orange') +
+    geom_line( aes(y=RefrigTemp), color='green') +
+    scale_x_datetime( labels=date_format('%m/%d'), breaks='1 days' ) +
+    xlab( 'Time' ) +
+    ylab('Temp (F)')
+
 
 
