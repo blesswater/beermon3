@@ -73,7 +73,14 @@ if( __name__ == '__main__' ):
                     print( 'INFO: Beermon State: %s' % (controlStates[stateVal]) )
                 else:
                     print( 'INFO: Bad state value %d' % (stateVal) )
-
+            elif( chr(frm[0]) == 'B' ):
+                print( 'INFO: Bloop' )
+                red.set( 'beermonBloopSet', 1 )
+                blp = red.get( 'beermonBloopCnt' )
+                if( blp ):
+                    red.incr( 'beermonBloopCnt' )
+                else:
+                    red.set( 'beermonBloopCnt', 1 )
             else:
                 print( 'INFO: Unknown Frame %s' % (chr(frm[0])) )
 

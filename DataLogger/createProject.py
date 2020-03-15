@@ -6,31 +6,10 @@ from beerChipRedis import beerChipRedis as beerChip
 from beerChipDB import beerChipSQLiteDB as beerDB
 
 projDescr = {
-                'name' : 'Test0',
+                'name' : 'RefrigeRun00',
                 'probes' : [
-                    { 'name' : 'Chan0',
+                    { 'name' : 'RefrigTemp',
                       'chan' : 0,
-                      'type' : 'NTC_00',
-                      'control' : True,
-                      'min_range' : 20.0,
-                      'max_range' : 80.0
-                    },
-                    { 'name' : 'Chan1',
-                      'chan' : 1,
-                      'type' : 'NTC_00',
-                      'control' : True,
-                      'min_range' : 20.0,
-                      'max_range' : 80.0
-                    },
-                    { 'name' : 'Chan2',
-                      'chan' : 2,
-                      'type' : 'NTC_00',
-                      'control' : True,
-                      'min_range' : 20.0,
-                      'max_range' : 80.0
-                    },
-                    { 'name' : 'Chan3',
-                      'chan' : 3,
                       'type' : 'NTC_00',
                       'control' : True,
                       'min_range' : 20.0,
