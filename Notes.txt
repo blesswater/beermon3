@@ -179,6 +179,9 @@ sudo apt-get upgrade
 # Install tools
 sudo apt-get install xdotool unclutter sed
 
+# Screensaver App
+sudo apt install xscreensaver
+
 # Verify Autologin
 sudo raspi-config
     3 Boot Options -> B1 Desktop / CLI -> B4 Desktop Autologin
