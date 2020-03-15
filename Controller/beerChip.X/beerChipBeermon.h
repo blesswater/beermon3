@@ -16,7 +16,7 @@ extern "C" {
 
 #define BEERMON_DEFAULT_SETPOINT          0x2D00  /* 45 F */
 #define BEERMON_DEFAULT_ON_DEBOUNCE_TIME  120     /* 2min */
-#define BEERMON_DEFAULT_OFF_DEBOUNCE_TIME 120     /* 2min */
+#define BEERMON_DEFAULT_OFF_DEBOUNCE_TIME 10      /* 10sec */
     
 #define BEERMON_NUM_TEMP_PROBES  4
     

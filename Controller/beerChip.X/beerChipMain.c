@@ -267,6 +267,7 @@ int main(int argc, char** argv)
                   &enableRelay, &controlRelay );
     
     bloopDet_Init( &bloopDetState );
+    uint16_t lastBloopTx = 0x0000;
   
 #ifdef BEERCHIP_USE_SERIAL
     initSerial();
@@ -274,9 +275,7 @@ int main(int argc, char** argv)
     uint8_t  serialMessage[BEERMON_TX_BUFSIZE];
     
     initTxState( &txSerial );
-    txSerial.buffer = &(serialMessage[0]);
-    txSerial.frmLen = 15;
-    txSerial.frmType = 'M';
+    
     txSerial.buffer = (uint8_t *)serialMessage;
     uint8_t serialMsgCnt = 0;
     usrTmr_Init( &serialDataTmr );
@@ -293,13 +292,27 @@ int main(int argc, char** argv)
     while( 1 )
     {
 #ifdef BEERCHIP_USE_SERIAL
-        if( usrTmr_Check( &serialDataTmr ) && isTxReady( &txSerial ) )
+        if( isTxReady( &txSerial ) )
         {
-            buildSerialMessage( serialMsgCnt++, &txSerial );
-            txStart( &txSerial );
-            usrTmr_Start( &serialDataTmr, BEERCHIP_SERIAL_DATA_SEND );
-            
+            if( (bloopDetState.bloopCnt == bloopdet_state_bloop) && (bloopDetState.bloopCnt != lastBloopTx) )
+            {
+                /* Send a Bloop Indication to the host */
+                txSerial.frmType = 'B';
+                *(bloopDetState_t *)txSerial.buffer = bloopDetState;
+                txSerial.frmLen = sizeof( bloopDetState_t );
+                
+                lastBloopTx = bloopDetState.bloopCnt;
+                
+                txStart( &txSerial );
+            }
+            else if( usrTmr_Check( &serialDataTmr ) )
+            {
+                buildSerialMessage( serialMsgCnt++, &txSerial );
+                txStart( &txSerial );
+                usrTmr_Start( &serialDataTmr, BEERCHIP_SERIAL_DATA_SEND );
+            }
         }
+        
         txProcess( &txSerial );
 #endif /* BEERCHIP_USE_SERIAL */
         
