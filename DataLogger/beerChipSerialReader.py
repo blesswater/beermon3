@@ -155,6 +155,12 @@ if( __name__ == '__main__' ):
             if( len( frm ) == 3 ):
                 print( 'Sending %s' % (binascii.hexlify( frm )) )
                 link.txFrame( frm )
+
+        bloopAck = red.get( 'beermonBloopAck' )
+        if( bloopAck ):
+            red.delete( 'beermonBloopAck' )
+            frm = bytearray(['b'])
+            link.txFrame( frm )
                 
 
 
