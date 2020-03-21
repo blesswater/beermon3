@@ -294,7 +294,7 @@ int main(int argc, char** argv)
 #ifdef BEERCHIP_USE_SERIAL
         if( isTxReady( &txSerial ) )
         {
-            if( (bloopDetState.bloopCnt == bloopdet_state_bloop) && (bloopDetState.bloopCnt != lastBloopTx) )
+            if( (bloopDetState.state == bloopdet_state_bloop) && (bloopDetState.bloopCnt != lastBloopTx) )
             {
                 /* Send a Bloop Indication to the host */
                 txSerial.frmType = 'B';
