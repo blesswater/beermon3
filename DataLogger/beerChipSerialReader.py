@@ -160,10 +160,12 @@ if( __name__ == '__main__' ):
         if( bloopAck ):
             red.delete( 'beermonBloopAck' )
             frm = bytearray(['b'])
+            if( bloopAck == 'reset' ):
+                frm += bytearray( [0x01] )
+            else:
+                frm += bytearray( [0x00] )
             link.txFrame( frm )
                 
-
-
 
     link.stop()
 

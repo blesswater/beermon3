@@ -74,7 +74,7 @@ if __name__ == '__main__':
     bloopSql  = "INSERT INTO Event (proj_id, event_type, event_time) "
     # bloopSql += "VALUES( %d, 'bloop', datetime( 'now' ) ) " % (id)
     bloopSql += "VALUES( %d, 'bloop', strftime('%%Y-%%m-%%d %%H:%%M:%%f', 'now')) " % (id)
-    bc.resetBloopDet()
+    # bc.resetBloopDet()
 
     # Set Project as collecting
     sql  = "UPDATE Project SET collection_state = 'collecting' "

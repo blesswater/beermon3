@@ -99,14 +99,14 @@ class beerChipRedis( beerChip ):
                 self.red.hset( 'beermonSetRelay', 'control', rState )
 
     def ackBloopDet(self):
-        self.red.set( 'beermonBloopAck', 1 )
+        self.red.set( 'beermonBloopAck', 'ack')
 
     def resetBloopDet( self ):
         self.bloopCnt = 0
         self.bloopAckCnt = 0
         self.red.set( 'beermonBloopCnt', 0 )
         self.red.delete( 'beermonBloopSet' )
-        self.red.delete( 'beermonBloopAck' )
+        self.red.set( 'beermonBloopAck', 'reset' )
 
     def isBloopDet(self):
         bloop = self.red.get( 'beermonBloopSet' )
