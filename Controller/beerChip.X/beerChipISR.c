@@ -723,6 +723,17 @@ void __interrupt () ISR( void )
                         }
                     }
                 break;
+                
+                case 'b':
+                    if( (rxSerial.rxByte >= 1) && (rxSerial.buffer[0] == 0x01) )
+                    {
+                        bloopDet_ProcessEvent( &bloopDetState, bloopdet_event_reset );
+                    }
+                    else
+                    {
+                        bloopDet_ProcessEvent( &bloopDetState, bloopdet_event_bloopack );
+                    }
+                break;
             }
             doneRxSerial( &rxSerial );
         }
